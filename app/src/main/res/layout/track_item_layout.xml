@@ -2,9 +2,10 @@
 <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools" android:orientation="vertical"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="65dp">
+        android:layout_height="68dp">
 
     <TextView
             android:text="3:58"
@@ -20,15 +21,14 @@
 
     <android.support.v7.widget.AppCompatImageView
             android:layout_width="60dp"
-            android:layout_height="0dp"
-            android:src="@drawable/ic_launcher_foreground"
+            android:layout_height="60dp"
+            android:src="@drawable/album_art_default"
             android:id="@+id/imageView"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            android:layout_marginBottom="4dp"
+            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginStart="8dp"/>
 
     <android.support.v7.widget.AppCompatTextView
             android:text="Rammstein - Rosenrot"

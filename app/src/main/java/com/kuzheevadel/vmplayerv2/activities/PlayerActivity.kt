@@ -11,7 +11,11 @@ import android.view.MenuItem
 import com.kuzheevadel.vmplayerv2.fragments.AllTracksFragment
 import com.kuzheevadel.vmplayerv2.adapters.PlayerPagerAdapter
 import com.kuzheevadel.vmplayerv2.R
+import com.kuzheevadel.vmplayerv2.fragments.FullScreenPlaybackFragment
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.full_screen_playback.*
 import kotlinx.android.synthetic.main.player_layout.*
 
 class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -32,6 +36,10 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         setupPager(player_pager)
         tab_layout.setupWithViewPager(player_pager)
+
+        supportFragmentManager.beginTransaction()
+            .add(R.id.playback_container, FullScreenPlaybackFragment())
+            .commit()
     }
 
     private fun setupPager(pager: ViewPager) {
@@ -44,6 +52,9 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     override fun onBackPressed() {
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
+        } else if (activity_main != null &&
+            (activity_main.panelState == PanelState.EXPANDED || activity_main.panelState == PanelState.ANCHORED)){
+            activity_main.panelState = PanelState.COLLAPSED
         } else {
             super.onBackPressed()
         }
