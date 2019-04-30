@@ -37,4 +37,8 @@ dependencies {
 
     // SlideUpPanel
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
+
+    //Picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
 }

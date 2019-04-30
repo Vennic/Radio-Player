@@ -25,14 +25,12 @@
 
         <android.support.design.widget.AppBarLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/AppTheme.AppBarOverlay">
+                android:layout_height="wrap_content">
 
             <android.support.v7.widget.Toolbar
                     android:id="@+id/player_toolbar"
                     android:layout_width="match_parent"
                     app:layout_scrollFlags="scroll|enterAlways|snap"
-                    app:popupTheme="@style/AppTheme.AppBarOverlay"
                     android:background="?attr/colorPrimary"
                     android:layout_height="?attr/actionBarSize"/>
 

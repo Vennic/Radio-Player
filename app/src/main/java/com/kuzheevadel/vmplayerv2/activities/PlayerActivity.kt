@@ -2,6 +2,7 @@ package com.kuzheevadel.vmplayerv2.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.support.design.widget.NavigationView
 import android.support.design.widget.TabLayout
 import android.support.v4.view.GravityCompat
@@ -11,6 +12,7 @@ import android.view.MenuItem
 import com.kuzheevadel.vmplayerv2.fragments.AllTracksFragment
 import com.kuzheevadel.vmplayerv2.adapters.PlayerPagerAdapter
 import com.kuzheevadel.vmplayerv2.R
+import com.kuzheevadel.vmplayerv2.fragments.AlbumsFragment
 import com.kuzheevadel.vmplayerv2.fragments.FullScreenPlaybackFragment
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.*
@@ -21,6 +23,7 @@ import kotlinx.android.synthetic.main.player_layout.*
 class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(player_toolbar)
@@ -37,16 +40,25 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         setupPager(player_pager)
         tab_layout.setupWithViewPager(player_pager)
 
-        supportFragmentManager.beginTransaction()
-            .add(R.id.playback_container, FullScreenPlaybackFragment())
-            .commit()
+        startPlaybackFragment()
     }
 
     private fun setupPager(pager: ViewPager) {
         val adapter = PlayerPagerAdapter(supportFragmentManager)
         adapter.addFragment(AllTracksFragment(), "All Songs")
-        adapter.addFragment(AllTracksFragment(), "Albums")
+        adapter.addFragment(AlbumsFragment(), "Albums")
         pager.adapter = adapter
+    }
+
+    private fun startPlaybackFragment() {
+        val runnable = Runnable {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.playback_container, FullScreenPlaybackFragment(), null)
+                .commit()
+        }
+
+        val handler = Handler()
+        handler.postDelayed(runnable, 50)
     }
 
     override fun onBackPressed() {

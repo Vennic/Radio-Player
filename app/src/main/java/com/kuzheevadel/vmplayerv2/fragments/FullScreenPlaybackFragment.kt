@@ -7,9 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.kuzheevadel.vmplayerv2.R
+import com.kuzheevadel.vmplayerv2.interfaces.MvpContracts
 import kotlinx.android.synthetic.main.full_screen_playback.view.*
 
-class FullScreenPlaybackFragment: Fragment() {
+class FullScreenPlaybackFragment: Fragment(), MvpContracts.PlaybackView {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.full_screen_playback, container, false)
