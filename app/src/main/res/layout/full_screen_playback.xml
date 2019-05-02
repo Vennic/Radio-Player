@@ -70,11 +70,11 @@
         <android.support.v7.widget.AppCompatImageButton
                 android:layout_width="@dimen/playback_bottom_buttons_size"
                 android:layout_height="@dimen/playback_bottom_buttons_size"
-                app:srcCompat="@drawable/round_play_arrow_black_48dp"
+                app:srcCompat="@drawable/ic_play_to_pause"
                 android:id="@+id/playback_play_pause_button"
                 android:clickable="true"
                 android:focusable="true"
-                android:scaleType="centerInside"
+                android:scaleType="centerCrop"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 app:layout_constraintStart_toEndOf="@+id/imageView10"
                 android:layout_marginStart="8dp"
