@@ -1,8 +1,18 @@
 package com.kuzheevadel.vmplayerv2.interfaces
 
 import com.kuzheevadel.vmplayerv2.model.Track
+import io.reactivex.Observable
 
 class MvpContracts {
+
+    interface TracksAdapter {
+        fun updateTracksList(list: MutableList<Track>)
+    }
+
+    interface AllTracksPresenter {
+        fun updateAdapter(list: MutableList<Track>)
+        fun setAdapter(adapter: MvpContracts.TracksAdapter)
+    }
     interface PlaybackPresenter {
 
     }
@@ -24,6 +34,6 @@ class MvpContracts {
     }
 
     interface StorageMedia {
-        fun getTracksList(): MutableList<Track>
+        fun getTracksList(): Observable<MutableList<Track>>
     }
 }

@@ -10,12 +10,14 @@ import android.view.View
 import android.view.ViewGroup
 import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.adapters.TracksRecyclerAdapter
+import com.kuzheevadel.vmplayerv2.interfaces.MvpContracts
 import kotlinx.android.synthetic.main.recycler_layout.view.*
 
 class AllTracksFragment: Fragment() {
 
     private lateinit var tracksRecycler: RecyclerView
     private lateinit var adapter: TracksRecyclerAdapter
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.recycler_layout, container, false)

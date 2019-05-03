@@ -7,16 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.kuzheevadel.vmplayerv2.R
+import com.kuzheevadel.vmplayerv2.interfaces.MvpContracts
+import com.kuzheevadel.vmplayerv2.model.Track
 import kotlinx.android.synthetic.main.track_item_layout.view.*
 
-class TracksRecyclerAdapter(var context: Context?): RecyclerView.Adapter<TracksRecyclerAdapter.TrackViewHolder>() {
+class TracksRecyclerAdapter(var context: Context?): RecyclerView.Adapter<TracksRecyclerAdapter.TrackViewHolder>(), MvpContracts.TracksAdapter {
 
-    private val list= mutableListOf<Int>()
+    private var tracksList= mutableListOf<Track>()
 
-    init {
-        for (i in 0..100) {
-            list.add(i)
-        }
+    override fun updateTracksList(list: MutableList<Track>) {
+        tracksList = list
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(container: ViewGroup, position: Int): TrackViewHolder {
@@ -25,7 +26,7 @@ class TracksRecyclerAdapter(var context: Context?): RecyclerView.Adapter<TracksR
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return tracksList.size
     }
 
     override fun onBindViewHolder(viewHolder: TrackViewHolder, position: Int) {
@@ -42,7 +43,7 @@ class TracksRecyclerAdapter(var context: Context?): RecyclerView.Adapter<TracksR
         }
 
         fun bind(position: Int) {
-            textView.text = list[position].toString()
+            textView.text = tracksList[position].toString()
         }
     }
 }
