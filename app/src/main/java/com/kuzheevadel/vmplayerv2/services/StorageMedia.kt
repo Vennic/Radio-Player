@@ -4,11 +4,15 @@ import android.content.Context
 import android.provider.MediaStore
 import com.kuzheevadel.vmplayerv2.interfaces.MvpContracts
 import com.kuzheevadel.vmplayerv2.model.Track
-import io.reactivex.Observable
+import java.util.concurrent.Callable
 
-class StorageMedia(private val context: Context): MvpContracts.StorageMedia {
+class StorageMedia(private val context: Context): MvpContracts.StorageMedia, Callable<MutableList<Track>> {
 
-    override fun getTracksList(): Observable<MutableList<Track>> {
+    override fun call(): MutableList<Track> {
+        return getTracksList()
+    }
+
+    override fun getTracksList(): MutableList<Track> {
 
         val tracksList = mutableListOf<Track>()
         val contentResolver = context.contentResolver
@@ -36,6 +40,6 @@ class StorageMedia(private val context: Context): MvpContracts.StorageMedia {
 
             cursor.close()
         }
-        return Observable.fromArray(tracksList)
+        return tracksList
     }
 }

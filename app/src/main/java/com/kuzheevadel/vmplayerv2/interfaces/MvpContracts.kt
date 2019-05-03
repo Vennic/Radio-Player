@@ -10,7 +10,7 @@ class MvpContracts {
     }
 
     interface AllTracksPresenter {
-        fun updateAdapter(list: MutableList<Track>)
+        fun updateAdapter()
         fun setAdapter(adapter: MvpContracts.TracksAdapter)
     }
     interface PlaybackPresenter {
@@ -34,6 +34,6 @@ class MvpContracts {
     }
 
     interface StorageMedia {
-        fun getTracksList(): Observable<MutableList<Track>>
+        fun getTracksList(): MutableList<Track>
     }
 }
