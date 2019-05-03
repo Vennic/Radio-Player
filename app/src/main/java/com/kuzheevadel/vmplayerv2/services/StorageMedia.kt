@@ -1,18 +1,20 @@
 package com.kuzheevadel.vmplayerv2.services
 
+import android.content.ContentUris
 import android.content.Context
+import android.net.Uri
 import android.provider.MediaStore
-import com.kuzheevadel.vmplayerv2.interfaces.MvpContracts
+import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.model.Track
 import java.util.concurrent.Callable
 
-class StorageMedia(private val context: Context): MvpContracts.StorageMedia, Callable<MutableList<Track>> {
+class StorageMedia(private val context: Context): Callable<MutableList<Track>> {
 
     override fun call(): MutableList<Track> {
         return getTracksList()
     }
 
-    override fun getTracksList(): MutableList<Track> {
+    private fun getTracksList(): MutableList<Track> {
 
         val tracksList = mutableListOf<Track>()
         val contentResolver = context.contentResolver
@@ -34,7 +36,9 @@ class StorageMedia(private val context: Context): MvpContracts.StorageMedia, Cal
                 val albumId:Long = cursor.getLong(albumIdColumn)
                 val duration: Int = cursor.getInt(durationColumn)
                 val album: String = cursor.getString(albumColumn)
-                tracksList.add(Track(id, title, artist, albumId, duration, album))
+                val imageUri = ContentUris.withAppendedId(Uri.parse(Constants.BASE_ALBUMSART_URI), albumId)
+                val audioUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id)
+                tracksList.add(Track(id, title, artist, imageUri, audioUri, duration, album))
 
             } while (cursor.moveToNext())
 

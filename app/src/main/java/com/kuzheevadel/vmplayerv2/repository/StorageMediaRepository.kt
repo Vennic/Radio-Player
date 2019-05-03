@@ -1,8 +1,13 @@
 package com.kuzheevadel.vmplayerv2.repository
 
+import android.annotation.SuppressLint
 import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.interfaces.MvpContracts
+import com.kuzheevadel.vmplayerv2.model.Album
 import com.kuzheevadel.vmplayerv2.model.Track
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 class StorageMediaRepository: MvpContracts.StorageMediaRepository {
@@ -11,8 +16,27 @@ class StorageMediaRepository: MvpContracts.StorageMediaRepository {
     private var shuffleMode = Constants.SHUFFLE_MODE_OFF
     private var currentPosition: Int = 0
     private var loopMode = Constants.NO_LOOP_MODE
+    private lateinit var albumsList: MutableList<Album>
+
+
+    override fun getTracksList(): MutableList<Track> {
+        return origTracksList
+    }
+
+    @SuppressLint("CheckResult")
+    private fun createAlbums() {
+        albumsList = mutableListOf()
+
+        Observable.fromArray(origTracksList)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+
+            }
+    }
 
     override fun setTracksList(list: MutableList<Track>) {
+        list.sortWith(compareBy { it.title })
         origTracksList = list
     }
     
@@ -96,8 +120,8 @@ class StorageMediaRepository: MvpContracts.StorageMediaRepository {
         loopMode = mode
     }
 
-    override fun getAlbumsMap(): MutableMap<String, MutableList<Track>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getAlbumsList(): MutableList<Album> {
+        return albumsList
     }
 
     private fun getShuffledTrack(): Track {

@@ -1,5 +1,6 @@
 package com.kuzheevadel.vmplayerv2.interfaces
 
+import com.kuzheevadel.vmplayerv2.model.Album
 import com.kuzheevadel.vmplayerv2.model.Track
 import io.reactivex.Observable
 
@@ -12,6 +13,7 @@ class MvpContracts {
     interface AllTracksPresenter {
         fun updateAdapter()
         fun setAdapter(adapter: MvpContracts.TracksAdapter)
+        fun loadTracks()
     }
     interface PlaybackPresenter {
 
@@ -22,6 +24,7 @@ class MvpContracts {
     }
 
     interface StorageMediaRepository {
+        fun getTracksList(): MutableList<Track>
         fun setTracksList(list: MutableList<Track>)
         fun getCurrentTrack(): Track
         fun getNextTrack(): Track
@@ -30,10 +33,7 @@ class MvpContracts {
         fun setCurrentPosition(position: Int) //???
         fun getCurrentPosition(): Int
         fun setLoopMode(mode: Int)
-        fun getAlbumsMap(): MutableMap<String, MutableList<Track>>
+        fun getAlbumsList(): MutableList<Album>
     }
 
-    interface StorageMedia {
-        fun getTracksList(): MutableList<Track>
-    }
 }

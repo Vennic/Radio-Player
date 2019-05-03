@@ -40,7 +40,9 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         setupPager(player_pager)
         tab_layout.setupWithViewPager(player_pager)
 
-        startPlaybackFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.playback_container, FullScreenPlaybackFragment(), null)
+            .commit()
     }
 
     private fun setupPager(pager: ViewPager) {
@@ -49,17 +51,7 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         adapter.addFragment(AlbumsFragment(), "Albums")
         pager.adapter = adapter
     }
-
-    private fun startPlaybackFragment() {
-        val runnable = Runnable {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.playback_container, FullScreenPlaybackFragment(), null)
-                .commit()
-        }
-
-        val handler = Handler()
-        handler.postDelayed(runnable, 50)
-    }
+    
 
     override fun onBackPressed() {
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {

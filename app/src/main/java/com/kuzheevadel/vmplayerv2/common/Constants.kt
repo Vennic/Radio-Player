@@ -6,4 +6,5 @@ object Constants {
     const val ALL_LOOP_MODE = 2
     const val SHUFFLE_MODE_ON = 1
     const val SHUFFLE_MODE_OFF = 2
+    const val BASE_ALBUMSART_URI = "content://media/external/audio/albumart"
 }

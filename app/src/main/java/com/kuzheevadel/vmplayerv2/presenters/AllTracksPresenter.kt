@@ -13,18 +13,25 @@ class AllTracksPresenter(private val storageMedia: Callable<MutableList<Track>>,
 
     private lateinit var mAdapter: MvpContracts.TracksAdapter
 
+    @SuppressLint("CheckResult")
+    override fun loadTracks() {
+        Observable.fromCallable(storageMedia)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                mediaRepository.setTracksList(it)
+                mAdapter.updateTracksList(mediaRepository.getTracksList())
+
+            }
+
+    }
+
     override fun setAdapter(adapter: MvpContracts.TracksAdapter) {
         mAdapter = adapter
     }
 
     @SuppressLint("CheckResult")
     override fun updateAdapter() {
-        Observable.fromCallable(storageMedia)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                mAdapter.updateTracksList(it)
-                mediaRepository.setTracksList(it)
-            }
+        mAdapter.updateTracksList(mediaRepository.getTracksList())
     }
 }

@@ -1,6 +1,7 @@
 package com.kuzheevadel.vmplayerv2.dagger
 
 import android.content.Context
+import com.kuzheevadel.vmplayerv2.adapters.TracksRecyclerAdapter
 import com.kuzheevadel.vmplayerv2.fragments.AllTracksFragment
 import com.kuzheevadel.vmplayerv2.interfaces.MvpContracts
 import com.kuzheevadel.vmplayerv2.model.Track
@@ -21,15 +22,15 @@ class AllTracksModule {
 
     @AllTracksScope
     @Provides
-    fun provideStorageMedia(context: Context): Callable<MutableList<Track>> {
-        return StorageMedia(context)
+    fun providePresenter(storageMedia: Callable<MutableList<Track>>,
+                         mediaRepository: MvpContracts.StorageMediaRepository): MvpContracts.AllTracksPresenter {
+        return AllTracksPresenter(storageMedia, mediaRepository)
     }
 
     @AllTracksScope
     @Provides
-    fun providePresenter(storageMedia: Callable<MutableList<Track>>,
-                         mediaRepository: MvpContracts.StorageMediaRepository): MvpContracts.AllTracksPresenter {
-        return AllTracksPresenter(storageMedia, mediaRepository)
+    fun provideAdapter(context: Context): TracksRecyclerAdapter {
+        return TracksRecyclerAdapter(context)
     }
 }
 

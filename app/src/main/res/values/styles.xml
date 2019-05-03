@@ -13,5 +13,13 @@
         <item name="android:windowBackground">@drawable/launch_screen</item>
         <item name="colorPrimaryDark">#FF6D00</item>
     </style>
+    
+    <style name="MyCustomTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="MyCustomTabStyle" parent="Widget.Design.TabLayout">
+        <item name="tabTextAppearance">@style/MyCustomTextAppearance</item>
+    </style>
 
 </resources>
