@@ -6,6 +6,19 @@ import io.reactivex.Observable
 
 class MvpContracts {
 
+    interface AlbumsPresenter {
+        fun setAdapter(adapter: MvpContracts.AlbumsAdapter)
+        fun updateAdapter()
+    }
+
+    interface AlbumsView {
+
+    }
+
+    interface AlbumsAdapter {
+        fun updateAlbumsAdapter(list: MutableList<Album>)
+    }
+
     interface TracksAdapter {
         fun updateTracksList(list: MutableList<Track>)
     }

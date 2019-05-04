@@ -6,6 +6,7 @@ class App: Application() {
 
     private lateinit var appComponent: AppComponent
     private var allTracksComponent: AllTracksComponent? = null
+    private var albumsComponent: AlbumsComponent? = null
 
     companion object {
         lateinit var instance: App
@@ -24,7 +25,16 @@ class App: Application() {
         return allTracksComponent
     }
 
+    fun createAlbumsComponent(): AlbumsComponent? {
+        albumsComponent = appComponent.getAlbumsComponent()
+        return albumsComponent
+    }
+
     fun releaseAllTrackComponent() {
         allTracksComponent = null
+    }
+
+    fun releaseAlbumsComponent() {
+        albumsComponent = null
     }
 }

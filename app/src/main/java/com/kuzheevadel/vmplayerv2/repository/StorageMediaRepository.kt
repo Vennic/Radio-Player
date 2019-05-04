@@ -1,13 +1,10 @@
 package com.kuzheevadel.vmplayerv2.repository
 
-import android.annotation.SuppressLint
+import android.util.Log
 import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.interfaces.MvpContracts
 import com.kuzheevadel.vmplayerv2.model.Album
 import com.kuzheevadel.vmplayerv2.model.Track
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import java.util.*
 
 class StorageMediaRepository: MvpContracts.StorageMediaRepository {
@@ -23,21 +20,28 @@ class StorageMediaRepository: MvpContracts.StorageMediaRepository {
         return origTracksList
     }
 
-    @SuppressLint("CheckResult")
     private fun createAlbums() {
+        val albumsMap = mutableMapOf<String, MutableList<Track>>()
         albumsList = mutableListOf()
-
-        Observable.fromArray(origTracksList)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-
+        for (item in origTracksList) {
+            if (!albumsMap.containsKey(item.albumName)) {
+                albumsMap[item.albumName] = mutableListOf(item)
+            } else {
+                albumsMap.getValue(item.albumName).add(item)
             }
+        }
+
+        for (item in albumsMap.entries) {
+            val album = Album(item.key, item.value)
+            albumsList.add(album)
+        }
+        Log.i("CheckMap", "$albumsMap")
     }
 
     override fun setTracksList(list: MutableList<Track>) {
         list.sortWith(compareBy { it.title })
         origTracksList = list
+        createAlbums()
     }
     
     override fun getCurrentTrack(): Track {

@@ -40,4 +40,5 @@ class AppModule(private val context: Context) {
 @Component(modules = [AppModule::class])
 interface AppComponent {
     fun getAllTracksComponent(): AllTracksComponent
+    fun getAlbumsComponent(): AlbumsComponent
 }

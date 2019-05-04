@@ -1,11 +1,13 @@
 package com.kuzheevadel.vmplayerv2.presenters
 
 import android.annotation.SuppressLint
+import com.kuzheevadel.vmplayerv2.common.LoadMediaMessage
 import com.kuzheevadel.vmplayerv2.interfaces.MvpContracts
 import com.kuzheevadel.vmplayerv2.model.Track
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.greenrobot.eventbus.EventBus
 import java.util.concurrent.Callable
 
 class AllTracksPresenter(private val storageMedia: Callable<MutableList<Track>>,
@@ -22,6 +24,11 @@ class AllTracksPresenter(private val storageMedia: Callable<MutableList<Track>>,
                 mediaRepository.setTracksList(it)
                 mAdapter.updateTracksList(mediaRepository.getTracksList())
 
+                if (it != null) {
+                    EventBus.getDefault().post(LoadMediaMessage(true))
+                } else {
+                    EventBus.getDefault().post(LoadMediaMessage(false))
+                }
             }
 
     }
