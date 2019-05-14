@@ -28,7 +28,6 @@ class AlbumsFragment: Fragment() {
     @Inject
     lateinit var factory: CustomViewModelFactory
 
-    @Inject
     lateinit var viewModel: AlbumViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {

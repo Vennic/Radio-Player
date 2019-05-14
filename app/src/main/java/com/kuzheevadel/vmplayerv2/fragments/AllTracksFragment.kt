@@ -24,7 +24,6 @@ class AllTracksFragment: Fragment() {
 
     private lateinit var tracksRecycler: RecyclerView
 
-    @Inject
     lateinit var viewModel: AllTracksViewModel
 
     @Inject
