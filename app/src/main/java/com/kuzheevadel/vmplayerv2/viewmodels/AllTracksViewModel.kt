@@ -1,22 +1,24 @@
-package com.kuzheevadel.vmplayerv2.presenters
+package com.kuzheevadel.vmplayerv2.viewmodels
 
 import android.annotation.SuppressLint
+import android.arch.lifecycle.ViewModel
 import com.kuzheevadel.vmplayerv2.common.LoadMediaMessage
-import com.kuzheevadel.vmplayerv2.interfaces.MvpContracts
+import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Track
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.greenrobot.eventbus.EventBus
 import java.util.concurrent.Callable
+import javax.inject.Inject
 
-class AllTracksPresenter(private val storageMedia: Callable<MutableList<Track>>,
-                         private val mediaRepository: MvpContracts.StorageMediaRepository): MvpContracts.AllTracksPresenter {
+class AllTracksViewModel @Inject constructor(private val storageMedia: Callable<MutableList<Track>>,
+                                             private val mediaRepository: Interfaces.StorageMediaRepository): ViewModel() {
 
-    private lateinit var mAdapter: MvpContracts.TracksAdapter
+    private lateinit var mAdapter: Interfaces.TracksAdapter
 
     @SuppressLint("CheckResult")
-    override fun loadTracks() {
+    fun loadTracks() {
         Observable.fromCallable(storageMedia)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -33,12 +35,11 @@ class AllTracksPresenter(private val storageMedia: Callable<MutableList<Track>>,
 
     }
 
-    override fun setAdapter(adapter: MvpContracts.TracksAdapter) {
+    fun setAdapter(adapter: Interfaces.TracksAdapter) {
         mAdapter = adapter
     }
 
-    @SuppressLint("CheckResult")
-    override fun updateAdapter() {
+    fun updateAdapter() {
         mAdapter.updateTracksList(mediaRepository.getTracksList())
     }
 }

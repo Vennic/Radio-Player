@@ -1,7 +1,9 @@
 package com.kuzheevadel.vmplayerv2.fragments
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +11,9 @@ import android.view.ViewGroup
 import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.adapters.AlbumsAdapter
 import com.kuzheevadel.vmplayerv2.common.LoadMediaMessage
-import com.kuzheevadel.vmplayerv2.dagger.App
-import com.kuzheevadel.vmplayerv2.interfaces.MvpContracts
+import com.kuzheevadel.vmplayerv2.di.App
+import com.kuzheevadel.vmplayerv2.di.CustomViewModelFactory
+import com.kuzheevadel.vmplayerv2.viewmodels.AlbumViewModel
 import kotlinx.android.synthetic.main.albums_layout.view.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -23,12 +26,21 @@ class AlbumsFragment: Fragment() {
     lateinit var mAdapter: AlbumsAdapter
 
     @Inject
-    lateinit var mPresenter: MvpContracts.AlbumsPresenter
+    lateinit var factory: CustomViewModelFactory
+
+    @Inject
+    lateinit var viewModel: AlbumViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        App.instance.createAlbumsComponent()?.inject(this)
-        mPresenter.setAdapter(mAdapter)
+
+        (activity?.application as App).getComponent().inject(this)
+        viewModel = ViewModelProviders.of(this, factory).get(AlbumViewModel::class.java)
+
+        viewModel.setAdapter(mAdapter)
+
+        mAdapter.setFragmentManager(activity?.supportFragmentManager!!)
+        mAdapter.setActivity(activity as AppCompatActivity)
     }
 
     override fun onStart() {
@@ -48,15 +60,11 @@ class AlbumsFragment: Fragment() {
         super.onStop()
     }
 
-    override fun onDestroy() {
-        App.instance.releaseAlbumsComponent()
-        super.onDestroy()
-    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun updateAdapter(event: LoadMediaMessage) {
         if (event.isLoaded) {
-            mPresenter.updateAdapter()
+            viewModel.updateAdapter()
         }
     }
 }

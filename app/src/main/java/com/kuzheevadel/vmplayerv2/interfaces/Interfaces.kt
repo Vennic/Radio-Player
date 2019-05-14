@@ -1,13 +1,13 @@
 package com.kuzheevadel.vmplayerv2.interfaces
 
+import android.support.v4.app.FragmentManager
 import com.kuzheevadel.vmplayerv2.model.Album
 import com.kuzheevadel.vmplayerv2.model.Track
-import io.reactivex.Observable
 
-class MvpContracts {
+class Interfaces {
 
     interface AlbumsPresenter {
-        fun setAdapter(adapter: MvpContracts.AlbumsAdapter)
+        fun setAdapter(adapter: Interfaces.AlbumsAdapter)
         fun updateAdapter()
     }
 
@@ -17,6 +17,7 @@ class MvpContracts {
 
     interface AlbumsAdapter {
         fun updateAlbumsAdapter(list: MutableList<Album>)
+        fun setFragmentManager(fm: FragmentManager)
     }
 
     interface TracksAdapter {
@@ -25,7 +26,7 @@ class MvpContracts {
 
     interface AllTracksPresenter {
         fun updateAdapter()
-        fun setAdapter(adapter: MvpContracts.TracksAdapter)
+        fun setAdapter(adapter: Interfaces.TracksAdapter)
         fun loadTracks()
     }
     interface PlaybackPresenter {

@@ -8,10 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.kuzheevadel.vmplayerv2.R
-import com.kuzheevadel.vmplayerv2.interfaces.MvpContracts
+import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import kotlinx.android.synthetic.main.full_screen_playback.view.*
 
-class FullScreenPlaybackFragment: Fragment(), MvpContracts.PlaybackView {
+class FullScreenPlaybackFragment: Fragment(), Interfaces.PlaybackView {
 
     private var isPlaying = true
 

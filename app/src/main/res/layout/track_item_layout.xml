@@ -30,20 +30,22 @@
             android:textSize="12sp"
             app:layout_constraintStart_toEndOf="@+id/item_image"
             android:layout_marginStart="8dp"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toBottomOf="parent" android:layout_marginEnd="8dp"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
             tools:text="Rosenrot"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="20dp"
             android:id="@+id/item_track_name"
             android:textSize="14sp"
             android:textColor="@android:color/black"
             app:layout_constraintStart_toEndOf="@+id/item_image"
             android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/item_artist_name" android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/item_artist_name"
+            android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

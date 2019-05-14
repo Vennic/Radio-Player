@@ -1,23 +1,19 @@
 package com.kuzheevadel.vmplayerv2.adapters
 
-import android.content.ContentUris
 import android.content.Context
-import android.net.Uri
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.kuzheevadel.vmplayerv2.R
-import com.kuzheevadel.vmplayerv2.common.Constants
-import com.kuzheevadel.vmplayerv2.interfaces.MvpContracts
+import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Track
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 import kotlinx.android.synthetic.main.track_item_layout.view.*
 
-class TracksRecyclerAdapter(var context: Context?): RecyclerView.Adapter<TracksRecyclerAdapter.TrackViewHolder>(), MvpContracts.TracksAdapter {
+class TracksRecyclerAdapter(var context: Context?): RecyclerView.Adapter<TracksRecyclerAdapter.TrackViewHolder>(), Interfaces.TracksAdapter {
 
     private var tracksList= mutableListOf<Track>()
     private val mPicasso = Picasso.get()

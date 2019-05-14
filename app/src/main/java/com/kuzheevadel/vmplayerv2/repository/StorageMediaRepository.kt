@@ -2,12 +2,12 @@ package com.kuzheevadel.vmplayerv2.repository
 
 import android.util.Log
 import com.kuzheevadel.vmplayerv2.common.Constants
-import com.kuzheevadel.vmplayerv2.interfaces.MvpContracts
+import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Album
 import com.kuzheevadel.vmplayerv2.model.Track
 import java.util.*
 
-class StorageMediaRepository: MvpContracts.StorageMediaRepository {
+class StorageMediaRepository: Interfaces.StorageMediaRepository {
     
     private lateinit var origTracksList: MutableList<Track>
     private var shuffleMode = Constants.SHUFFLE_MODE_OFF
@@ -16,6 +16,9 @@ class StorageMediaRepository: MvpContracts.StorageMediaRepository {
     private lateinit var albumsList: MutableList<Album>
 
 
+    init {
+        Log.i("ViewModelTest", "MediaStore: $this")
+    }
     override fun getTracksList(): MutableList<Track> {
         return origTracksList
     }

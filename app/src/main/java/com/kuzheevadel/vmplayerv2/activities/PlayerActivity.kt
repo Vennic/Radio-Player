@@ -2,9 +2,8 @@ package com.kuzheevadel.vmplayerv2.activities
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.support.design.widget.NavigationView
-import android.support.design.widget.TabLayout
+import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBarDrawerToggle
@@ -14,10 +13,8 @@ import com.kuzheevadel.vmplayerv2.adapters.PlayerPagerAdapter
 import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.fragments.AlbumsFragment
 import com.kuzheevadel.vmplayerv2.fragments.FullScreenPlaybackFragment
-import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.*
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.full_screen_playback.*
 import kotlinx.android.synthetic.main.player_layout.*
 
 class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -37,11 +34,12 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         nav_view.setNavigationItemSelectedListener(this)
 
+        player_pager.offscreenPageLimit = 3
         setupPager(player_pager)
         tab_layout.setupWithViewPager(player_pager)
 
         supportFragmentManager.beginTransaction()
-            .replace(R.id.playback_container, FullScreenPlaybackFragment(), null)
+            .replace(R.id.playback_container, FullScreenPlaybackFragment(), "PlaybackFragment")
             .commit()
     }
 
@@ -49,6 +47,7 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         val adapter = PlayerPagerAdapter(supportFragmentManager)
         adapter.addFragment(AllTracksFragment(), "All Songs")
         adapter.addFragment(AlbumsFragment(), "Albums")
+        adapter.addFragment(Fragment(), "Radio")
         pager.adapter = adapter
     }
     
