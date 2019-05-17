@@ -3,6 +3,7 @@ package com.kuzheevadel.vmplayerv2.di
 import android.arch.lifecycle.ViewModel
 import com.kuzheevadel.vmplayerv2.viewmodels.AlbumViewModel
 import com.kuzheevadel.vmplayerv2.viewmodels.AllTracksViewModel
+import com.kuzheevadel.vmplayerv2.viewmodels.DetailAlbumViewModel
 import com.kuzheevadel.vmplayerv2.viewmodels.PlaybackViewModel
 import dagger.Binds
 import dagger.Module
@@ -26,4 +27,9 @@ abstract class Model {
     @IntoMap
     @ViewModelKey(PlaybackViewModel::class)
     abstract fun playbackViewModel(playbackViewModel: PlaybackViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(DetailAlbumViewModel::class)
+    abstract fun detailViewModel(detailViewModel: DetailAlbumViewModel): ViewModel
 }

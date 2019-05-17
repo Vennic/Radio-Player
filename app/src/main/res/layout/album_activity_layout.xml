@@ -11,38 +11,60 @@
         app:umanoShadowHeight="5dp"
         tools:context=".activities.AlbumActivity">
 
-        <android.support.design.widget.CoordinatorLayout
+    <android.support.design.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <LinearLayout
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
+            <TextView
+                    tools:text="Mutter"
+                    android:gravity="center|start"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:id="@+id/detail_album_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp" android:textSize="18sp" android:textColor="@android:color/black"/>
 
             <android.support.v7.widget.RecyclerView
                     android:id="@+id/albums_recycler_detail"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:elevation="20dp"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+                    />
 
+        </LinearLayout>
 
-            <android.support.design.widget.AppBarLayout
+        <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                    android:id="@+id/player_album_toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    app:layout_scrollFlags="enterAlways|snap|scroll"
+                    android:background="?attr/colorPrimary"
+                    android:layout_height="?attr/actionBarSize"/>
 
-                <android.support.v7.widget.Toolbar
-                        android:id="@+id/player_album_toolbar"
-                        android:layout_width="match_parent"
-                        app:layout_scrollFlags="enterAlways|snap|scroll"
-                        android:background="?attr/colorPrimary"
-                        android:layout_height="?attr/actionBarSize"/>
+            <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/albums_detail_image"
+                    android:layout_width="match_parent"
+                    android:src="@drawable/album_image"
+                    android:scaleType="centerCrop"
+                    android:transitionName="shared_album_image"
+                    app:layout_scrollFlags="scroll|enterAlways"
+                    android:layout_height="276dp"/>
 
-                <android.support.v7.widget.AppCompatImageView
-                        android:id="@+id/albums_detail_image"
-                        android:layout_width="match_parent"
-                        app:layout_scrollFlags="scroll|enterAlways"
-                        android:layout_height="276dp"/>
+        </android.support.design.widget.AppBarLayout>
 
-            </android.support.design.widget.AppBarLayout>
 
-        </android.support.design.widget.CoordinatorLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
 
     <FrameLayout
             android:id="@+id/playback_container_detail"

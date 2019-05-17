@@ -22,7 +22,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="144dp"
                 android:scaleType="centerCrop"
-                tools:src="@drawable/album_image"
+                android:src="@drawable/album_image"
+                android:transitionName="shared_album_image"
                 android:id="@+id/card_albums_image"/>
 
         <android.support.v7.widget.AppCompatTextView

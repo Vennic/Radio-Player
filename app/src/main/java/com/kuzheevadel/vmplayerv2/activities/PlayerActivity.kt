@@ -3,11 +3,13 @@ package com.kuzheevadel.vmplayerv2.activities
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.transition.Fade
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.MenuItem
+import android.view.View
 import com.kuzheevadel.vmplayerv2.fragments.AllTracksFragment
 import com.kuzheevadel.vmplayerv2.adapters.PlayerPagerAdapter
 import com.kuzheevadel.vmplayerv2.R
@@ -24,6 +26,15 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(player_toolbar)
+
+        /*val fade = Fade()
+        val decor = window.decorView
+        fade.excludeTarget(android.R.id.statusBarBackground, true)
+        fade.excludeTarget(android.R.id.navigationBarBackground, true)
+        fade.excludeTarget(android.R.id.background, true)*//*
+
+        window.enterTransition = fade*/
+
 
         val toggle = ActionBarDrawerToggle(
             this, drawer_layout, player_toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close

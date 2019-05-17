@@ -2,8 +2,11 @@ package com.kuzheevadel.vmplayerv2.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.FragmentManager
+import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.RecyclerView
@@ -39,7 +42,7 @@ class AlbumsAdapter(private val context: Context): RecyclerView.Adapter<AlbumsAd
     }
 
     override fun onCreateViewHolder(container: ViewGroup, position: Int): AlbumsViewHolder {
-        return AlbumsViewHolder(LayoutInflater.from(context).inflate(R.layout.album_item, container, false))
+        return AlbumsViewHolder(LayoutInflater.from(activity).inflate(R.layout.album_item, container, false))
     }
 
     override fun getItemCount(): Int {
@@ -50,22 +53,21 @@ class AlbumsAdapter(private val context: Context): RecyclerView.Adapter<AlbumsAd
         viewHolder.bind(position)
     }
 
-    inner class AlbumsViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        private val albumImage: AppCompatImageView = view.card_albums_image
+    inner class AlbumsViewHolder(private val view: View): RecyclerView.ViewHolder(view) {
+        private val albumImage = view.card_albums_image
         private val albumText = view.card_albums_text
-        init {
-            view.setOnClickListener {
-                /*fragmentManager.beginTransaction()
-                    .replace(R.id.root_frag, DetailAlbumFragment())
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                    .addToBackStack(null)
-                    .commit()*/
 
-                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity)
-                val intent = Intent(context, AlbumActivity::class.java)
-                context.startActivity(intent)
+        /*init {
+            view.setOnClickListener {
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, albumImage, ViewCompat.getTransitionName(albumImage)!!)
+                val intent = Intent(activity, AlbumActivity::class.java)
+                intent.putExtra("Album's Uri", uri.toString())
+                intent.putExtra("Text", albumText.text)
+                activity.startActivity(intent, options.toBundle())
             }
-        }
+
+        }*/
+
         fun bind(position: Int) {
             val album = albumsList[position]
             albumText.text = album.title
@@ -76,6 +78,15 @@ class AlbumsAdapter(private val context: Context): RecyclerView.Adapter<AlbumsAd
                 .fit()
                 .placeholder(R.drawable.vinil_default)
                 .into(albumImage)
+
+            view.setOnClickListener {
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, albumImage, ViewCompat.getTransitionName(albumImage)!!)
+                val intent = Intent(activity, AlbumActivity::class.java)
+                intent.putExtra("Album's Uri", uri.toString())
+                intent.putExtra("Text", album.title)
+                intent.putExtra("Position", position)
+                activity.startActivity(intent, options.toBundle())
+            }
         }
     }
 }

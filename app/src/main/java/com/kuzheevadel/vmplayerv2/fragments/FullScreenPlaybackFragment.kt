@@ -1,5 +1,6 @@
 package com.kuzheevadel.vmplayerv2.fragments
 
+import android.arch.lifecycle.ViewModelProviders
 import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -8,12 +9,28 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.kuzheevadel.vmplayerv2.R
+import com.kuzheevadel.vmplayerv2.di.App
+import com.kuzheevadel.vmplayerv2.di.CustomViewModelFactory
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
+import com.kuzheevadel.vmplayerv2.viewmodels.AlbumViewModel
+import com.kuzheevadel.vmplayerv2.viewmodels.PlaybackViewModel
 import kotlinx.android.synthetic.main.full_screen_playback.view.*
+import javax.inject.Inject
 
 class FullScreenPlaybackFragment: Fragment(), Interfaces.PlaybackView {
 
+    @Inject
+    lateinit var factory: CustomViewModelFactory
+
+    lateinit var viewModel: PlaybackViewModel
+
     private var isPlaying = true
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (activity?.application as App).getComponent().inject(this)
+        viewModel = ViewModelProviders.of(this, factory).get(PlaybackViewModel::class.java)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.full_screen_playback, container, false)
