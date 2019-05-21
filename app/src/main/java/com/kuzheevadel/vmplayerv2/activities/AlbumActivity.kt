@@ -4,15 +4,14 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.transition.Fade
-import android.view.View
 import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.adapters.AlbumsTrackList
-import com.kuzheevadel.vmplayerv2.di.App
-import com.kuzheevadel.vmplayerv2.di.CustomViewModelFactory
+import com.kuzheevadel.vmplayerv2.common.Constants
+import com.kuzheevadel.vmplayerv2.dagger.App
+import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
 import com.kuzheevadel.vmplayerv2.fragments.FullScreenPlaybackFragment
 import com.kuzheevadel.vmplayerv2.viewmodels.DetailAlbumViewModel
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.album_activity_layout.*
 import javax.inject.Inject
@@ -37,9 +36,9 @@ class AlbumActivity: AppCompatActivity() {
         viewModel = ViewModelProviders.of(this, factory).get(DetailAlbumViewModel::class.java)
         viewModel.setAdapter(adapter)
 
-        val position = intent.getIntExtra("Position", 0)
-        val uri = intent.getStringExtra("Album's Uri")
-        detail_album_text.text = intent.getStringExtra("Text")
+        val position = intent.getIntExtra(Constants.POSITION, 0)
+        val uri = intent.getStringExtra(Constants.ALBUMS_URI)
+        detail_album_text.text = intent.getStringExtra(Constants.ALBUMS_TITLE)
 
         albums_recycler_detail.layoutManager = LinearLayoutManager(this)
         albums_recycler_detail.adapter = adapter
@@ -53,5 +52,14 @@ class AlbumActivity: AppCompatActivity() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.playback_container_detail, FullScreenPlaybackFragment(), null)
             .commit()
+    }
+
+    override fun onBackPressed() {
+        if (activity_album_root != null &&
+            (activity_album_root.panelState == SlidingUpPanelLayout.PanelState.EXPANDED || activity_album_root.panelState == SlidingUpPanelLayout.PanelState.ANCHORED)){
+            activity_album_root.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+        } else {
+            super.onBackPressed()
+        }
     }
 }

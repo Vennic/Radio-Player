@@ -27,15 +27,6 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         setContentView(R.layout.activity_main)
         setSupportActionBar(player_toolbar)
 
-        /*val fade = Fade()
-        val decor = window.decorView
-        fade.excludeTarget(android.R.id.statusBarBackground, true)
-        fade.excludeTarget(android.R.id.navigationBarBackground, true)
-        fade.excludeTarget(android.R.id.background, true)*//*
-
-        window.enterTransition = fade*/
-
-
         val toggle = ActionBarDrawerToggle(
             this, drawer_layout, player_toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
         )

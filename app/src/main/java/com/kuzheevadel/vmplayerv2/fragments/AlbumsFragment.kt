@@ -11,8 +11,8 @@ import android.view.ViewGroup
 import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.adapters.AlbumsAdapter
 import com.kuzheevadel.vmplayerv2.common.LoadMediaMessage
-import com.kuzheevadel.vmplayerv2.di.App
-import com.kuzheevadel.vmplayerv2.di.CustomViewModelFactory
+import com.kuzheevadel.vmplayerv2.dagger.App
+import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
 import com.kuzheevadel.vmplayerv2.viewmodels.AlbumViewModel
 import kotlinx.android.synthetic.main.albums_layout.view.*
 import org.greenrobot.eventbus.EventBus

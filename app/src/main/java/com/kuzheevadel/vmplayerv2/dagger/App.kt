@@ -1,11 +1,11 @@
-package com.kuzheevadel.vmplayerv2.di
+package com.kuzheevadel.vmplayerv2.dagger
 
 import android.app.Application
 import android.content.Context
 import com.kuzheevadel.vmplayerv2.activities.AlbumActivity
 import com.kuzheevadel.vmplayerv2.adapters.AlbumsAdapter
 import com.kuzheevadel.vmplayerv2.adapters.AlbumsTrackList
-import com.kuzheevadel.vmplayerv2.adapters.TracksRecyclerAdapter
+import com.kuzheevadel.vmplayerv2.adapters.TrackListAdapter
 import com.kuzheevadel.vmplayerv2.fragments.AlbumsFragment
 import com.kuzheevadel.vmplayerv2.fragments.AllTracksFragment
 import com.kuzheevadel.vmplayerv2.fragments.FullScreenPlaybackFragment
@@ -13,7 +13,6 @@ import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Track
 import com.kuzheevadel.vmplayerv2.repository.StorageMediaRepository
 import com.kuzheevadel.vmplayerv2.services.StorageMedia
-import com.kuzheevadel.vmplayerv2.viewmodels.DetailAlbumViewModel
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
@@ -68,11 +67,6 @@ class AppModule(val context: Context) {
         return AlbumsAdapter(context)
     }
 
-    @Provides
-    fun provideAdapter(context: Context): TracksRecyclerAdapter {
-        return TracksRecyclerAdapter(context)
-    }
-
     @Singleton
     @Provides
     fun provideStorageMediaRepository(): Interfaces.StorageMediaRepository {
@@ -82,5 +76,10 @@ class AppModule(val context: Context) {
     @Provides
     fun provideStorageMedia(context: Context): Callable<MutableList<Track>> {
         return StorageMedia(context)
+    }
+
+    @Provides
+    fun provideTraclListAdapter(): TrackListAdapter {
+        return TrackListAdapter()
     }
 }

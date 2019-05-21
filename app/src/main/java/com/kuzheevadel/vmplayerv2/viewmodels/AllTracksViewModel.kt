@@ -2,6 +2,7 @@ package com.kuzheevadel.vmplayerv2.viewmodels
 
 import android.annotation.SuppressLint
 import android.arch.lifecycle.ViewModel
+import com.kuzheevadel.vmplayerv2.adapters.TrackListAdapter
 import com.kuzheevadel.vmplayerv2.common.LoadMediaMessage
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Track
@@ -15,7 +16,7 @@ import javax.inject.Inject
 class AllTracksViewModel @Inject constructor(private val storageMedia: Callable<MutableList<Track>>,
                                              private val mediaRepository: Interfaces.StorageMediaRepository): ViewModel() {
 
-    private lateinit var mAdapter: Interfaces.TracksAdapter
+    private lateinit var mAdapter: TrackListAdapter
 
     @SuppressLint("CheckResult")
     fun loadTracks() {
@@ -24,7 +25,8 @@ class AllTracksViewModel @Inject constructor(private val storageMedia: Callable<
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 mediaRepository.setTracksList(it)
-                mAdapter.updateTracksList(mediaRepository.getTracksList())
+                mAdapter.setDataList(mediaRepository.getTracksList())
+                mAdapter.notifyDataSetChanged()
 
                 if (it != null) {
                     EventBus.getDefault().post(LoadMediaMessage(true))
@@ -35,11 +37,12 @@ class AllTracksViewModel @Inject constructor(private val storageMedia: Callable<
 
     }
 
-    fun setAdapter(adapter: Interfaces.TracksAdapter) {
+    fun setAdapter(adapter: TrackListAdapter) {
         mAdapter = adapter
     }
 
     fun updateAdapter() {
-        mAdapter.updateTracksList(mediaRepository.getTracksList())
+        mAdapter.setDataList(mediaRepository.getTracksList())
+        mAdapter.notifyDataSetChanged()
     }
 }

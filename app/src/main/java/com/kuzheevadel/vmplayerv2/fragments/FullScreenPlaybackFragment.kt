@@ -9,10 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.kuzheevadel.vmplayerv2.R
-import com.kuzheevadel.vmplayerv2.di.App
-import com.kuzheevadel.vmplayerv2.di.CustomViewModelFactory
+import com.kuzheevadel.vmplayerv2.dagger.App
+import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
-import com.kuzheevadel.vmplayerv2.viewmodels.AlbumViewModel
 import com.kuzheevadel.vmplayerv2.viewmodels.PlaybackViewModel
 import kotlinx.android.synthetic.main.full_screen_playback.view.*
 import javax.inject.Inject

@@ -1,4 +1,4 @@
-package com.kuzheevadel.vmplayerv2.di
+package com.kuzheevadel.vmplayerv2.dagger
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider

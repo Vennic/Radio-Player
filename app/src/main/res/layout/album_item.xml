@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_height="192dp"
         android:id="@+id/albums_card_view"
@@ -27,7 +26,7 @@
                 android:id="@+id/card_albums_image"/>
 
         <android.support.v7.widget.AppCompatTextView
-                android:text="asdasd"
+                tools:text="asdasd"
                 android:layout_marginTop="12dp"
                 android:layout_marginStart="12dp"
                 android:layout_gravity="bottom|start"
@@ -36,9 +35,7 @@
                 android:layout_marginEnd="12dp"
                 android:id="@+id/card_albums_text"
                 android:singleLine="true"
-                android:ellipsize="marquee"
                 android:textAllCaps="false"
-                android:marqueeRepeatLimit="marquee_forever"
                 android:textSize="18sp"
                 android:textColor="@android:color/black"/>
     </LinearLayout>

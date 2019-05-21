@@ -13,9 +13,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kuzheevadel.vmplayerv2.R
-import com.kuzheevadel.vmplayerv2.adapters.TracksRecyclerAdapter
-import com.kuzheevadel.vmplayerv2.di.App
-import com.kuzheevadel.vmplayerv2.di.CustomViewModelFactory
+import com.kuzheevadel.vmplayerv2.adapters.TrackListAdapter
+import com.kuzheevadel.vmplayerv2.dagger.App
+import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
+import com.kuzheevadel.vmplayerv2.model.Track
 import com.kuzheevadel.vmplayerv2.viewmodels.AllTracksViewModel
 import kotlinx.android.synthetic.main.recycler_layout.view.*
 import javax.inject.Inject
@@ -30,7 +31,7 @@ class AllTracksFragment: Fragment() {
     lateinit var factory: CustomViewModelFactory
 
     @Inject
-    lateinit var mAdapter: TracksRecyclerAdapter
+    lateinit var mAdapter: TrackListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
