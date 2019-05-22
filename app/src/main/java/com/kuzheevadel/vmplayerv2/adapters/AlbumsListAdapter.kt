@@ -36,8 +36,10 @@ class AlbumsListAdapter: RecyclerView.Adapter<AlbumsListAdapter.AlbumsListViewHo
 
         viewHolder.binding?.click = object : ClickHandler {
             override fun click(view: View) {
+
                 val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,
-                    viewHolder.binding?.cardAlbumsImage as View, ViewCompat.getTransitionName(viewHolder.binding.cardAlbumsImage)!!)
+                    viewHolder.binding?.cardAlbumsImage as View,
+                    ViewCompat.getTransitionName(viewHolder.binding.cardAlbumsImage)!!)
 
                 val intent = Intent(activity, AlbumActivity::class.java)
                 intent.putExtra(Constants.ALBUMS_URI, album.getAlbumImageUri().toString())
@@ -45,7 +47,6 @@ class AlbumsListAdapter: RecyclerView.Adapter<AlbumsListAdapter.AlbumsListViewHo
                 intent.putExtra(Constants.POSITION, viewHolder.adapterPosition)
                 activity.startActivity(intent, options.toBundle())
             }
-
         }
     }
 

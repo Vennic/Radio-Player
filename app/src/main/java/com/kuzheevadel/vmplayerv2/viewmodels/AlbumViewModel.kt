@@ -17,4 +17,5 @@ class AlbumViewModel @Inject constructor(private val mediaRepository: Interfaces
         mAdapter.albumsList = mediaRepository.getAlbumsList()
         mAdapter.notifyDataSetChanged()
     }
+
 }

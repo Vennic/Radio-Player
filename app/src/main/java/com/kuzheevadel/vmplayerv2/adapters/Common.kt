@@ -14,43 +14,6 @@ import com.kuzheevadel.vmplayerv2.databinding.AlbumItemBinding
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 
-/*abstract class BaseRecyclerAdapter<T>: RecyclerView.Adapter<BaseRecyclerAdapter<T>.BindingHolder>() {
-
-    private var itemsList = mutableListOf<T>()
-
-    fun setDataList(list: MutableList<T>) {
-        itemsList = list
-    }
-
-    abstract fun getItemLayoutId(): Int
-    abstract fun getVariableId(): Int
-
-
-    override fun onCreateViewHolder(parent: ViewGroup, position: Int): BindingHolder {
-        val view = LayoutInflater.from(parent.context).inflate(getItemLayoutId(), parent, false)
-        return BindingHolder(view)
-    }
-
-    override fun getItemCount(): Int {
-        return itemsList.size
-    }
-
-    override fun onBindViewHolder(viewHolder: BindingHolder, position: Int) {
-        val item = itemsList[position]
-        viewHolder.getDataBinding()?.setVariable(getVariableId(), item)
-        viewHolder.getDataBinding()?.executePendingBindings()
-    }
-
-    inner class BindingHolder(val view: View): RecyclerView.ViewHolder(view) {
-
-        private var binding: ViewDataBinding? = DataBindingUtil.bind(view)
-
-        fun getDataBinding(): ViewDataBinding? {
-            return binding
-        }
-    }
-}*/
-
 interface ClickHandler {
     fun click(view: View)
 }

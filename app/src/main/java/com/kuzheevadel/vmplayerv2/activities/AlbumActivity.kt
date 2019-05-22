@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import com.kuzheevadel.vmplayerv2.R
-import com.kuzheevadel.vmplayerv2.adapters.AlbumsTrackList
+import com.kuzheevadel.vmplayerv2.adapters.AlbumsTracksListAdapter
 import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.dagger.App
 import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
@@ -21,10 +21,10 @@ class AlbumActivity: AppCompatActivity() {
     @Inject
     lateinit var factory: CustomViewModelFactory
 
-    lateinit var viewModel: DetailAlbumViewModel
+    private lateinit var viewModel: DetailAlbumViewModel
 
     @Inject
-    lateinit var adapter: AlbumsTrackList
+    lateinit var adapter: AlbumsTracksListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

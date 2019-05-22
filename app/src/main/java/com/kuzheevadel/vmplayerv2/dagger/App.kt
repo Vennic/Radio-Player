@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.kuzheevadel.vmplayerv2.activities.AlbumActivity
 import com.kuzheevadel.vmplayerv2.adapters.AlbumsListAdapter
-import com.kuzheevadel.vmplayerv2.adapters.AlbumsTrackList
+import com.kuzheevadel.vmplayerv2.adapters.AlbumsTracksListAdapter
 import com.kuzheevadel.vmplayerv2.adapters.TrackListAdapter
 import com.kuzheevadel.vmplayerv2.fragments.AlbumsFragment
 import com.kuzheevadel.vmplayerv2.fragments.AllTracksFragment
@@ -58,8 +58,8 @@ class AppModule(val context: Context) {
     fun provContext() = context
 
     @Provides
-    fun provideDetailAlbumAdapter(context: Context): AlbumsTrackList {
-        return AlbumsTrackList(context)
+    fun provideDetailAlbumAdapter(): AlbumsTracksListAdapter {
+        return AlbumsTracksListAdapter()
     }
 
     @Provides
@@ -79,7 +79,7 @@ class AppModule(val context: Context) {
     }
 
     @Provides
-    fun provideTraclListAdapter(): TrackListAdapter {
+    fun provideTrackListAdapter(): TrackListAdapter {
         return TrackListAdapter()
     }
 }
