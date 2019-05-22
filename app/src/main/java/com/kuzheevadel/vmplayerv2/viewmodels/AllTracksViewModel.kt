@@ -25,7 +25,7 @@ class AllTracksViewModel @Inject constructor(private val storageMedia: Callable<
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 mediaRepository.setTracksList(it)
-                mAdapter.setDataList(mediaRepository.getTracksList())
+                mAdapter.trackList = mediaRepository.getTracksList()
                 mAdapter.notifyDataSetChanged()
 
                 if (it != null) {
@@ -42,7 +42,7 @@ class AllTracksViewModel @Inject constructor(private val storageMedia: Callable<
     }
 
     fun updateAdapter() {
-        mAdapter.setDataList(mediaRepository.getTracksList())
+        mAdapter.trackList = mediaRepository.getTracksList()
         mAdapter.notifyDataSetChanged()
     }
 }

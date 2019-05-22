@@ -3,7 +3,7 @@ package com.kuzheevadel.vmplayerv2.dagger
 import android.app.Application
 import android.content.Context
 import com.kuzheevadel.vmplayerv2.activities.AlbumActivity
-import com.kuzheevadel.vmplayerv2.adapters.AlbumsAdapter
+import com.kuzheevadel.vmplayerv2.adapters.AlbumsListAdapter
 import com.kuzheevadel.vmplayerv2.adapters.AlbumsTrackList
 import com.kuzheevadel.vmplayerv2.adapters.TrackListAdapter
 import com.kuzheevadel.vmplayerv2.fragments.AlbumsFragment
@@ -63,8 +63,8 @@ class AppModule(val context: Context) {
     }
 
     @Provides
-    fun provideAlbumsAdapter(context: Context): AlbumsAdapter {
-        return AlbumsAdapter(context)
+    fun provideAlbumsAdapter(): AlbumsListAdapter {
+        return AlbumsListAdapter()
     }
 
     @Singleton

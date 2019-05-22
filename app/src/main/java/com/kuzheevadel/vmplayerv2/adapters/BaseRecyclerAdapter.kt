@@ -10,10 +10,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kuzheevadel.vmplayerv2.R
+import com.kuzheevadel.vmplayerv2.databinding.AlbumItemBinding
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 
-abstract class BaseRecyclerAdapter<T>: RecyclerView.Adapter<BaseRecyclerAdapter<T>.BindingHolder>() {
+/*abstract class BaseRecyclerAdapter<T>: RecyclerView.Adapter<BaseRecyclerAdapter<T>.BindingHolder>() {
 
     private var itemsList = mutableListOf<T>()
 
@@ -23,6 +24,7 @@ abstract class BaseRecyclerAdapter<T>: RecyclerView.Adapter<BaseRecyclerAdapter<
 
     abstract fun getItemLayoutId(): Int
     abstract fun getVariableId(): Int
+
 
     override fun onCreateViewHolder(parent: ViewGroup, position: Int): BindingHolder {
         val view = LayoutInflater.from(parent.context).inflate(getItemLayoutId(), parent, false)
@@ -39,7 +41,7 @@ abstract class BaseRecyclerAdapter<T>: RecyclerView.Adapter<BaseRecyclerAdapter<
         viewHolder.getDataBinding()?.executePendingBindings()
     }
 
-    inner class BindingHolder(view: View): RecyclerView.ViewHolder(view) {
+    inner class BindingHolder(val view: View): RecyclerView.ViewHolder(view) {
 
         private var binding: ViewDataBinding? = DataBindingUtil.bind(view)
 
@@ -47,6 +49,10 @@ abstract class BaseRecyclerAdapter<T>: RecyclerView.Adapter<BaseRecyclerAdapter<
             return binding
         }
     }
+}*/
+
+interface ClickHandler {
+    fun click(view: View)
 }
 
 @BindingAdapter(value = ["app:url"])
@@ -57,5 +63,13 @@ fun loadRoundedCornersImage(view: AppCompatImageView, uri: Uri) {
         .placeholder(R.drawable.vinil_default)
         .resize(100, 100)
         .transform(RoundedCornersTransformation(20, 3))
+        .into(view)
+}
+
+@BindingAdapter(value = ["app:album_url"])
+fun loadImage(view: AppCompatImageView, uri: Uri) {
+    Picasso.get().load(uri)
+        .fit()
+        .placeholder(R.drawable.vinil_default)
         .into(view)
 }

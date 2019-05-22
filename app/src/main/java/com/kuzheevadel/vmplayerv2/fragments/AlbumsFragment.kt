@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kuzheevadel.vmplayerv2.R
-import com.kuzheevadel.vmplayerv2.adapters.AlbumsAdapter
+import com.kuzheevadel.vmplayerv2.adapters.AlbumsListAdapter
 import com.kuzheevadel.vmplayerv2.common.LoadMediaMessage
 import com.kuzheevadel.vmplayerv2.dagger.App
 import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
@@ -23,7 +23,7 @@ import javax.inject.Inject
 class AlbumsFragment: Fragment() {
 
     @Inject
-    lateinit var mAdapter: AlbumsAdapter
+    lateinit var mAdapter: AlbumsListAdapter
 
     @Inject
     lateinit var factory: CustomViewModelFactory
@@ -38,7 +38,6 @@ class AlbumsFragment: Fragment() {
 
         viewModel.setAdapter(mAdapter)
 
-        mAdapter.setFragmentManager(activity?.supportFragmentManager!!)
         mAdapter.setActivity(activity as AppCompatActivity)
     }
 

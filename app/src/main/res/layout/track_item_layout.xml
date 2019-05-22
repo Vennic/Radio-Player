@@ -4,6 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <variable name="click" type="com.kuzheevadel.vmplayerv2.adapters.ClickHandler"/>
         <variable name="track"
                   type="com.kuzheevadel.vmplayerv2.model.Track"/>
     </data>
@@ -14,6 +15,7 @@
             android:layout_width="match_parent"
             android:clickable="true"
             android:focusable="true"
+            android:onClick="@{click.click}"
             android:background="@drawable/ripple_effect"
             android:layout_height="60dp">
 
