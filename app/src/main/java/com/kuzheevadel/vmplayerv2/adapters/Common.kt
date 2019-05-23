@@ -19,7 +19,7 @@ interface ClickHandler {
 }
 
 @BindingAdapter(value = ["app:url"])
-fun loadRoundedCornersImage(view: AppCompatImageView, uri: Uri) {
+fun loadRoundedCornersImage(view: AppCompatImageView, uri: Uri?) {
     Picasso.get()
         .load(uri)
         .centerCrop()
@@ -30,9 +30,19 @@ fun loadRoundedCornersImage(view: AppCompatImageView, uri: Uri) {
 }
 
 @BindingAdapter(value = ["app:album_url"])
-fun loadImage(view: AppCompatImageView, uri: Uri) {
+fun loadImage(view: AppCompatImageView, uri: Uri?) {
     Picasso.get().load(uri)
         .fit()
         .placeholder(R.drawable.vinil_default)
+        .into(view)
+}
+
+@BindingAdapter(value = ["app:radio_thumb"])
+fun loadRadioImage(view: AppCompatImageView, url: String?) {
+    Picasso.get().load(url)
+        .centerCrop()
+        .placeholder(R.drawable.vinil_default)
+        .resize(100, 100)
+        .transform(RoundedCornersTransformation(20, 3))
         .into(view)
 }

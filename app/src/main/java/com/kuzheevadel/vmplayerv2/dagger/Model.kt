@@ -1,10 +1,7 @@
 package com.kuzheevadel.vmplayerv2.dagger
 
 import android.arch.lifecycle.ViewModel
-import com.kuzheevadel.vmplayerv2.viewmodels.AlbumViewModel
-import com.kuzheevadel.vmplayerv2.viewmodels.AllTracksViewModel
-import com.kuzheevadel.vmplayerv2.viewmodels.DetailAlbumViewModel
-import com.kuzheevadel.vmplayerv2.viewmodels.PlaybackViewModel
+import com.kuzheevadel.vmplayerv2.viewmodels.*
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -32,4 +29,9 @@ abstract class Model {
     @IntoMap
     @ViewModelKey(DetailAlbumViewModel::class)
     abstract fun detailViewModel(detailViewModel: DetailAlbumViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(RadioViewModel::class)
+    abstract fun radioViewModel(radioViewModel: RadioViewModel): ViewModel
 }

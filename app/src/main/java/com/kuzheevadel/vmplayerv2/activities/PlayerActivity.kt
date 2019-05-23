@@ -15,6 +15,7 @@ import com.kuzheevadel.vmplayerv2.adapters.PlayerPagerAdapter
 import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.fragments.AlbumsFragment
 import com.kuzheevadel.vmplayerv2.fragments.FullScreenPlaybackFragment
+import com.kuzheevadel.vmplayerv2.fragments.RadioFragment
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.player_layout.*
@@ -49,7 +50,7 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         val adapter = PlayerPagerAdapter(supportFragmentManager)
         adapter.addFragment(AllTracksFragment(), "All Songs")
         adapter.addFragment(AlbumsFragment(), "Albums")
-        adapter.addFragment(Fragment(), "Radio")
+        adapter.addFragment(RadioFragment(), "Radio")
         pager.adapter = adapter
     }
     

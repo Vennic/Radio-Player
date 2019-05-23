@@ -3,12 +3,13 @@ package com.kuzheevadel.vmplayerv2.interfaces
 import android.support.v4.app.FragmentManager
 import com.kuzheevadel.vmplayerv2.model.Album
 import com.kuzheevadel.vmplayerv2.model.Track
+import com.kuzheevadel.vmplayerv2.radio.RadioStation
+import io.reactivex.Observable
 
 class Interfaces {
 
-    interface AlbumsPresenter {
-        fun setAdapter(adapter: Interfaces.AlbumsAdapter)
-        fun updateAdapter()
+    interface Network {
+        fun getStationsList(type: Int, page: Int): Observable<MutableList<RadioStation>>
     }
 
     interface AlbumsView {
@@ -24,14 +25,6 @@ class Interfaces {
         fun updateTracksList(list: MutableList<Track>)
     }
 
-    interface AllTracksPresenter {
-        fun updateAdapter()
-        fun setAdapter(adapter: Interfaces.TracksAdapter)
-        fun loadTracks()
-    }
-    interface PlaybackPresenter {
-
-    }
 
     interface PlaybackView {
 

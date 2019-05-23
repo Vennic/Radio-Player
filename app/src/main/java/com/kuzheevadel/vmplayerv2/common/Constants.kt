@@ -10,4 +10,5 @@ object Constants {
     const val POSITION = "com.kuzheevadel.position"
     const val ALBUMS_URI = "com.kuzheevadel.albumsUri"
     const val ALBUMS_TITLE = "com.kuzheevadel.title"
+    const val BASE_RADIO_URL = "http://api.dirble.com"
 }

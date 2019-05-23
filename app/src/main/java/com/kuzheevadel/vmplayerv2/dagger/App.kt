@@ -5,14 +5,17 @@ import android.content.Context
 import com.kuzheevadel.vmplayerv2.activities.AlbumActivity
 import com.kuzheevadel.vmplayerv2.adapters.AlbumsListAdapter
 import com.kuzheevadel.vmplayerv2.adapters.AlbumsTracksListAdapter
+import com.kuzheevadel.vmplayerv2.adapters.RadioStationsAdapter
 import com.kuzheevadel.vmplayerv2.adapters.TrackListAdapter
 import com.kuzheevadel.vmplayerv2.fragments.AlbumsFragment
 import com.kuzheevadel.vmplayerv2.fragments.AllTracksFragment
 import com.kuzheevadel.vmplayerv2.fragments.FullScreenPlaybackFragment
+import com.kuzheevadel.vmplayerv2.fragments.RadioFragment
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Track
 import com.kuzheevadel.vmplayerv2.repository.StorageMediaRepository
 import com.kuzheevadel.vmplayerv2.services.StorageMedia
+import com.kuzheevadel.vmplayerv2.services.VmpNetwork
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
@@ -47,7 +50,8 @@ interface ApplicationComponent {
     fun inject(allTracksFragment: AllTracksFragment)
     fun inject(albumsFragment: AlbumsFragment)
     fun inject(playbackFragment: FullScreenPlaybackFragment)
-    fun inject(detailAlbumViewModel: AlbumActivity)
+    fun inject(detailAlbumFragment: AlbumActivity)
+    fun inject(fragment: RadioFragment)
 }
 
 @Module(includes = [Model::class])
@@ -67,6 +71,11 @@ class AppModule(val context: Context) {
         return AlbumsListAdapter()
     }
 
+    @Provides
+    fun provideRadioAdapter(): RadioStationsAdapter {
+        return RadioStationsAdapter()
+    }
+
     @Singleton
     @Provides
     fun provideStorageMediaRepository(): Interfaces.StorageMediaRepository {
@@ -81,5 +90,11 @@ class AppModule(val context: Context) {
     @Provides
     fun provideTrackListAdapter(): TrackListAdapter {
         return TrackListAdapter()
+    }
+
+    @Singleton
+    @Provides
+    fun provideVmpNetwork(): Interfaces.Network {
+        return VmpNetwork()
     }
 }
