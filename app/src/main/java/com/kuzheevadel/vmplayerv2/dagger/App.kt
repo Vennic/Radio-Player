@@ -14,6 +14,7 @@ import com.kuzheevadel.vmplayerv2.fragments.RadioFragment
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Track
 import com.kuzheevadel.vmplayerv2.repository.StorageMediaRepository
+import com.kuzheevadel.vmplayerv2.services.PlayerService
 import com.kuzheevadel.vmplayerv2.services.StorageMedia
 import com.kuzheevadel.vmplayerv2.services.VmpNetwork
 import dagger.BindsInstance
@@ -52,6 +53,7 @@ interface ApplicationComponent {
     fun inject(playbackFragment: FullScreenPlaybackFragment)
     fun inject(detailAlbumFragment: AlbumActivity)
     fun inject(fragment: RadioFragment)
+    fun inject(service: PlayerService)
 }
 
 @Module(includes = [Model::class])
@@ -88,8 +90,8 @@ class AppModule(val context: Context) {
     }
 
     @Provides
-    fun provideTrackListAdapter(): TrackListAdapter {
-        return TrackListAdapter()
+    fun provideTrackListAdapter(context: Context): TrackListAdapter {
+        return TrackListAdapter(context)
     }
 
     @Singleton

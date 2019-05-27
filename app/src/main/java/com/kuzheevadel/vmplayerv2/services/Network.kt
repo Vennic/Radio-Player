@@ -1,12 +1,9 @@
 package com.kuzheevadel.vmplayerv2.services
 
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.radio.RadioStation
-import dagger.Module
-import dagger.Provides
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
