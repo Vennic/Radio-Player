@@ -31,6 +31,8 @@ class Interfaces {
     }
 
     interface StorageMediaRepository {
+        fun setShuffleMode(mode:Int)
+        fun getTrackByPosition(position: Int): Track
         fun getTracksList(): MutableList<Track>
         fun setTracksList(list: MutableList<Track>)
         fun getCurrentTrack(): Track
@@ -41,6 +43,7 @@ class Interfaces {
         fun getCurrentPosition(): Int
         fun setLoopMode(mode: Int)
         fun getAlbumsList(): MutableList<Album>
+        fun setPlayingTrackList(trackList: MutableList<Track>)
     }
 
 }

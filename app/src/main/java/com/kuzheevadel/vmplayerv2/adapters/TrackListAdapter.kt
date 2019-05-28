@@ -14,17 +14,19 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.android.databinding.library.baseAdapters.BR
 import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.databinding.TrackItemLayoutBinding
+import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Track
 import com.kuzheevadel.vmplayerv2.services.PlayerService
 
-class TrackListAdapter(private val context: Context): RecyclerView.Adapter<TrackListAdapter.TrackListViewHolder>() {
+class TrackListAdapter(private val context: Context,
+                       private val mediaRepository: Interfaces.StorageMediaRepository): RecyclerView.Adapter<TrackListAdapter.TrackListViewHolder>() {
 
     var trackList = mutableListOf<Track>()
     private var mediaControllerCompat: MediaControllerCompat? = null
+    private val serviceConnection: ServiceConnection
 
     init {
         val callback = object : MediaControllerCompat.Callback() {
@@ -33,10 +35,10 @@ class TrackListAdapter(private val context: Context): RecyclerView.Adapter<Track
             }
         }
 
-        val serviConnection = object : ServiceConnection {
+        serviceConnection = object : ServiceConnection {
 
             override fun onServiceDisconnected(name: ComponentName?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                mediaControllerCompat = null
             }
 
             override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
@@ -51,7 +53,7 @@ class TrackListAdapter(private val context: Context): RecyclerView.Adapter<Track
                 }
             }
         }
-        context.bindService(Intent(context, PlayerService::class.java), serviConnection, Context.BIND_AUTO_CREATE)
+        context.bindService(Intent(context, PlayerService::class.java), serviceConnection, Context.BIND_AUTO_CREATE)
     }
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): TrackListViewHolder {
@@ -64,16 +66,16 @@ class TrackListAdapter(private val context: Context): RecyclerView.Adapter<Track
         return trackList.size
     }
 
-    override fun onBindViewHolder(viewHolder: TrackListViewHolder, p1: Int) {
-        val track = trackList[p1]
+    override fun onBindViewHolder(viewHolder: TrackListViewHolder, position: Int) {
+        val track = trackList[position]
         val bundle = Bundle()
         viewHolder.binding?.setVariable(BR.track, track)
-        bundle.putParcelable(Constants.PLAYING_TRACK, track)
-        bundle.putInt(Constants.POSITION, p1)
+        bundle.putInt(Constants.POSITION, position)
 
         viewHolder.binding?.click = object : ClickHandler {
 
             override fun click(view: View) {
+                mediaRepository.setPlayingTrackList(trackList)
                 mediaControllerCompat?.transportControls?.prepareFromMediaId("AllTracks", bundle)
             }
 
@@ -85,6 +87,10 @@ class TrackListAdapter(private val context: Context): RecyclerView.Adapter<Track
 
     inner class TrackListViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val binding: TrackItemLayoutBinding? = DataBindingUtil.bind(view)
+    }
+
+    fun unbindService() {
+        context.unbindService(serviceConnection)
     }
 
 }

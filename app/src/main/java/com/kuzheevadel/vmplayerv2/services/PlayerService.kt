@@ -29,6 +29,7 @@ import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.dagger.App
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Track
+import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 
 class PlayerService: Service() {
@@ -109,19 +110,25 @@ class PlayerService: Service() {
         }
     }
 
+    private fun updateUI(track: Track) {
+        EventBus.getDefault().post(track)
+    }
+
     private val mediaSessionCallback: MediaSessionCompat.Callback = object : MediaSessionCompat.Callback() {
 
         var currentState = PlaybackStateCompat.STATE_STOPPED
 
-        override fun onPrepareFromMediaId(mediaId: String?, extras: Bundle?) {
+        override fun onPrepareFromMediaId(mediaId: String?, extras: Bundle) {
             super.onPrepareFromMediaId(mediaId, extras)
-            val track = extras?.getParcelable(Constants.PLAYING_TRACK) as Track
+
             val position = extras.getInt(Constants.POSITION)
+            val track = mediaRepository.getTrackByPosition(position)
 
             if (track.id != mediaRepository.getCurrentTrack().id) {
                 mediaRepository.setCurrentPosition(position)
                 setAudioUri(track.uri)
                 mediaSession.setMetadata(setMediaMetaData(track))
+                updateUI(track)
 
                 onPlay()
 
@@ -185,10 +192,26 @@ class PlayerService: Service() {
 
         override fun onSkipToNext() {
             super.onSkipToNext()
+            mExoplayer.stop()
+            val track = mediaRepository.getNextTrackByClick()
+            setAudioUri(track.uri)
+            updateUI(track)
+            onPlay()
+
         }
 
         override fun onSkipToPrevious() {
             super.onSkipToPrevious()
+            mExoplayer.stop()
+            val track = mediaRepository.getPrevTrack()
+            setAudioUri(track.uri)
+            updateUI(track)
+            onPlay()
+        }
+
+        override fun onSetShuffleMode(shuffleMode: Int) {
+            super.onSetShuffleMode(shuffleMode)
+            mediaRepository.setShuffleMode(shuffleMode)
         }
     }
 

@@ -90,8 +90,8 @@ class AppModule(val context: Context) {
     }
 
     @Provides
-    fun provideTrackListAdapter(context: Context): TrackListAdapter {
-        return TrackListAdapter(context)
+    fun provideTrackListAdapter(context: Context, mediaRepository: Interfaces.StorageMediaRepository): TrackListAdapter {
+        return TrackListAdapter(context, mediaRepository)
     }
 
     @Singleton

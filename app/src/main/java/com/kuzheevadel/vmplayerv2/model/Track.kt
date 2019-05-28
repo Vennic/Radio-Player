@@ -29,7 +29,7 @@ data class Track(val id: Long,
         return "$artist • ${getDurationInTimeFormat()}"
     }
 
-    private fun getDurationInTimeFormat(): String {
+    fun getDurationInTimeFormat(): String {
         val d = duration / 1000
         val minutes = d / 60
         val seconds = d % 60

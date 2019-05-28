@@ -72,4 +72,9 @@ class AllTracksFragment: Fragment() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
+    override fun onDestroy() {
+        mAdapter.unbindService()
+        super.onDestroy()
+    }
+
 }
