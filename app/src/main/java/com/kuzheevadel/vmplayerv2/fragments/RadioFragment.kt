@@ -1,6 +1,5 @@
 package com.kuzheevadel.vmplayerv2.fragments
 
-import android.annotation.SuppressLint
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -8,21 +7,15 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.adapters.RadioStationsAdapter
 import com.kuzheevadel.vmplayerv2.dagger.App
 import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
 import com.kuzheevadel.vmplayerv2.services.State
-import com.kuzheevadel.vmplayerv2.services.VmpNetwork
-import com.kuzheevadel.vmplayerv2.viewmodels.AllTracksViewModel
 import com.kuzheevadel.vmplayerv2.viewmodels.RadioViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.radio_layout.view.*
 import javax.inject.Inject
 

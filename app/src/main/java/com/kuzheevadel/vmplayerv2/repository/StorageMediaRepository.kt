@@ -16,9 +16,6 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
     private lateinit var albumsList: MutableList<Album>
     private lateinit var playingTrackList: MutableList<Track>
 
-    init {
-        Log.i("ViewModelTest", "MediaStore: $this")
-    }
     override fun getTracksList(): MutableList<Track> {
         return loadedTracksList
     }

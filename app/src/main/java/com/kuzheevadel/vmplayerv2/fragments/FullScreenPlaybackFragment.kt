@@ -19,18 +19,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.kuzheevadel.vmplayerv2.R
-import com.kuzheevadel.vmplayerv2.common.UpdateUIMessage
 import com.kuzheevadel.vmplayerv2.dagger.App
 import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
 import com.kuzheevadel.vmplayerv2.databinding.FullScreenPlaybackBinding
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
-import com.kuzheevadel.vmplayerv2.model.Track
 import com.kuzheevadel.vmplayerv2.services.PlayerService
 import com.kuzheevadel.vmplayerv2.viewmodels.PlaybackViewModel
 import kotlinx.android.synthetic.main.full_screen_playback.view.*
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import javax.inject.Inject
 
 class FullScreenPlaybackFragment: Fragment(), Interfaces.PlaybackView {
@@ -38,7 +33,7 @@ class FullScreenPlaybackFragment: Fragment(), Interfaces.PlaybackView {
     @Inject
     lateinit var factory: CustomViewModelFactory
 
-    lateinit var viewModel: PlaybackViewModel
+    private lateinit var viewModel: PlaybackViewModel
     private lateinit var binding: FullScreenPlaybackBinding
     private lateinit var serviceConnection: ServiceConnection
     private var mediaControllerCompat: MediaControllerCompat? = null
@@ -50,9 +45,9 @@ class FullScreenPlaybackFragment: Fragment(), Interfaces.PlaybackView {
         viewModel = ViewModelProviders.of(this, factory).get(PlaybackViewModel::class.java)
 
         val callback = object : MediaControllerCompat.Callback() {
-            override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
+            /*override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
                 super.onPlaybackStateChanged(state)
-            }
+            }*/
         }
 
         serviceConnection = object : ServiceConnection {

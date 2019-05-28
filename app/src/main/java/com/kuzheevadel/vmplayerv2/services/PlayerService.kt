@@ -12,7 +12,6 @@ import android.os.Binder
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
-import android.provider.MediaStore
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
@@ -116,7 +115,7 @@ class PlayerService: Service() {
 
     private val mediaSessionCallback: MediaSessionCompat.Callback = object : MediaSessionCompat.Callback() {
 
-        var currentState = PlaybackStateCompat.STATE_STOPPED
+        //var currentState = PlaybackStateCompat.STATE_STOPPED
 
         override fun onPrepareFromMediaId(mediaId: String?, extras: Bundle) {
             super.onPrepareFromMediaId(mediaId, extras)

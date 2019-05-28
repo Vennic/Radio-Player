@@ -2,7 +2,6 @@ package com.kuzheevadel.vmplayerv2.viewmodels
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.util.Log
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Track
 import org.greenrobot.eventbus.EventBus
