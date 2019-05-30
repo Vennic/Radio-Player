@@ -2,6 +2,7 @@ package com.kuzheevadel.vmplayerv2.dagger
 
 import android.app.Application
 import android.content.Context
+import com.kuzheevadel.vmplayerv2.Helpers.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.activities.AlbumActivity
 import com.kuzheevadel.vmplayerv2.adapters.AlbumsListAdapter
 import com.kuzheevadel.vmplayerv2.adapters.AlbumsTracksListAdapter
@@ -64,6 +65,9 @@ class AppModule(val context: Context) {
     fun provContext() = context
 
     @Provides
+    fun provideBindHelper(context: Context): BindServiceHelper = BindServiceHelper(context)
+
+    @Provides
     fun provideDetailAlbumAdapter(): AlbumsTracksListAdapter {
         return AlbumsTracksListAdapter()
     }
@@ -90,8 +94,8 @@ class AppModule(val context: Context) {
     }
 
     @Provides
-    fun provideTrackListAdapter(context: Context, mediaRepository: Interfaces.StorageMediaRepository): TrackListAdapter {
-        return TrackListAdapter(context, mediaRepository)
+    fun provideTrackListAdapter(mediaRepository: Interfaces.StorageMediaRepository, bindServiceHelper: BindServiceHelper): TrackListAdapter {
+        return TrackListAdapter(mediaRepository, bindServiceHelper)
     }
 
     @Singleton

@@ -138,6 +138,7 @@ class PlayerService: Service() {
             }
         }
 
+
         override fun onPlay() {
             super.onPlay()
 
@@ -210,7 +211,11 @@ class PlayerService: Service() {
 
         override fun onSetShuffleMode(shuffleMode: Int) {
             super.onSetShuffleMode(shuffleMode)
-            mediaRepository.setShuffleMode(shuffleMode)
+            if (shuffleMode == PlaybackStateCompat.SHUFFLE_MODE_NONE) {
+                mediaRepository.setShuffleMode(Constants.SHUFFLE_MODE_OFF)
+            } else {
+                mediaRepository.setShuffleMode(Constants.SHUFFLE_MODE_ON)
+            }
         }
     }
 

@@ -1,13 +1,7 @@
 package com.kuzheevadel.vmplayerv2.adapters
 
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.os.IBinder
-import android.os.RemoteException
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.support.v7.widget.RecyclerView
@@ -15,18 +9,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.android.databinding.library.baseAdapters.BR
+import com.kuzheevadel.vmplayerv2.Helpers.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.databinding.TrackItemLayoutBinding
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Track
-import com.kuzheevadel.vmplayerv2.services.PlayerService
 
-class TrackListAdapter(private val context: Context,
-                       private val mediaRepository: Interfaces.StorageMediaRepository): RecyclerView.Adapter<TrackListAdapter.TrackListViewHolder>() {
+class TrackListAdapter(private val mediaRepository: Interfaces.StorageMediaRepository,
+                       private val bindServiceHelper: BindServiceHelper): RecyclerView.Adapter<TrackListAdapter.TrackListViewHolder>() {
 
     var trackList = mutableListOf<Track>()
-    private var mediaControllerCompat: MediaControllerCompat? = null
-    private val serviceConnection: ServiceConnection
 
     init {
         val callback = object : MediaControllerCompat.Callback() {
@@ -35,30 +27,12 @@ class TrackListAdapter(private val context: Context,
             }
         }
 
-        serviceConnection = object : ServiceConnection {
-
-            override fun onServiceDisconnected(name: ComponentName?) {
-                mediaControllerCompat = null
-            }
-
-            override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-                val serviceBinder = service as PlayerService.PlayerBinder
-
-                try {
-                    mediaControllerCompat = MediaControllerCompat(context, serviceBinder.getMediaSessionToken())
-                    mediaControllerCompat?.registerCallback(callback)
-                    callback.onPlaybackStateChanged(mediaControllerCompat?.playbackState)
-                } catch (e: RemoteException) {
-                    mediaControllerCompat = null
-                }
-            }
-        }
-        context.bindService(Intent(context, PlayerService::class.java), serviceConnection, Context.BIND_AUTO_CREATE)
+        bindServiceHelper.bindPlayerService(callback)
     }
 
-    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): TrackListViewHolder {
-        val inflater = LayoutInflater.from(p0.context)
-        val binding = TrackItemLayoutBinding.inflate(inflater, p0, false)
+    override fun onCreateViewHolder(viewGroup: ViewGroup, p1: Int): TrackListViewHolder {
+        val inflater = LayoutInflater.from(viewGroup.context)
+        val binding = TrackItemLayoutBinding.inflate(inflater, viewGroup, false)
         return TrackListViewHolder(binding.root)
     }
 
@@ -76,7 +50,7 @@ class TrackListAdapter(private val context: Context,
 
             override fun click(view: View) {
                 mediaRepository.setPlayingTrackList(trackList)
-                mediaControllerCompat?.transportControls?.prepareFromMediaId("AllTracks", bundle)
+                bindServiceHelper.mediaControllerCompat?.transportControls?.prepareFromMediaId("AllTracks", bundle)
             }
 
         }
@@ -90,7 +64,7 @@ class TrackListAdapter(private val context: Context,
     }
 
     fun unbindService() {
-        context.unbindService(serviceConnection)
+        bindServiceHelper.unbindPlayerService()
     }
 
 }

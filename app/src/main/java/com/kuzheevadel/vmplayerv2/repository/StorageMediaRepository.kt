@@ -11,7 +11,8 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
     
     private lateinit var loadedTracksList: MutableList<Track>
     private var shuffleMode = Constants.SHUFFLE_MODE_ON
-    private var currentPosition: Int = 0
+    private var currentTrackPosition: Int = 0
+    private var currentAlbumsPosition: Int = 0
     private var loopMode = Constants.NO_LOOP_MODE
     private lateinit var albumsList: MutableList<Album>
     private lateinit var playingTrackList: MutableList<Track>
@@ -45,6 +46,7 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
     override fun setTracksList(list: MutableList<Track>) {
         list.sortWith(compareBy { it.title })
         loadedTracksList = list
+        playingTrackList = loadedTracksList
         createAlbums()
     }
 
@@ -53,7 +55,7 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
     }
     
     override fun getCurrentTrack(): Track {
-        return playingTrackList[currentPosition]
+        return playingTrackList[currentTrackPosition]
     }
 
     override fun getTrackByPosition(position: Int): Track {
@@ -66,34 +68,34 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
                 return if (shuffleMode == Constants.SHUFFLE_MODE_ON) {
                     getShuffledTrack()
                 } else {
-                    if (currentPosition < playingTrackList.size - 1) {
-                        currentPosition++
-                        playingTrackList[currentPosition]
+                    if (currentTrackPosition < playingTrackList.size - 1) {
+                        currentTrackPosition++
+                        playingTrackList[currentTrackPosition]
                     } else {
-                        playingTrackList[currentPosition]
+                        playingTrackList[currentTrackPosition]
                     }
                 }
             }
 
             Constants.ONE_LOOP_MODE -> {
-                return playingTrackList[currentPosition]
+                return playingTrackList[currentTrackPosition]
             }
 
             Constants.ALL_LOOP_MODE -> {
                 return if (shuffleMode == Constants.SHUFFLE_MODE_ON) {
                     getShuffledTrack()
                 } else {
-                    if (currentPosition < playingTrackList.size - 1) {
-                        currentPosition++
-                        playingTrackList[currentPosition]
+                    if (currentTrackPosition < playingTrackList.size - 1) {
+                        currentTrackPosition++
+                        playingTrackList[currentTrackPosition]
                     } else {
-                        currentPosition = 0
-                        playingTrackList[currentPosition]
+                        currentTrackPosition = 0
+                        playingTrackList[currentTrackPosition]
                     }
                 }
             }
 
-            else -> return playingTrackList[currentPosition]
+            else -> return playingTrackList[currentTrackPosition]
         }
     }
 
@@ -101,12 +103,12 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
         return if (shuffleMode == Constants.SHUFFLE_MODE_ON) {
             getShuffledTrack()
         } else {
-            if (currentPosition < playingTrackList.size - 1) {
-                currentPosition++
-                playingTrackList[currentPosition]
+            if (currentTrackPosition < playingTrackList.size - 1) {
+                currentTrackPosition++
+                playingTrackList[currentTrackPosition]
             } else {
-                currentPosition = 0
-                playingTrackList[currentPosition]
+                currentTrackPosition = 0
+                playingTrackList[currentTrackPosition]
             }
         }
 
@@ -116,21 +118,21 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
         return if (shuffleMode == Constants.SHUFFLE_MODE_ON) {
             getShuffledTrack()
         } else {
-            if (currentPosition > 0) {
-                currentPosition--
-                playingTrackList[currentPosition]
+            if (currentTrackPosition > 0) {
+                currentTrackPosition--
+                playingTrackList[currentTrackPosition]
             } else {
-                currentPosition = playingTrackList.size - 1
-                playingTrackList[currentPosition]
+                currentTrackPosition = playingTrackList.size - 1
+                playingTrackList[currentTrackPosition]
             }
         }
     }
 
     override fun setCurrentPosition(position: Int) {
-        currentPosition = position
+        currentTrackPosition = position
     }
 
-    override fun getCurrentPosition() = currentPosition
+    override fun getCurrentPosition() = currentTrackPosition
 
     override fun setLoopMode(mode: Int) {
         loopMode = mode
@@ -142,8 +144,8 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
 
     private fun getShuffledTrack(): Track {
         val r = Random()
-        currentPosition = r.nextInt(playingTrackList.size)
-        return playingTrackList[currentPosition]
+        currentTrackPosition = r.nextInt(playingTrackList.size)
+        return playingTrackList[currentTrackPosition]
     }
 
 }

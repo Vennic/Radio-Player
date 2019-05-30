@@ -134,7 +134,7 @@
                     android:layout_width="@dimen/playback_bottom_buttons_size"
                     android:layout_height="@dimen/playback_bottom_buttons_size"
                     app:srcCompat="@drawable/ic_repeat_black"
-                    android:id="@+id/imageView12"
+                    android:id="@+id/shuffle_image"
                     android:clickable="true"
                     android:focusable="true"
                     android:background="?attr/selectableItemBackgroundBorderless"
