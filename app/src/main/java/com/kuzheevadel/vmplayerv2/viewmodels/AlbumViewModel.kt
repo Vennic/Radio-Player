@@ -1,6 +1,7 @@
 package com.kuzheevadel.vmplayerv2.viewmodels
 
 import android.arch.lifecycle.ViewModel
+import android.util.Log
 import com.kuzheevadel.vmplayerv2.adapters.AlbumsListAdapter
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import javax.inject.Inject
@@ -16,6 +17,10 @@ class AlbumViewModel @Inject constructor(private val mediaRepository: Interfaces
     fun updateAdapter() {
         mAdapter.albumsList = mediaRepository.getAlbumsList()
         mAdapter.notifyDataSetChanged()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
     }
 
 }

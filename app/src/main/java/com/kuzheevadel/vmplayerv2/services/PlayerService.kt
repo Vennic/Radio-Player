@@ -116,6 +116,7 @@ class PlayerService: Service() {
     private val mediaSessionCallback: MediaSessionCompat.Callback = object : MediaSessionCompat.Callback() {
 
         //var currentState = PlaybackStateCompat.STATE_STOPPED
+        private var currentPlayingTrackId: Long = -1
 
         override fun onPrepareFromMediaId(mediaId: String?, extras: Bundle) {
             super.onPrepareFromMediaId(mediaId, extras)
@@ -123,10 +124,11 @@ class PlayerService: Service() {
             val position = extras.getInt(Constants.POSITION)
             val track = mediaRepository.getTrackByPosition(position)
 
-            if (track.id != mediaRepository.getCurrentTrack().id) {
+            if (track.id != currentPlayingTrackId) {
                 mediaRepository.setCurrentPosition(position)
-                setAudioUri(track.uri)
+                setAudioUri(track.getAudioUri())
                 mediaSession.setMetadata(setMediaMetaData(track))
+                currentPlayingTrackId = track.id
                 updateUI(track)
 
                 onPlay()
@@ -194,7 +196,8 @@ class PlayerService: Service() {
             super.onSkipToNext()
             mExoplayer.stop()
             val track = mediaRepository.getNextTrackByClick()
-            setAudioUri(track.uri)
+            currentPlayingTrackId = track.id
+            setAudioUri(track.getAudioUri())
             updateUI(track)
             onPlay()
 
@@ -204,7 +207,8 @@ class PlayerService: Service() {
             super.onSkipToPrevious()
             mExoplayer.stop()
             val track = mediaRepository.getPrevTrack()
-            setAudioUri(track.uri)
+            currentPlayingTrackId = track.id
+            setAudioUri(track.getAudioUri())
             updateUI(track)
             onPlay()
         }

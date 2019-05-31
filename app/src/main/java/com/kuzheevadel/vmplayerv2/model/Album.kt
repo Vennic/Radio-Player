@@ -5,6 +5,6 @@ import android.net.Uri
 data class Album(val title: String, val tracksList: MutableList<Track>) {
 
     fun getAlbumImageUri(): Uri {
-        return tracksList[0].albumId
+        return tracksList[0].getImageUri()
     }
 }

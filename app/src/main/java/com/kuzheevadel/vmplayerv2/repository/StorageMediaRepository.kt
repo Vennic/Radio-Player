@@ -9,7 +9,7 @@ import java.util.*
 
 class StorageMediaRepository: Interfaces.StorageMediaRepository {
     
-    private lateinit var loadedTracksList: MutableList<Track>
+    private var loadedTracksList: MutableList<Track> = mutableListOf()
     private var shuffleMode = Constants.SHUFFLE_MODE_ON
     private var currentTrackPosition: Int = 0
     private var currentAlbumsPosition: Int = 0
@@ -22,10 +22,19 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
     }
 
     override fun setPlayingTrackList(trackList: MutableList<Track>) {
+        val id = playingTrackList[currentTrackPosition].id
+        currentTrackPosition = 0
         playingTrackList = trackList
+
+        for ((index, value) in playingTrackList.withIndex()) {
+            if (value.id == id) {
+                currentTrackPosition = index
+                return
+            }
+        }
     }
 
-    private fun createAlbums() {
+    override fun createAlbums() {
         val albumsMap = mutableMapOf<String, MutableList<Track>>()
         albumsList = mutableListOf()
         for (item in loadedTracksList) {
@@ -40,7 +49,7 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
             val album = Album(item.key, item.value)
             albumsList.add(album)
         }
-        Log.i("CheckMap", "$albumsMap")
+        Log.i("CheckMap", "$albumsList")
     }
 
     override fun setTracksList(list: MutableList<Track>) {

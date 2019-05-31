@@ -39,6 +39,7 @@ class Interfaces {
         fun getNextTrack(): Track
         fun getNextTrackByClick(): Track
         fun getPrevTrack(): Track
+        fun createAlbums()
         fun setCurrentPosition(position: Int) //???
         fun getCurrentPosition(): Int
         fun setLoopMode(mode: Int)

@@ -17,7 +17,7 @@
                 android:layout_height="60dp"
                 android:src="@drawable/album_art_default"
                 android:id="@+id/imageView3"
-                app:album_url="@{playbackTrack.albumId}"
+                app:album_url="@{playbackTrack.imageUri}"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -67,7 +67,7 @@
                     android:layout_height="408dp"
                     android:src="@drawable/album_art_default"
                     android:scaleType="centerCrop"
-                    app:album_url="@{playbackTrack.albumId}"
+                    app:album_url="@{playbackTrack.imageUri}"
                     android:id="@+id/imageView5"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -122,7 +122,7 @@
                     android:layout_width="@dimen/playback_bottom_buttons_size"
                     android:layout_height="@dimen/playback_bottom_buttons_size"
                     app:srcCompat="@drawable/ic_shuffle_black"
-                    android:id="@+id/imageView11"
+                    android:id="@+id/shuffle_image_button"
                     android:clickable="true"
                     android:focusable="true"
                     android:background="?attr/selectableItemBackgroundBorderless"
@@ -134,7 +134,7 @@
                     android:layout_width="@dimen/playback_bottom_buttons_size"
                     android:layout_height="@dimen/playback_bottom_buttons_size"
                     app:srcCompat="@drawable/ic_repeat_black"
-                    android:id="@+id/shuffle_image"
+                    android:id="@+id/loop_image_button"
                     android:clickable="true"
                     android:focusable="true"
                     android:background="?attr/selectableItemBackgroundBorderless"
@@ -148,7 +148,7 @@
                     android:id="@+id/seekBar" app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginEnd="8dp" app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView11"/>
+                    app:layout_constraintTop_toBottomOf="@+id/shuffle_image_button"/>
 
             <TextView
                     android:text="0:00"

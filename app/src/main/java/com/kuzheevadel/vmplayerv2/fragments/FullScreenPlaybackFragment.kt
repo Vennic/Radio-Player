@@ -72,9 +72,10 @@ class FullScreenPlaybackFragment: Fragment(), Interfaces.PlaybackView {
                 bindService.mediaControllerCompat?.transportControls?.skipToPrevious()
             }
 
-            shuffleImage.setOnClickListener {
-
+            shuffleImageButton.setOnClickListener {
+                viewModel.addTrackToPlaylistDatabase()
             }
+
         }
 
         viewModel.trackData.observe(this, Observer {

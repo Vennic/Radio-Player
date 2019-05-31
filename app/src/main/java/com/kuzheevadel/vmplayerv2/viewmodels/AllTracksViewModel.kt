@@ -20,20 +20,27 @@ class AllTracksViewModel @Inject constructor(private val storageMedia: Callable<
 
     @SuppressLint("CheckResult")
     fun loadTracks() {
-        Observable.fromCallable(storageMedia)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                mediaRepository.setTracksList(it)
-                mAdapter.trackList = mediaRepository.getTracksList()
-                mAdapter.notifyDataSetChanged()
+        if (mediaRepository.getTracksList().isEmpty()) {
+            Observable.fromCallable(storageMedia)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    mediaRepository.setTracksList(it)
+                    mAdapter.trackList = mediaRepository.getTracksList()
+                    mAdapter.notifyDataSetChanged()
 
-                if (it != null) {
-                    EventBus.getDefault().post(LoadMediaMessage(true))
-                } else {
-                    EventBus.getDefault().post(LoadMediaMessage(false))
+                    if (it != null) {
+                        EventBus.getDefault().post(LoadMediaMessage(true))
+                    } else {
+                        EventBus.getDefault().post(LoadMediaMessage(false))
+                    }
                 }
-            }
+        } else {
+            mediaRepository.createAlbums()
+            mAdapter.trackList = mediaRepository.getTracksList()
+            mAdapter.notifyDataSetChanged()
+            EventBus.getDefault().postSticky(LoadMediaMessage(true))
+        }
 
     }
 
@@ -41,8 +48,4 @@ class AllTracksViewModel @Inject constructor(private val storageMedia: Callable<
         mAdapter = adapter
     }
 
-    fun updateAdapter() {
-        mAdapter.trackList = mediaRepository.getTracksList()
-        mAdapter.notifyDataSetChanged()
-    }
 }

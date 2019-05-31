@@ -15,14 +15,14 @@
             android:layout_width="match_parent"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="@{click.click}"
+            android:onClick="@{click::click}"
             android:background="@drawable/ripple_effect"
             android:layout_height="60dp">
 
         <android.support.v7.widget.AppCompatImageView
                 android:layout_width="52dp"
                 android:layout_height="52dp"
-                app:url="@{track.albumId}"
+                app:url="@{track.imageUri}"
                 android:id="@+id/item_image"
                 android:layout_marginTop="8dp"
                 app:layout_constraintTop_toTopOf="parent"

@@ -1,6 +1,7 @@
 package com.kuzheevadel.vmplayerv2.dagger
 
 import android.app.Application
+import android.arch.persistence.room.Room
 import android.content.Context
 import com.kuzheevadel.vmplayerv2.Helpers.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.activities.AlbumActivity
@@ -8,10 +9,8 @@ import com.kuzheevadel.vmplayerv2.adapters.AlbumsListAdapter
 import com.kuzheevadel.vmplayerv2.adapters.AlbumsTracksListAdapter
 import com.kuzheevadel.vmplayerv2.adapters.RadioStationsAdapter
 import com.kuzheevadel.vmplayerv2.adapters.TrackListAdapter
-import com.kuzheevadel.vmplayerv2.fragments.AlbumsFragment
-import com.kuzheevadel.vmplayerv2.fragments.AllTracksFragment
-import com.kuzheevadel.vmplayerv2.fragments.FullScreenPlaybackFragment
-import com.kuzheevadel.vmplayerv2.fragments.RadioFragment
+import com.kuzheevadel.vmplayerv2.database.PlaylistDatabase
+import com.kuzheevadel.vmplayerv2.fragments.*
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Track
 import com.kuzheevadel.vmplayerv2.repository.StorageMediaRepository
@@ -49,12 +48,13 @@ interface ApplicationComponent {
         fun build(): ApplicationComponent
     }
 
-    fun inject(allTracksFragment: AllTracksFragment)
-    fun inject(albumsFragment: AlbumsFragment)
-    fun inject(playbackFragment: FullScreenPlaybackFragment)
-    fun inject(detailAlbumFragment: AlbumActivity)
+    fun inject(fragment: AllTracksFragment)
+    fun inject(fragment: AlbumsFragment)
+    fun inject(fragment: FullScreenPlaybackFragment)
+    fun inject(fragment: AlbumActivity)
     fun inject(fragment: RadioFragment)
     fun inject(service: PlayerService)
+    fun inject(fragment: PlaylistFragment)
 }
 
 @Module(includes = [Model::class])
@@ -68,8 +68,8 @@ class AppModule(val context: Context) {
     fun provideBindHelper(context: Context): BindServiceHelper = BindServiceHelper(context)
 
     @Provides
-    fun provideDetailAlbumAdapter(): AlbumsTracksListAdapter {
-        return AlbumsTracksListAdapter()
+    fun provideDetailAlbumAdapter(mediaRepository: Interfaces.StorageMediaRepository, bindServiceHelper: BindServiceHelper): AlbumsTracksListAdapter {
+        return AlbumsTracksListAdapter(mediaRepository, bindServiceHelper)
     }
 
     @Provides
@@ -80,6 +80,12 @@ class AppModule(val context: Context) {
     @Provides
     fun provideRadioAdapter(): RadioStationsAdapter {
         return RadioStationsAdapter()
+    }
+
+    @Singleton
+    @Provides
+    fun provideDatabase(context: Context): PlaylistDatabase {
+        return Room.databaseBuilder(context, PlaylistDatabase::class.java, "playlistDatabase").build()
     }
 
     @Singleton

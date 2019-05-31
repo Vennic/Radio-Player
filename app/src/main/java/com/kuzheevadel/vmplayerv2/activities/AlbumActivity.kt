@@ -54,6 +54,11 @@ class AlbumActivity: AppCompatActivity() {
             .commit()
     }
 
+    override fun onDestroy() {
+        adapter.unbindService()
+        super.onDestroy()
+    }
+
     override fun onBackPressed() {
         if (activity_album_root != null &&
             (activity_album_root.panelState == SlidingUpPanelLayout.PanelState.EXPANDED || activity_album_root.panelState == SlidingUpPanelLayout.PanelState.ANCHORED)){

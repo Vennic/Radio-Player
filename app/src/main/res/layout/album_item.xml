@@ -14,7 +14,7 @@
             android:layout_height="192dp"
             android:id="@+id/albums_card_view"
             android:elevation="12dp"
-            android:onClick="@{click.click}"
+            android:onClick="@{click::click}"
             android:layout_margin="4dp"
             android:foreground="?android:attr/selectableItemBackground"
             android:clickable="true"
