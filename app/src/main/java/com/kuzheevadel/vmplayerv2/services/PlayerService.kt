@@ -2,6 +2,7 @@ package com.kuzheevadel.vmplayerv2.services
 
 import android.app.PendingIntent
 import android.app.Service
+import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.content.Intent
 import android.media.AudioAttributes
@@ -16,6 +17,7 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
+import android.util.Log
 import com.google.android.exoplayer2.DefaultLoadControl
 import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.ExoPlayerFactory
@@ -28,13 +30,23 @@ import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.dagger.App
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Track
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import org.greenrobot.eventbus.EventBus
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class PlayerService: Service() {
 
     @Inject
     lateinit var mediaRepository: Interfaces.StorageMediaRepository
+
+    private lateinit var disposable: CompositeDisposable
+    private lateinit var subscription: Disposable
+    val progressData: MutableLiveData<Int> = MutableLiveData()
 
     private lateinit var mExoplayer: SimpleExoPlayer
     private val metadataBuilder: MediaMetadataCompat.Builder = MediaMetadataCompat.Builder()
@@ -167,6 +179,7 @@ class PlayerService: Service() {
                 isAudioFocusRequest = true
                 mediaSession.isActive = true
                 mExoplayer.playWhenReady = true
+                startInterval()
 
                 mediaSession.setPlaybackState(
                     stateBuilder.setState(
@@ -182,6 +195,7 @@ class PlayerService: Service() {
 
             if (mExoplayer.playWhenReady) {
                 mExoplayer.playWhenReady = false
+                stopInterval()
 
                 mediaSession.setPlaybackState(
                     stateBuilder.setState(
@@ -190,6 +204,11 @@ class PlayerService: Service() {
                     ).build()
                 )
             }
+        }
+
+        override fun onSeekTo(pos: Long) {
+            super.onSeekTo(pos)
+            mExoplayer.seekTo(pos)
         }
 
         override fun onSkipToNext() {
@@ -234,6 +253,10 @@ class PlayerService: Service() {
 
     inner class PlayerBinder: Binder() {
         fun getMediaSessionToken(): MediaSessionCompat.Token = mediaSession.sessionToken
+        fun getProgressData(): MutableLiveData<Int> {
+            Log.i("ProgressTest", "$progressData")
+            return progressData
+        }
     }
 
     private fun initializePlayer() {
@@ -259,8 +282,34 @@ class PlayerService: Service() {
             .build()
     }
 
+    private fun stopInterval() {
+        disposable.dispose()
+    }
+
+    private fun startInterval() {
+        disposable = CompositeDisposable()
+
+        subscription = Observable.interval(1, TimeUnit.SECONDS)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                if (mExoplayer.playWhenReady) {
+                    progressData.value = (mExoplayer.currentPosition / 1000).toInt()
+                    Log.i("ProgressTest", "${mExoplayer.contentPosition / 1000}")
+                } else {
+                    disposable.dispose()
+                }
+            },
+                {
+                    Log.i("Error Log", "${it.stackTrace}")
+                })
+
+        disposable.add(subscription)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
+
         mediaSession.release()
     }
 }

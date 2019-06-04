@@ -1,5 +1,6 @@
 package com.kuzheevadel.vmplayerv2.interfaces
 
+import android.arch.lifecycle.MutableLiveData
 import android.support.v4.app.FragmentManager
 import com.kuzheevadel.vmplayerv2.model.Album
 import com.kuzheevadel.vmplayerv2.model.Track
@@ -26,8 +27,8 @@ class Interfaces {
     }
 
 
-    interface PlaybackView {
-
+    interface Player {
+        fun getProgressData(): MutableLiveData<Int>
     }
 
     interface StorageMediaRepository {

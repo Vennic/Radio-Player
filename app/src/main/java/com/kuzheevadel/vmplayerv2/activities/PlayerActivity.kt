@@ -34,7 +34,7 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        player_pager.offscreenPageLimit = 3
+        player_pager.offscreenPageLimit = 4
         setupPager(player_pager)
         tab_layout.setupWithViewPager(player_pager)
 

@@ -1,5 +1,6 @@
 package com.kuzheevadel.vmplayerv2.fragments
 
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
@@ -7,20 +8,21 @@ import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.media.session.MediaControllerCompat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import com.kuzheevadel.vmplayerv2.Helpers.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.dagger.App
 import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
 import com.kuzheevadel.vmplayerv2.databinding.FullScreenPlaybackBinding
-import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.viewmodels.PlaybackViewModel
 import kotlinx.android.synthetic.main.full_screen_playback.view.*
 import javax.inject.Inject
 
-class FullScreenPlaybackFragment: Fragment(), Interfaces.PlaybackView {
+class FullScreenPlaybackFragment: Fragment() {
 
     @Inject
     lateinit var factory: CustomViewModelFactory
@@ -30,6 +32,7 @@ class FullScreenPlaybackFragment: Fragment(), Interfaces.PlaybackView {
     private lateinit var viewModel: PlaybackViewModel
     private lateinit var binding: FullScreenPlaybackBinding
     private var isPlaying = true
+    private lateinit var progressData: MutableLiveData<Int>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +45,18 @@ class FullScreenPlaybackFragment: Fragment(), Interfaces.PlaybackView {
             }*/
         }
 
+
+
+        bindService.setOnConnectionListener(object : BindServiceHelper.OnConnectionListener {
+            override fun setProgressData(data: MutableLiveData<Int>) {
+                progressData = data
+                progressData.observe(this@FullScreenPlaybackFragment, Observer {
+                    binding.progressSeekBar.progress = it!!
+                }) }
+        })
+
         bindService.bindPlayerService(callback)
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -63,6 +77,19 @@ class FullScreenPlaybackFragment: Fragment(), Interfaces.PlaybackView {
                     true
                 }
             }
+
+            progressSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                }
+
+                override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    bindService.mediaControllerCompat?.transportControls?.seekTo((seekBar.progress * 1000).toLong())
+                }
+
+            })
 
             nextTrack.setOnClickListener {
                 bindService.mediaControllerCompat?.transportControls?.skipToNext()

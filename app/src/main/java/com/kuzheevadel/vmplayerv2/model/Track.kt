@@ -31,6 +31,10 @@ data class Track(@PrimaryKey val id: Long,
         return ContentUris.withAppendedId(Uri.parse(Constants.BASE_ALBUMSART_URI), albumId)
     }
 
+    fun getDurationInSeconds(): Int {
+        return duration / 1000
+    }
+
     fun getDurationInTimeFormat(): String {
         val d = duration / 1000
         val minutes = d / 60
