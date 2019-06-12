@@ -8,6 +8,7 @@
         <item name="colorAccent">#000000</item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowContentTransitions">true</item>
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
     </style>
     
     <style name="AppTheme.NoActionBar">
@@ -30,6 +31,16 @@
 
     <style name="MyCustomTabStyle" parent="Widget.Design.TabLayout">
         <item name="tabTextAppearance">@style/MyCustomTextAppearance</item>
+    </style>
+
+    <style name="AppBottomSheetDialogTheme"
+           parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+
+    <style name="AppModalStyle"
+           parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/rounded_dialog</item>
     </style>
 
 </resources>

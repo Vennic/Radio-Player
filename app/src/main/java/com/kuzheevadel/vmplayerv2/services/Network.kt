@@ -3,7 +3,8 @@ package com.kuzheevadel.vmplayerv2.services
 import com.google.gson.GsonBuilder
 import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
-import com.kuzheevadel.vmplayerv2.radio.RadioStation
+import com.kuzheevadel.vmplayerv2.model.RadioStation
+import com.kuzheevadel.vmplayerv2.radio.RadioStationDirble
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -19,17 +20,25 @@ interface ApiService {
     @GET("/v2/stations/")
     fun getAllRadioStations(@Query("page") page: String,
                             @Query("per_page") per_page: String,
-                            @Query("token") apiKey: String): Observable<MutableList<RadioStation>>
+                            @Query("token") apiKey: String): Observable<MutableList<RadioStationDirble>>
 
     @GET("/v2/stations/popular")
-    fun getPopularRadioStations(@Query("token") apiKey: String): Observable<MutableList<RadioStation>>
+    fun getPopularRadioStations(@Query("token") apiKey: String): Observable<MutableList<RadioStationDirble>>
+
+    @GET("/webservice/json/stations/topvote/100")
+    fun getStationsByVote(): Observable<MutableList<RadioStation>>
+
+    @GET("/webservice/json/stations/search")
+    fun getSearchStations(@Query("name") country: String,
+                          @Query("limit") limit: String,
+                          @Query("offset") offset: String): Observable<MutableList<RadioStation>>
 
 
 }
 
 class VmpNetwork: Interfaces.Network {
 
-    private val apiKey = "ca22a774a26a15ffb46cdb6c73"
+    private val apiKey = ""
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(Constants.BASE_RADIO_URL)
@@ -38,8 +47,16 @@ class VmpNetwork: Interfaces.Network {
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .build()
 
-    override fun getStationsList(type: Int, page: Int): Observable<MutableList<RadioStation>> {
+    override fun getStationsList(type: Int, page: Int): Observable<MutableList<RadioStationDirble>> {
         return retrofit.create(ApiService::class.java).getPopularRadioStations(apiKey)
+    }
+
+    fun executeRadioApi(index: Int): Observable<MutableList<RadioStation>> {
+        return retrofit.create(ApiService::class.java).getSearchStations("jazz", "40", index.toString())
+    }
+
+    override fun getStionListByVote(): Observable<MutableList<RadioStation>> {
+        return retrofit.create(ApiService::class.java).getStationsByVote()
     }
 
     private fun getOkHttpClient(): OkHttpClient {

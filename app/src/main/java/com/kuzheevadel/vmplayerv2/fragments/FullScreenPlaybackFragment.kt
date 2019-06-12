@@ -8,6 +8,7 @@ import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.media.session.MediaControllerCompat
+import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -31,7 +32,6 @@ class FullScreenPlaybackFragment: Fragment() {
 
     private lateinit var viewModel: PlaybackViewModel
     private lateinit var binding: FullScreenPlaybackBinding
-    private var isPlaying = true
     private lateinit var progressData: MutableLiveData<Int>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +51,8 @@ class FullScreenPlaybackFragment: Fragment() {
             override fun setProgressData(data: MutableLiveData<Int>) {
                 progressData = data
                 progressData.observe(this@FullScreenPlaybackFragment, Observer {
-                    binding.progressSeekBar.progress = it!!
+                    binding.currentDurationText.text = getDurationInTimeFormat(it!!)
+                    binding.progressSeekBar.progress = it
                 }) }
         })
 
@@ -67,15 +68,7 @@ class FullScreenPlaybackFragment: Fragment() {
             bottomTrackInfoText.isSelected = true
 
             playbackPlayPauseButton.setOnClickListener {
-                isPlaying = if (isPlaying) {
-                    view.playback_play_pause_button.setImageResource(R.drawable.ic_play_to_pause)
-                    (view.playback_play_pause_button.drawable as Animatable).start()
-                    false
-                } else {
-                    view.playback_play_pause_button.setImageResource(R.drawable.ic_pause_to_play)
-                    (view.playback_play_pause_button.drawable as Animatable).start()
-                    true
-                }
+                playOrPause()
             }
 
             progressSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -92,10 +85,12 @@ class FullScreenPlaybackFragment: Fragment() {
             })
 
             nextTrack.setOnClickListener {
+                progressSeekBar.progress = 0
                 bindService.mediaControllerCompat?.transportControls?.skipToNext()
             }
 
             prevTrack.setOnClickListener {
+                progressSeekBar.progress = 0
                 bindService.mediaControllerCompat?.transportControls?.skipToPrevious()
             }
 
@@ -110,6 +105,26 @@ class FullScreenPlaybackFragment: Fragment() {
         })
 
         return view
+    }
+
+    private fun playOrPause() {
+        with(bindService.mediaControllerCompat) {
+            if (this?.playbackState?.state == PlaybackStateCompat.STATE_PLAYING) {
+                transportControls.pause()
+                binding.playbackPlayPauseButton.setImageResource(R.drawable.ic_pause_to_play)
+                (binding.playbackPlayPauseButton.drawable as Animatable).start()
+            } else {
+                this?.transportControls?.play()
+                binding.playbackPlayPauseButton.setImageResource(R.drawable.ic_play_to_pause)
+                (binding.playbackPlayPauseButton.drawable as Animatable).start()
+            }
+        }
+    }
+
+    fun getDurationInTimeFormat(time: Int): String {
+        val minutes = time / 60
+        val seconds = time % 60
+        return "$minutes:${if (seconds < 10) "0" else ""}$seconds"
     }
 
     override fun onDestroy() {

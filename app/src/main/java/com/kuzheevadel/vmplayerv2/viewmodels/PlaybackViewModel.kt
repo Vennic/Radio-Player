@@ -1,5 +1,6 @@
 package com.kuzheevadel.vmplayerv2.viewmodels
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.util.Log
@@ -8,12 +9,10 @@ import com.kuzheevadel.vmplayerv2.database.TrackDao
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Track
 import io.reactivex.Completable
-import io.reactivex.functions.Action
 import io.reactivex.schedulers.Schedulers
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.util.concurrent.Callable
 import javax.inject.Inject
 
 class PlaybackViewModel @Inject constructor(private val mediaRepository: Interfaces.StorageMediaRepository,
@@ -38,6 +37,7 @@ class PlaybackViewModel @Inject constructor(private val mediaRepository: Interfa
         trackData.value = track
     }
 
+    @SuppressLint("CheckResult")
     fun addTrackToPlaylistDatabase() {
         Completable.fromAction { trackDao.insertTrack(mediaRepository.getCurrentTrack()) }
             .subscribeOn(Schedulers.io())
@@ -45,6 +45,9 @@ class PlaybackViewModel @Inject constructor(private val mediaRepository: Interfa
                 {
                     Log.i("InsertTest", "in onNext")
                     EventBus.getDefault().post("post")
+                },
+                {
+
                 }
             )
     }

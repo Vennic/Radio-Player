@@ -3,17 +3,20 @@
         xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-        <variable name="radioStation" type="com.kuzheevadel.vmplayerv2.radio.RadioStation"/>
+        <variable name="radioStation" type="com.kuzheevadel.vmplayerv2.model.RadioStation"/>
     </data>
 
     <android.support.constraint.ConstraintLayout
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground"
             android:layout_width="match_parent"
             android:layout_height="60dp">
 
         <android.support.v7.widget.AppCompatImageView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                app:radio_thumb="@{radioStation.image.thumb.url}"
+                app:radio_thumb="@{radioStation.favicon}"
                 tools:srcCompat="@tools:sample/backgrounds/scenic[5]"
                 android:id="@+id/imageView"
                 app:layout_constraintStart_toStartOf="parent"
@@ -22,17 +25,22 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"/>
+
         <TextView
                 android:text="@{radioStation.name}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView2"
+                android:singleLine="true"
+                android:ellipsize="marquee"
                 app:layout_constraintStart_toEndOf="@+id/imageView"
                 android:layout_marginStart="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="8dp"
                 app:layout_constraintTop_toTopOf="@+id/imageView"
                 android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView"/>
+                app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                android:textColor="@android:color/black"/>
+
     </android.support.constraint.ConstraintLayout>
 </layout>

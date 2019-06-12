@@ -23,8 +23,10 @@ import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.source.ExtractorMediaSource
+import com.google.android.exoplayer2.source.hls.HlsMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.util.Util
 import com.kuzheevadel.vmplayerv2.activities.PlayerActivity
 import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.dagger.App
@@ -121,7 +123,7 @@ class PlayerService: Service() {
         }
     }
 
-    private fun updateUI(track: Track) {
+    private fun updateTrackUI(track: Track) {
         EventBus.getDefault().post(track)
     }
 
@@ -133,25 +135,31 @@ class PlayerService: Service() {
         override fun onPrepareFromMediaId(mediaId: String?, extras: Bundle) {
             super.onPrepareFromMediaId(mediaId, extras)
 
-            val position = extras.getInt(Constants.POSITION)
-            val track = mediaRepository.getTrackByPosition(position)
+            if (mediaId == Constants.TRACK) {
+                val position = extras.getInt(Constants.POSITION)
+                val track = mediaRepository.getTrackByPosition(position)
 
-            if (track.id != currentPlayingTrackId) {
-                mediaRepository.setCurrentPosition(position)
-                setAudioUri(track.getAudioUri())
-                mediaSession.setMetadata(setMediaMetaData(track))
-                currentPlayingTrackId = track.id
-                updateUI(track)
+                if (track.id != currentPlayingTrackId) {
+                    mediaRepository.setCurrentPosition(position)
+                    setAudioUri(track.getAudioUri())
+                    mediaSession.setMetadata(setMediaMetaData(track))
+                    currentPlayingTrackId = track.id
+                    updateTrackUI(track)
 
+                    onPlay()
+
+                } else if (mExoplayer.playWhenReady) {
+                    onPause()
+                } else if (!mExoplayer.playWhenReady) {
+                    onPlay()
+                }
+            } else {
+                val uri = Uri.parse(extras.getString(Constants.RADIO_URL))
+                setAudioUri(uri)
                 onPlay()
 
-            } else if (mExoplayer.playWhenReady) {
-                onPause()
-            } else if (!mExoplayer.playWhenReady) {
-                onPlay()
             }
         }
-
 
         override fun onPlay() {
             super.onPlay()
@@ -217,7 +225,7 @@ class PlayerService: Service() {
             val track = mediaRepository.getNextTrackByClick()
             currentPlayingTrackId = track.id
             setAudioUri(track.getAudioUri())
-            updateUI(track)
+            updateTrackUI(track)
             onPlay()
 
         }
@@ -228,7 +236,7 @@ class PlayerService: Service() {
             val track = mediaRepository.getPrevTrack()
             currentPlayingTrackId = track.id
             setAudioUri(track.getAudioUri())
-            updateUI(track)
+            updateTrackUI(track)
             onPlay()
         }
 
@@ -272,6 +280,12 @@ class PlayerService: Service() {
         mExoplayer.prepare(mediaSource)
     }
 
+    private fun setHlsMediaSource(uri: Uri) {
+        val mediaSource = HlsMediaSource.Factory(DefaultDataSourceFactory(this, Util.getUserAgent(this, "VMPlayer")))
+            .createMediaSource(uri)
+        mExoplayer.prepare(mediaSource)
+    }
+
     private fun setMediaMetaData(track: Track): MediaMetadataCompat {
         return metadataBuilder
             //.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, MediaStore.Images.Media.getBitmap(this.contentResolver, track.albumId))
@@ -308,8 +322,13 @@ class PlayerService: Service() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
-
+        try {
+            disposable.dispose()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
         mediaSession.release()
+
+        super.onDestroy()
     }
 }

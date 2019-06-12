@@ -2,6 +2,7 @@ package com.kuzheevadel.vmplayerv2.adapters
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.v4.app.FragmentManager
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.support.v7.widget.RecyclerView
@@ -12,6 +13,7 @@ import com.android.databinding.library.baseAdapters.BR
 import com.kuzheevadel.vmplayerv2.Helpers.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.databinding.TrackItemLayoutBinding
+import com.kuzheevadel.vmplayerv2.fragments.TrackBottomMenu
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Track
 
@@ -19,6 +21,7 @@ class TrackListAdapter(private val mediaRepository: Interfaces.StorageMediaRepos
                        private val bindServiceHelper: BindServiceHelper): RecyclerView.Adapter<TrackListAdapter.TrackListViewHolder>() {
 
     var trackList = mutableListOf<Track>()
+    var fm: FragmentManager? = null
 
     init {
         val callback = object : MediaControllerCompat.Callback() {
@@ -50,9 +53,14 @@ class TrackListAdapter(private val mediaRepository: Interfaces.StorageMediaRepos
 
             override fun click(view: View) {
                 mediaRepository.setPlayingTrackList(trackList)
-                bindServiceHelper.mediaControllerCompat?.transportControls?.prepareFromMediaId("AllTracks", bundle)
+                bindServiceHelper.mediaControllerCompat?.transportControls?.prepareFromMediaId(Constants.TRACK, bundle)
             }
 
+        }
+
+        viewHolder.binding?.itemsMenu?.setOnClickListener {
+            val bottomDialog = TrackBottomMenu()
+            bottomDialog.show(fm, bottomDialog.tag)
         }
 
         viewHolder.binding?.executePendingBindings()

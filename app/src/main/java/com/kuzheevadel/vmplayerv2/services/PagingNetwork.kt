@@ -4,7 +4,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.paging.PageKeyedDataSource
 import com.google.gson.GsonBuilder
 import com.kuzheevadel.vmplayerv2.common.Constants
-import com.kuzheevadel.vmplayerv2.radio.RadioStation
+import com.kuzheevadel.vmplayerv2.radio.RadioStationDirble
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -24,12 +24,12 @@ interface NetworkService {
     @GET("/v2/stations/")
     fun getAllRadioStations(@Query("page") page: String,
                             @Query("per_page") per_page: String,
-                            @Query("token") apiKey: String): Observable<MutableList<RadioStation>>
+                            @Query("token") apiKey: String): Observable<MutableList<RadioStationDirble>>
 
     @GET("/v2/stations/popular")
     fun getPopularRadioStations(@Query("page") page: Int,
                                 @Query("per_page") per_page: Int,
-                                @Query("token") apiKey: String): Observable<MutableList<RadioStation>>
+                                @Query("token") apiKey: String): Observable<MutableList<RadioStationDirble>>
 
     companion object {
         fun getService(): NetworkService {
@@ -49,12 +49,12 @@ enum class State {
 }
 
 class RadioStationsDataSource(private val networkService: NetworkService,
-                              private val compositeDisposable: CompositeDisposable): PageKeyedDataSource<Int, RadioStation>() {
+                              private val compositeDisposable: CompositeDisposable): PageKeyedDataSource<Int, RadioStationDirble>() {
 
     var state: MutableLiveData<State> = MutableLiveData()
     private var retryCompletable: Completable? = null
 
-    override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, RadioStation>) {
+    override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, RadioStationDirble>) {
         updateState(State.LOADING)
 
         compositeDisposable.add(
@@ -71,7 +71,7 @@ class RadioStationsDataSource(private val networkService: NetworkService,
         )
     }
 
-    override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, RadioStation>) {
+    override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, RadioStationDirble>) {
         updateState(State.LOADING)
 
         compositeDisposable.add(
@@ -91,7 +91,7 @@ class RadioStationsDataSource(private val networkService: NetworkService,
         )
     }
 
-    override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, RadioStation>) {
+    override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, RadioStationDirble>) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

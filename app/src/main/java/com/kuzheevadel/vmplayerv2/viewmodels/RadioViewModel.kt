@@ -25,17 +25,18 @@ class RadioViewModel @Inject constructor(private val network: Interfaces.Network
     fun loadRadioStations() {
         loadingState.value = State.LOADING
 
-        network.getStationsList(1, 1)
+        network.getStionListByVote()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe ({
-                mAdapter.radioStationsList = it
-                loadingState.value = State.DONE
-                mAdapter.notifyDataSetChanged()
-            },
+            .subscribe(
+                {
+                    mAdapter.radioStationsList = it
+                    loadingState.value = State.DONE
+                    mAdapter.notifyDataSetChanged()
+                },
                 {
                     loadingState.value = State.ERROR
-                })
-
+                }
+            )
     }
 }

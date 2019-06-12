@@ -1,6 +1,6 @@
 package com.kuzheevadel.vmplayerv2.radio
 
-data class RadioStation(
+data class RadioStationDirble(
     val categories: List<Category>,
     val country: String,
     val created_at: String,

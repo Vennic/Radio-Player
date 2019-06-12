@@ -39,6 +39,7 @@ class AllTracksFragment: Fragment() {
         (activity?.application as App).getComponent().inject(this)
         viewModel = ViewModelProviders.of(this, factory).get(AllTracksViewModel::class.java)
         viewModel.setAdapter(mAdapter)
+        mAdapter.fm = activity?.supportFragmentManager
 
         val permissionStatus = ContextCompat.checkSelfPermission(activity!!.applicationContext,
             Manifest.permission.READ_EXTERNAL_STORAGE)

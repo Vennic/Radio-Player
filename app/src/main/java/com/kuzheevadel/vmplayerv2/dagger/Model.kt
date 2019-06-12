@@ -39,4 +39,9 @@ abstract class Model {
     @IntoMap
     @ViewModelKey(PlaylistViewModel::class)
     abstract fun playlistViewModel(viewModel: PlaylistViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SearchRadioViewModel::class)
+    abstract fun searchTadioViewMOdel(viewModel: SearchRadioViewModel): ViewModel
 }

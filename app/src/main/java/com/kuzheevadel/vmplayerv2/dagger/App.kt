@@ -3,6 +3,7 @@ package com.kuzheevadel.vmplayerv2.dagger
 import android.app.Application
 import android.arch.persistence.room.Room
 import android.content.Context
+import android.support.v4.app.Fragment
 import com.kuzheevadel.vmplayerv2.Helpers.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.activities.AlbumActivity
 import com.kuzheevadel.vmplayerv2.adapters.AlbumsListAdapter
@@ -54,7 +55,10 @@ interface ApplicationComponent {
     fun inject(fragment: AlbumActivity)
     fun inject(fragment: RadioFragment)
     fun inject(service: PlayerService)
+    fun inject(fragment: PopularRadioFragment)
     fun inject(fragment: PlaylistFragment)
+    fun inject(fragment: SearchRadioFragment)
+
 }
 
 @Module(includes = [Model::class])
@@ -78,8 +82,8 @@ class AppModule(val context: Context) {
     }
 
     @Provides
-    fun provideRadioAdapter(): RadioStationsAdapter {
-        return RadioStationsAdapter()
+    fun provideRadioAdapter(bindServiceHelper: BindServiceHelper): RadioStationsAdapter {
+        return RadioStationsAdapter(bindServiceHelper)
     }
 
     @Singleton
@@ -107,6 +111,12 @@ class AppModule(val context: Context) {
     @Singleton
     @Provides
     fun provideVmpNetwork(): Interfaces.Network {
+        return VmpNetwork()
+    }
+
+    @Singleton
+    @Provides
+    fun provideNetwork(): VmpNetwork {
         return VmpNetwork()
     }
 }

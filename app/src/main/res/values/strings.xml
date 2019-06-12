@@ -7,4 +7,8 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="reload_radio_stations">Reload</string>
+    <string name="popular_radio_stations">Popular radio stations</string>
+    <string name="search_stations">Search</string>
+    <string name="favorite_stations">Favorite stations</string>
+    <string name="search">Search</string>
 </resources>

@@ -158,8 +158,9 @@
                     android:text="0:00"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView4"
-                    app:layout_constraintTop_toBottomOf="@+id/progress_seek_bar" app:layout_constraintStart_toStartOf="parent"
+                    android:id="@+id/current_duration_text"
+                    app:layout_constraintTop_toBottomOf="@+id/progress_seek_bar"
+                    app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginStart="16dp"/>
 
             <TextView
@@ -167,7 +168,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView5"
-                    app:layout_constraintTop_toBottomOf="@+id/progress_seek_bar" app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/progress_seek_bar"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginEnd="16dp"/>
 
             <TextView

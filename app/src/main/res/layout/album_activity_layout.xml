@@ -58,7 +58,7 @@
                     android:scaleType="centerCrop"
                     android:transitionName="shared_album_image"
                     app:layout_scrollFlags="scroll|enterAlways"
-                    android:layout_height="276dp"/>
+                    android:layout_height="288dp"/>
 
         </android.support.design.widget.AppBarLayout>
 

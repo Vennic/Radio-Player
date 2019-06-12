@@ -3,14 +3,16 @@ package com.kuzheevadel.vmplayerv2.interfaces
 import android.arch.lifecycle.MutableLiveData
 import android.support.v4.app.FragmentManager
 import com.kuzheevadel.vmplayerv2.model.Album
+import com.kuzheevadel.vmplayerv2.model.RadioStation
 import com.kuzheevadel.vmplayerv2.model.Track
-import com.kuzheevadel.vmplayerv2.radio.RadioStation
+import com.kuzheevadel.vmplayerv2.radio.RadioStationDirble
 import io.reactivex.Observable
 
 class Interfaces {
 
     interface Network {
-        fun getStationsList(type: Int, page: Int): Observable<MutableList<RadioStation>>
+        fun getStationsList(type: Int, page: Int): Observable<MutableList<RadioStationDirble>>
+        fun getStionListByVote(): Observable<MutableList<RadioStation>>
     }
 
     interface AlbumsView {

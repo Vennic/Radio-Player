@@ -46,6 +46,7 @@ class PlaylistFragment: Fragment() {
         super.onCreate(savedInstanceState)
         (activity?.application as App).getComponent().inject(this)
         viewModel = ViewModelProviders.of(this, factory).get(PlaylistViewModel::class.java)
+        mAdapter.fm = activity?.supportFragmentManager
 
         viewModel.apply {
             trackData.observe(this@PlaylistFragment, Observer { mAdapter.trackList = it!! })
