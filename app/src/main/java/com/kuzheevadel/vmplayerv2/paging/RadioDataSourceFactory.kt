@@ -7,13 +7,15 @@ import com.kuzheevadel.vmplayerv2.services.VmpNetwork
 import io.reactivex.disposables.CompositeDisposable
 
 class RadioDataSourceFactory(private val network: VmpNetwork,
-                             private val compositeDisposable: CompositeDisposable): DataSource.Factory<Int, RadioStation>() {
+                             private val compositeDisposable: CompositeDisposable,
+                             private val name: String): DataSource.Factory<Int, RadioStation>() {
 
     val liveData: MutableLiveData<RadioDataSource> = MutableLiveData()
 
     override fun create(): DataSource<Int, RadioStation> {
-        val radioDataSource = RadioDataSource(network, compositeDisposable)
+        val radioDataSource = RadioDataSource(network, compositeDisposable, name)
         liveData.postValue(radioDataSource)
         return radioDataSource
     }
+
 }

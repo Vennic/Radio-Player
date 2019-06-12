@@ -1,16 +1,10 @@
 package com.kuzheevadel.vmplayerv2.adapters
 
 import android.databinding.BindingAdapter
-import android.databinding.DataBindingUtil
-import android.databinding.ViewDataBinding
 import android.net.Uri
 import android.support.v7.widget.AppCompatImageView
-import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import com.kuzheevadel.vmplayerv2.R
-import com.kuzheevadel.vmplayerv2.databinding.AlbumItemBinding
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 

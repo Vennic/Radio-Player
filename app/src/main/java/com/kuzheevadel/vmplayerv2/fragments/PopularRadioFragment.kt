@@ -14,7 +14,7 @@ import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.adapters.RadioStationsAdapter
 import com.kuzheevadel.vmplayerv2.dagger.App
 import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
-import com.kuzheevadel.vmplayerv2.services.State
+import com.kuzheevadel.vmplayerv2.common.State
 import com.kuzheevadel.vmplayerv2.viewmodels.RadioViewModel
 import kotlinx.android.synthetic.main.popular_radio_layout.view.*
 import javax.inject.Inject

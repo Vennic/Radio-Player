@@ -4,7 +4,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.kuzheevadel.vmplayerv2.database.PlaylistDatabase
 import com.kuzheevadel.vmplayerv2.model.Track
-import com.kuzheevadel.vmplayerv2.services.State
+import com.kuzheevadel.vmplayerv2.common.State
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

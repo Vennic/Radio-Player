@@ -3,7 +3,6 @@ package com.kuzheevadel.vmplayerv2.dagger
 import android.app.Application
 import android.arch.persistence.room.Room
 import android.content.Context
-import android.support.v4.app.Fragment
 import com.kuzheevadel.vmplayerv2.Helpers.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.activities.AlbumActivity
 import com.kuzheevadel.vmplayerv2.adapters.AlbumsListAdapter
@@ -14,6 +13,7 @@ import com.kuzheevadel.vmplayerv2.database.PlaylistDatabase
 import com.kuzheevadel.vmplayerv2.fragments.*
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Track
+import com.kuzheevadel.vmplayerv2.paging.RadioPagingAdapter
 import com.kuzheevadel.vmplayerv2.repository.StorageMediaRepository
 import com.kuzheevadel.vmplayerv2.services.PlayerService
 import com.kuzheevadel.vmplayerv2.services.StorageMedia
@@ -108,10 +108,9 @@ class AppModule(val context: Context) {
         return TrackListAdapter(mediaRepository, bindServiceHelper)
     }
 
-    @Singleton
     @Provides
-    fun provideVmpNetwork(): Interfaces.Network {
-        return VmpNetwork()
+    fun provideSearchPagingAdapter(bindServiceHelper: BindServiceHelper): RadioPagingAdapter {
+        return RadioPagingAdapter(bindServiceHelper)
     }
 
     @Singleton

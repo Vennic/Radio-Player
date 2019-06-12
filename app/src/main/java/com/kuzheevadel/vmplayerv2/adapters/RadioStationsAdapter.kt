@@ -13,7 +13,6 @@ import com.kuzheevadel.vmplayerv2.Helpers.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.databinding.RadioStationItemBinding
 import com.kuzheevadel.vmplayerv2.model.RadioStation
-import com.kuzheevadel.vmplayerv2.radio.RadioStationDirble
 
 class RadioStationsAdapter(private val bindServiceHelper: BindServiceHelper): RecyclerView.Adapter<RadioStationsAdapter.RadioViewHolder>() {
 
