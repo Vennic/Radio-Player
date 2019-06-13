@@ -37,6 +37,13 @@ data class RadioStation(
         return url2
     }
 
+    fun getTagsInfo(): String {
+        val correctTags = tags.replace(",", ", ").replace("\n", "")
+        return "tags: $correctTags"
+    }
+
+    fun getCountryInfo() = "Country • $country"
+
     companion object {
         @JvmStatic
         val diffCallback = object : DiffUtil.ItemCallback<RadioStation>() {

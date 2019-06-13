@@ -3,7 +3,7 @@ package com.kuzheevadel.vmplayerv2.dagger
 import android.app.Application
 import android.arch.persistence.room.Room
 import android.content.Context
-import com.kuzheevadel.vmplayerv2.Helpers.BindServiceHelper
+import com.kuzheevadel.vmplayerv2.bindhelper.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.activities.AlbumActivity
 import com.kuzheevadel.vmplayerv2.adapters.AlbumsListAdapter
 import com.kuzheevadel.vmplayerv2.adapters.AlbumsTracksListAdapter
@@ -61,7 +61,7 @@ interface ApplicationComponent {
 
 }
 
-@Module(includes = [Model::class])
+@Module(includes = [Model::class, AdaptersModule::class])
 class AppModule(val context: Context) {
 
     @Singleton
@@ -70,21 +70,6 @@ class AppModule(val context: Context) {
 
     @Provides
     fun provideBindHelper(context: Context): BindServiceHelper = BindServiceHelper(context)
-
-    @Provides
-    fun provideDetailAlbumAdapter(mediaRepository: Interfaces.StorageMediaRepository, bindServiceHelper: BindServiceHelper): AlbumsTracksListAdapter {
-        return AlbumsTracksListAdapter(mediaRepository, bindServiceHelper)
-    }
-
-    @Provides
-    fun provideAlbumsAdapter(): AlbumsListAdapter {
-        return AlbumsListAdapter()
-    }
-
-    @Provides
-    fun provideRadioAdapter(bindServiceHelper: BindServiceHelper): RadioStationsAdapter {
-        return RadioStationsAdapter(bindServiceHelper)
-    }
 
     @Singleton
     @Provides
@@ -101,16 +86,6 @@ class AppModule(val context: Context) {
     @Provides
     fun provideStorageMedia(context: Context): Callable<MutableList<Track>> {
         return StorageMedia(context)
-    }
-
-    @Provides
-    fun provideTrackListAdapter(mediaRepository: Interfaces.StorageMediaRepository, bindServiceHelper: BindServiceHelper): TrackListAdapter {
-        return TrackListAdapter(mediaRepository, bindServiceHelper)
-    }
-
-    @Provides
-    fun provideSearchPagingAdapter(bindServiceHelper: BindServiceHelper): RadioPagingAdapter {
-        return RadioPagingAdapter(bindServiceHelper)
     }
 
     @Singleton

@@ -1,20 +1,23 @@
 package com.kuzheevadel.vmplayerv2.fragments
 
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.kuzheevadel.vmplayerv2.R
+import com.kuzheevadel.vmplayerv2.adapters.SpinnerArrayAdapter
 import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.dagger.App
 import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
+import com.kuzheevadel.vmplayerv2.model.Country
 import com.kuzheevadel.vmplayerv2.paging.RadioPagingAdapter
 import com.kuzheevadel.vmplayerv2.viewmodels.SearchRadioViewModel
 import kotlinx.android.synthetic.main.search_radio_layout.view.*
@@ -26,6 +29,8 @@ class SearchRadioFragment: Fragment() {
     lateinit var factory: CustomViewModelFactory
     private lateinit var viewModel: SearchRadioViewModel
     private var searchText = ""
+    private lateinit var countriesLiveData: MutableLiveData<MutableList<Country>>
+    private var countriesList: MutableList<Country>? = mutableListOf()
 
     @Inject
     lateinit var mAdapter: RadioPagingAdapter
@@ -39,10 +44,14 @@ class SearchRadioFragment: Fragment() {
 
         (activity?.application as App).getComponent().inject(this)
         viewModel = ViewModelProviders.of(this, factory).get(SearchRadioViewModel::class.java)
+        countriesLiveData = viewModel.countriesdata
+
+        viewModel.loadCountriesList()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.search_radio_layout, container, false)
+        initializeSpinner(view)
         view.search_radio_recycler.layoutManager = LinearLayoutManager(context)
         view.search_radio_recycler.adapter = mAdapter
 
@@ -74,6 +83,14 @@ class SearchRadioFragment: Fragment() {
             outState.putString(Constants.SEARCH_TEXT, searchText)
         }
         super.onSaveInstanceState(outState)
+    }
+
+    private fun initializeSpinner(view: View) {
+        countriesLiveData.observe(this, Observer {
+            countriesList = it
+            val adapter = SpinnerArrayAdapter(context!!, countriesList!!)
+            view.search_country_spinner.adapter = adapter
+        })
     }
 
     private fun initialList() {

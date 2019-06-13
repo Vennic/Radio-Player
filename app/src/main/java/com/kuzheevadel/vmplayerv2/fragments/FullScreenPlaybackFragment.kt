@@ -9,18 +9,16 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
-import com.kuzheevadel.vmplayerv2.Helpers.BindServiceHelper
+import com.kuzheevadel.vmplayerv2.bindhelper.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.dagger.App
 import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
 import com.kuzheevadel.vmplayerv2.databinding.FullScreenPlaybackBinding
 import com.kuzheevadel.vmplayerv2.viewmodels.PlaybackViewModel
-import kotlinx.android.synthetic.main.full_screen_playback.view.*
 import javax.inject.Inject
 
 class FullScreenPlaybackFragment: Fragment() {

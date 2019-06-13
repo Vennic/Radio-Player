@@ -11,16 +11,16 @@
             android:focusable="true"
             android:background="?android:attr/selectableItemBackground"
             android:layout_width="match_parent"
-            android:layout_height="60dp">
+            android:layout_height="68dp">
 
         <android.support.v7.widget.AppCompatImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
                 app:radio_thumb="@{radioStation.favicon}"
                 tools:srcCompat="@tools:sample/backgrounds/scenic[5]"
                 android:id="@+id/imageView"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginBottom="8dp"
@@ -33,14 +33,56 @@
                 android:id="@+id/textView2"
                 android:singleLine="true"
                 android:ellipsize="marquee"
+                android:layout_marginEnd="8dp"
+                android:textColor="@android:color/black"
                 app:layout_constraintStart_toEndOf="@+id/imageView"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/radio_item_menu_button"/>
+
+        <TextView
+                android:text="@{radioStation.countryInfo}"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView3"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                android:layout_marginStart="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/textView2"
+                android:layout_marginEnd="8dp"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toStartOf="@+id/radio_item_menu_button"/>
+
+        <TextView
+                android:text="@{radioStation.tagsInfo}"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView4"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/textView3"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toStartOf="@+id/radio_item_menu_button"/>
+
+        <ImageButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:scaleType="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_more_vert_black_24dp"
+                android:id="@+id/radio_item_menu_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="8dp"
-                app:layout_constraintTop_toTopOf="@+id/imageView"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView"
-                android:textColor="@android:color/black"/>
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
     </android.support.constraint.ConstraintLayout>
 </layout>

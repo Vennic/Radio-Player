@@ -2,6 +2,7 @@ package com.kuzheevadel.vmplayerv2.services
 
 import com.google.gson.GsonBuilder
 import com.kuzheevadel.vmplayerv2.common.Constants
+import com.kuzheevadel.vmplayerv2.model.Country
 import com.kuzheevadel.vmplayerv2.model.RadioStation
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
@@ -12,6 +13,9 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface ApiService {
+
+    @GET("/webservice/json/countries")
+    fun getCountriesList(): Observable<MutableList<Country>>
 
     @GET("/webservice/json/stations/topvote/100")
     fun getStationsByVote(): Observable<MutableList<RadioStation>>
@@ -32,13 +36,18 @@ class VmpNetwork {
         .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .build()
+        .create(ApiService::class.java)
 
     fun executeRadioApi(index: Int, name: String): Observable<MutableList<RadioStation>> {
-        return retrofit.create(ApiService::class.java).getSearchStations(name, "50", index.toString())
+        return retrofit.getSearchStations(name, "50", index.toString())
+    }
+
+    fun getCountriesList(): Observable<MutableList<Country>> {
+        return retrofit.getCountriesList()
     }
 
     fun getStationListByVote(): Observable<MutableList<RadioStation>> {
-        return retrofit.create(ApiService::class.java).getStationsByVote()
+        return retrofit.getStationsByVote()
     }
 
     private fun getOkHttpClient(): OkHttpClient {

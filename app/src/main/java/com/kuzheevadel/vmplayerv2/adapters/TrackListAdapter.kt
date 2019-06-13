@@ -10,7 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.android.databinding.library.baseAdapters.BR
-import com.kuzheevadel.vmplayerv2.Helpers.BindServiceHelper
+import com.kuzheevadel.vmplayerv2.bindhelper.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.databinding.TrackItemLayoutBinding
 import com.kuzheevadel.vmplayerv2.fragments.TrackBottomMenu
