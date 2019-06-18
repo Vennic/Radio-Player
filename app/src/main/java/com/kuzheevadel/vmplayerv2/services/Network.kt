@@ -22,6 +22,7 @@ interface ApiService {
 
     @GET("/webservice/json/stations/search")
     fun getSearchStations(@Query("name") name: String,
+                          @Query("country") country: String,
                           @Query("limit") limit: String,
                           @Query("offset") offset: String): Observable<MutableList<RadioStation>>
 
@@ -38,8 +39,8 @@ class VmpNetwork {
         .build()
         .create(ApiService::class.java)
 
-    fun executeRadioApi(index: Int, name: String): Observable<MutableList<RadioStation>> {
-        return retrofit.getSearchStations(name, "50", index.toString())
+    fun executeRadioApi(index: Int, name: String, country: String): Observable<MutableList<RadioStation>> {
+        return retrofit.getSearchStations(name, country, "50", index.toString())
     }
 
     fun getCountriesList(): Observable<MutableList<Country>> {

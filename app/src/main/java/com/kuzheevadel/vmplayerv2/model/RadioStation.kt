@@ -1,8 +1,11 @@
 package com.kuzheevadel.vmplayerv2.model
 
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.PrimaryKey
 import android.support.v7.util.DiffUtil
 import android.util.Log
 
+@Entity
 data class RadioStation(
     val bitrate: String,
     val changeuuid: String,
@@ -14,7 +17,7 @@ data class RadioStation(
     val favicon: String?,
     val hls: String,
     val homepage: String,
-    val id: String,
+    @PrimaryKey val id: String,
     val ip: String,
     val language: String,
     val lastchangetime: String,

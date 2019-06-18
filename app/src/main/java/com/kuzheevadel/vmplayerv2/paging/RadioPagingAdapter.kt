@@ -13,8 +13,10 @@ import com.kuzheevadel.vmplayerv2.bindhelper.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.databinding.RadioStationItemBinding
 import com.kuzheevadel.vmplayerv2.model.RadioStation
+import com.kuzheevadel.vmplayerv2.repository.RadioRepository
 
-class RadioPagingAdapter(private val bindServiceHelper: BindServiceHelper): PagedListAdapter<RadioStation, RadioPagingAdapter.RadioViewHolder>(RadioStation.diffCallback) {
+class RadioPagingAdapter(private val bindServiceHelper: BindServiceHelper,
+                         private val radioRepository: RadioRepository): PagedListAdapter<RadioStation, RadioPagingAdapter.RadioViewHolder>(RadioStation.diffCallback) {
 
     init {
         val callback = object : MediaControllerCompat.Callback() {
@@ -34,10 +36,13 @@ class RadioPagingAdapter(private val bindServiceHelper: BindServiceHelper): Page
         val radioStation = getItem(position)
         val bundle = Bundle()
         bundle.putString(Constants.RADIO_URL, radioStation?.url)
+        bundle.putString(Constants.RADIO_TITLE, radioStation?.name)
+        bundle.putString(Constants.RADIO_IMAGE, radioStation?.favicon)
 
         viewHolder.binding?.setVariable(BR.radioStation, radioStation)
 
         viewHolder.view.setOnClickListener {
+            radioRepository.currentPlayingStation = radioStation
             bindServiceHelper.mediaControllerCompat?.transportControls?.prepareFromMediaId(Constants.RADIO_STATION, bundle)
         }
 

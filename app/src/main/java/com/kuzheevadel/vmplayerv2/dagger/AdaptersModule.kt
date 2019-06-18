@@ -7,6 +7,7 @@ import com.kuzheevadel.vmplayerv2.adapters.TrackListAdapter
 import com.kuzheevadel.vmplayerv2.bindhelper.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.paging.RadioPagingAdapter
+import com.kuzheevadel.vmplayerv2.repository.RadioRepository
 import dagger.Module
 import dagger.Provides
 
@@ -25,8 +26,8 @@ class AdaptersModule {
     }
 
     @Provides
-    fun provideRadioAdapter(bindServiceHelper: BindServiceHelper): RadioStationsAdapter {
-        return RadioStationsAdapter(bindServiceHelper)
+    fun provideRadioAdapter(bindServiceHelper: BindServiceHelper, radioRepository: RadioRepository): RadioStationsAdapter {
+        return RadioStationsAdapter(bindServiceHelper, radioRepository)
     }
 
     @Provides
@@ -35,8 +36,8 @@ class AdaptersModule {
     }
 
     @Provides
-    fun provideSearchPagingAdapter(bindServiceHelper: BindServiceHelper): RadioPagingAdapter {
-        return RadioPagingAdapter(bindServiceHelper)
+    fun provideSearchPagingAdapter(bindServiceHelper: BindServiceHelper, radioRepository: RadioRepository): RadioPagingAdapter {
+        return RadioPagingAdapter(bindServiceHelper, radioRepository)
     }
 
 }

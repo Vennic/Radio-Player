@@ -8,12 +8,13 @@ import io.reactivex.disposables.CompositeDisposable
 
 class RadioDataSourceFactory(private val network: VmpNetwork,
                              private val compositeDisposable: CompositeDisposable,
-                             private val name: String): DataSource.Factory<Int, RadioStation>() {
+                             private val name: String,
+                             private val country: String): DataSource.Factory<Int, RadioStation>() {
 
     val liveData: MutableLiveData<RadioDataSource> = MutableLiveData()
 
     override fun create(): DataSource<Int, RadioStation> {
-        val radioDataSource = RadioDataSource(network, compositeDisposable, name)
+        val radioDataSource = RadioDataSource(network, compositeDisposable, name,country)
         liveData.postValue(radioDataSource)
         return radioDataSource
     }

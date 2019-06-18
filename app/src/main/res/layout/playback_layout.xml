@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <variable name="updatePlaybackMessage"
+                  type="com.kuzheevadel.vmplayerv2.common.UpdateUIMessage"/>
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="60dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:id="@+id/top_playback_controls">
+
+            <include layout="@layout/top_playback_layout"
+            app:topUpdateMessage="@{updatePlaybackMessage}"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:id="@+id/playback_controls_container"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/top_playback_controls"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+            <include layout="@layout/playback_controls_layout"
+            app:updateMessage="@{updatePlaybackMessage}"/>
+
+        </FrameLayout>
+    </android.support.constraint.ConstraintLayout>
+</layout>

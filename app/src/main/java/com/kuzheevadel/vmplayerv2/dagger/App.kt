@@ -61,7 +61,7 @@ interface ApplicationComponent {
 
 }
 
-@Module(includes = [Model::class, AdaptersModule::class])
+@Module(includes = [Model::class, AdaptersModule::class, RepositoriesModule::class])
 class AppModule(val context: Context) {
 
     @Singleton
@@ -75,12 +75,6 @@ class AppModule(val context: Context) {
     @Provides
     fun provideDatabase(context: Context): PlaylistDatabase {
         return Room.databaseBuilder(context, PlaylistDatabase::class.java, "playlistDatabase").build()
-    }
-
-    @Singleton
-    @Provides
-    fun provideStorageMediaRepository(): Interfaces.StorageMediaRepository {
-        return StorageMediaRepository()
     }
 
     @Provides

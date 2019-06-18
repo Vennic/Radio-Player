@@ -29,6 +29,7 @@ class RadioFragment: Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.radio_category_layout, container, false)
+        setCurrentFragment(view)
 
         view.category_button.setOnClickListener {
             val popupMenu = PopupMenu(context!!, it)
@@ -95,6 +96,30 @@ class RadioFragment: Fragment() {
         }
 
         return view
+    }
+
+    private fun setCurrentFragment(view: View) {
+        when (state) {
+            RadioState.POPULAR -> {
+                view.category_textview.text = getText(R.string.popular_radio_stations)
+
+                fm.beginTransaction()
+                    .replace(R.id.radio_fragments_container, popularRadioFragment)
+                    .commit()
+            }
+
+            RadioState.SEARCH -> {
+                view.category_textview.text = getText(R.string.search_stations)
+
+                fm.beginTransaction()
+                    .replace(R.id.radio_fragments_container, searchRadioFragment)
+                    .commit()
+            }
+
+            RadioState.FAVORITE -> {
+                view.category_textview.text = getText(R.string.favorite_stations)
+            }
+        }
     }
 }
 

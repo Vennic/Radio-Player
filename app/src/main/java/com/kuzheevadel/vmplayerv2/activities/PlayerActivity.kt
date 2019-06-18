@@ -3,6 +3,7 @@ package com.kuzheevadel.vmplayerv2.activities
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.design.widget.Snackbar
 import android.transition.Fade
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
@@ -14,10 +15,19 @@ import com.kuzheevadel.vmplayerv2.adapters.PlayerPagerAdapter
 import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.fragments.*
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.*
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.player_layout.*
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    private var count = 0
+    private var clickCount = 0
+    private var isStarted = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
@@ -60,8 +70,36 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             (activity_main.panelState == PanelState.EXPANDED || activity_main.panelState == PanelState.ANCHORED)){
             activity_main.panelState = PanelState.COLLAPSED
         } else {
-            super.onBackPressed()
+            clickCount++
+
+            if (!isStarted) {
+                Snackbar.make(activity_main, "Click one more time for exit", Snackbar.LENGTH_LONG).show()
+                startTimer()
+            }
+
+            if (clickCount == 2 && count < 5) {
+                finish()
+                super.onBackPressed()
+            }
         }
+    }
+
+    private fun startTimer() {
+        val disposable = CompositeDisposable()
+        isStarted = true
+
+        disposable.add(Observable.interval(1, TimeUnit.SECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe{
+                count++
+
+                if (it >= 2) {
+                    count = 0
+                    clickCount = 0
+                    isStarted = false
+                    disposable.dispose()
+                }
+            })
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

@@ -22,8 +22,8 @@ class SearchRadioViewModel @Inject constructor(private val network: VmpNetwork):
     lateinit var listLiveData: LiveData<PagedList<RadioStation>>
     val countriesdata: MutableLiveData<MutableList<Country>> = MutableLiveData()
 
-    fun searchRadioStations(name: String) {
-        radioDataSourceFactory = RadioDataSourceFactory(network, compositeDisposable, name)
+    fun searchRadioStations(name: String, country: String) {
+        radioDataSourceFactory = RadioDataSourceFactory(network, compositeDisposable, name, country)
         initializePaging()
     }
 
@@ -44,7 +44,7 @@ class SearchRadioViewModel @Inject constructor(private val network: VmpNetwork):
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                it.add(0, Country("All countries", "", "All countries"))
+                it.add(0, Country("All countries", "", ""))
                 countriesdata.value = it
             }
     }

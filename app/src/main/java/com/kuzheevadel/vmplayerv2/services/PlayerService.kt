@@ -29,9 +29,12 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import com.kuzheevadel.vmplayerv2.activities.PlayerActivity
 import com.kuzheevadel.vmplayerv2.common.Constants
+import com.kuzheevadel.vmplayerv2.common.Source
+import com.kuzheevadel.vmplayerv2.common.UpdateUIMessage
 import com.kuzheevadel.vmplayerv2.dagger.App
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Track
+import com.kuzheevadel.vmplayerv2.repository.RadioRepository
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -49,6 +52,7 @@ class PlayerService: Service() {
     private lateinit var disposable: CompositeDisposable
     private lateinit var subscription: Disposable
     val progressData: MutableLiveData<Int> = MutableLiveData()
+    private var source = Source.TRACK
 
     private lateinit var mExoplayer: SimpleExoPlayer
     private val metadataBuilder: MediaMetadataCompat.Builder = MediaMetadataCompat.Builder()
@@ -123,8 +127,8 @@ class PlayerService: Service() {
         }
     }
 
-    private fun updateTrackUI(track: Track) {
-        EventBus.getDefault().post(track)
+    private fun updateTrackUI(message: UpdateUIMessage) {
+        EventBus.getDefault().post(message)
     }
 
     private val mediaSessionCallback: MediaSessionCompat.Callback = object : MediaSessionCompat.Callback() {
@@ -144,7 +148,12 @@ class PlayerService: Service() {
                     setAudioUri(track.getAudioUri())
                     mediaSession.setMetadata(setMediaMetaData(track))
                     currentPlayingTrackId = track.id
-                    updateTrackUI(track)
+                    source = Source.TRACK
+
+                    with(track) {
+                        updateTrackUI(UpdateUIMessage(title, artist, albumId, null, duration, albumName, Source.TRACK))
+                    }
+
 
                     onPlay()
 
@@ -155,6 +164,10 @@ class PlayerService: Service() {
                 }
             } else {
                 val uri = Uri.parse(extras.getString(Constants.RADIO_URL))
+                val name = extras.getString(Constants.RADIO_TITLE)
+                val imageUrl = extras.getString(Constants.RADIO_IMAGE)
+                source = Source.RADIO
+                updateTrackUI(UpdateUIMessage("", name, 0, Uri.parse(imageUrl), 0, "", Source.RADIO))
                 setAudioUri(uri)
                 onPlay()
 
@@ -225,7 +238,12 @@ class PlayerService: Service() {
             val track = mediaRepository.getNextTrackByClick()
             currentPlayingTrackId = track.id
             setAudioUri(track.getAudioUri())
-            updateTrackUI(track)
+            source = Source.TRACK
+
+            with(track) {
+                updateTrackUI(UpdateUIMessage(title, artist, albumId, null, duration, albumName, Source.TRACK))
+            }
+
             onPlay()
 
         }
@@ -236,7 +254,12 @@ class PlayerService: Service() {
             val track = mediaRepository.getPrevTrack()
             currentPlayingTrackId = track.id
             setAudioUri(track.getAudioUri())
-            updateTrackUI(track)
+            source = Source.TRACK
+
+            with(track) {
+                updateTrackUI(UpdateUIMessage(title, artist, albumId, null, duration, albumName, Source.TRACK))
+            }
+
             onPlay()
         }
 
@@ -262,9 +285,9 @@ class PlayerService: Service() {
     inner class PlayerBinder: Binder() {
         fun getMediaSessionToken(): MediaSessionCompat.Token = mediaSession.sessionToken
         fun getProgressData(): MutableLiveData<Int> {
-            Log.i("ProgressTest", "$progressData")
             return progressData
         }
+        fun getCurrentSource() = source
     }
 
     private fun initializePlayer() {
@@ -309,7 +332,6 @@ class PlayerService: Service() {
             .subscribe({
                 if (mExoplayer.playWhenReady) {
                     progressData.value = (mExoplayer.currentPosition / 1000).toInt()
-                    Log.i("ProgressTest", "${mExoplayer.contentPosition / 1000}")
                 } else {
                     disposable.dispose()
                 }

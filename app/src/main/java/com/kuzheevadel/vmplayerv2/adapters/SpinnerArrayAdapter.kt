@@ -31,7 +31,7 @@ class SpinnerArrayAdapter(context: Context,
         val text = view?.findViewById<TextView>(R.id.spinner_country_text)
 
         if (item != null) {
-             text?.text = item.value
+             text?.text = item.name
         }
 
         return view!!

@@ -1,5 +1,6 @@
 package com.kuzheevadel.vmplayerv2.viewmodels
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.kuzheevadel.vmplayerv2.database.PlaylistDatabase
@@ -11,12 +12,13 @@ import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.Callable
 import javax.inject.Inject
 
-class PlaylistViewModel @Inject constructor(private val database: PlaylistDatabase): ViewModel() {
+class PlaylistViewModel @Inject constructor(database: PlaylistDatabase): ViewModel() {
 
     private val tracksDao = database.trackDao()
     val trackData: MutableLiveData<MutableList<Track>> = MutableLiveData()
     val loadStatus: MutableLiveData<State> = MutableLiveData()
 
+    @SuppressLint("CheckResult")
     fun loadPlaylistFromDatabase() {
         val callable = Callable<MutableList<Track>> { tracksDao.getAllTracks() }
 

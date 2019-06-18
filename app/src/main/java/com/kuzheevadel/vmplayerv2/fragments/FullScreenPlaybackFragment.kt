@@ -15,10 +15,13 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import com.kuzheevadel.vmplayerv2.bindhelper.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.R
+import com.kuzheevadel.vmplayerv2.common.Source
 import com.kuzheevadel.vmplayerv2.dagger.App
 import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
-import com.kuzheevadel.vmplayerv2.databinding.FullScreenPlaybackBinding
+import com.kuzheevadel.vmplayerv2.databinding.PlaybackLayoutBinding
 import com.kuzheevadel.vmplayerv2.viewmodels.PlaybackViewModel
+import kotlinx.android.synthetic.main.playback_controls_layout.view.*
+import kotlinx.android.synthetic.main.top_playback_layout.view.*
 import javax.inject.Inject
 
 class FullScreenPlaybackFragment: Fragment() {
@@ -29,7 +32,7 @@ class FullScreenPlaybackFragment: Fragment() {
     lateinit var bindService: BindServiceHelper
 
     private lateinit var viewModel: PlaybackViewModel
-    private lateinit var binding: FullScreenPlaybackBinding
+    private lateinit var binding: PlaybackLayoutBinding
     private lateinit var progressData: MutableLiveData<Int>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,11 +49,14 @@ class FullScreenPlaybackFragment: Fragment() {
 
 
         bindService.setOnConnectionListener(object : BindServiceHelper.OnConnectionListener {
-            override fun setProgressData(data: MutableLiveData<Int>) {
+            override fun setProgressData(data: MutableLiveData<Int>, source: Source) {
                 progressData = data
+                viewModel.source = source
+                viewModel.initViewModel()
+
                 progressData.observe(this@FullScreenPlaybackFragment, Observer {
-                    binding.currentDurationText.text = getDurationInTimeFormat(it!!)
-                    binding.progressSeekBar.progress = it
+                    binding.playbackControlsContainer.current_duration_text.text = getDurationInTimeFormat(it!!)
+                    binding.playbackControlsContainer.progress_seek_bar.progress = it
                 }) }
         })
 
@@ -59,17 +65,17 @@ class FullScreenPlaybackFragment: Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.full_screen_playback, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.playback_layout, container, false)
         val view = binding.root
 
         binding.apply {
-            bottomTrackInfoText.isSelected = true
+            topPlaybackControls.bottom_track_info_text.isSelected = true
 
-            playbackPlayPauseButton.setOnClickListener {
+            playbackControlsContainer.playback_play_pause_button.setOnClickListener {
                 playOrPause()
             }
 
-            progressSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            playbackControlsContainer.progress_seek_bar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 }
 
@@ -82,24 +88,24 @@ class FullScreenPlaybackFragment: Fragment() {
 
             })
 
-            nextTrack.setOnClickListener {
-                progressSeekBar.progress = 0
+            playbackControlsContainer.next_track.setOnClickListener {
+                playbackControlsContainer.progress_seek_bar.progress = 0
                 bindService.mediaControllerCompat?.transportControls?.skipToNext()
             }
 
-            prevTrack.setOnClickListener {
-                progressSeekBar.progress = 0
+            playbackControlsContainer.prev_track.setOnClickListener {
+                playbackControlsContainer.progress_seek_bar.progress = 0
                 bindService.mediaControllerCompat?.transportControls?.skipToPrevious()
             }
 
-            shuffleImageButton.setOnClickListener {
+            playbackControlsContainer.shuffle_image_button.setOnClickListener {
                 viewModel.addTrackToPlaylistDatabase()
             }
 
         }
 
         viewModel.trackData.observe(this, Observer {
-            binding.playbackTrack = it
+            binding.updatePlaybackMessage = it
         })
 
         return view
@@ -109,12 +115,12 @@ class FullScreenPlaybackFragment: Fragment() {
         with(bindService.mediaControllerCompat) {
             if (this?.playbackState?.state == PlaybackStateCompat.STATE_PLAYING) {
                 transportControls.pause()
-                binding.playbackPlayPauseButton.setImageResource(R.drawable.ic_pause_to_play)
-                (binding.playbackPlayPauseButton.drawable as Animatable).start()
+                binding.playbackControlsContainer.playback_play_pause_button.setImageResource(R.drawable.ic_pause_to_play)
+                (binding.playbackControlsContainer.playback_play_pause_button.drawable as Animatable).start()
             } else {
                 this?.transportControls?.play()
-                binding.playbackPlayPauseButton.setImageResource(R.drawable.ic_play_to_pause)
-                (binding.playbackPlayPauseButton.drawable as Animatable).start()
+                binding.playbackControlsContainer.playback_play_pause_button.setImageResource(R.drawable.ic_play_to_pause)
+                (binding.playbackControlsContainer.playback_play_pause_button.drawable as Animatable).start()
             }
         }
     }

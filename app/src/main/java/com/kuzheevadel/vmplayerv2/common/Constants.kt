@@ -15,5 +15,9 @@ object Constants {
     const val RADIO_STATION = "com.kuzheevadel.radioStation"
     const val RADIO_URL = "com.kuzheevadel.radioStation_url"
     const val SEARCH_TEXT = "com.kuzheevadel.search"
+    const val SPINNER_COUNTRY = "com.kuzheevadel.search_country"
+    const val SPINNER_POSITION = "com.kuzheevadel.spinner_position"
+    const val RADIO_TITLE = "com.kuzheevadel.radioTitle"
+    const val RADIO_IMAGE = "com.kuzheevadel.radioImage"
 }
 

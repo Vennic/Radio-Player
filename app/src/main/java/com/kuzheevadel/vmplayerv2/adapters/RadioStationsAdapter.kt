@@ -13,8 +13,10 @@ import com.kuzheevadel.vmplayerv2.bindhelper.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.databinding.RadioStationItemBinding
 import com.kuzheevadel.vmplayerv2.model.RadioStation
+import com.kuzheevadel.vmplayerv2.repository.RadioRepository
 
-class RadioStationsAdapter(private val bindServiceHelper: BindServiceHelper): RecyclerView.Adapter<RadioStationsAdapter.RadioViewHolder>() {
+class RadioStationsAdapter(private val bindServiceHelper: BindServiceHelper,
+                           private val radioRepository: RadioRepository): RecyclerView.Adapter<RadioStationsAdapter.RadioViewHolder>() {
 
     var radioStationsList = mutableListOf<RadioStation>()
 
@@ -40,12 +42,17 @@ class RadioStationsAdapter(private val bindServiceHelper: BindServiceHelper): Re
 
     override fun onBindViewHolder(viewHolder: RadioViewHolder, pos: Int) {
         val radioStation = radioStationsList[pos]
+
         val bundle = Bundle()
         bundle.putString(Constants.RADIO_URL, radioStation.url)
+        bundle.putString(Constants.RADIO_TITLE, radioStation.name)
+        bundle.putString(Constants.RADIO_IMAGE, radioStation.favicon)
+
 
         viewHolder.binding?.setVariable(BR.radioStation, radioStation)
 
         viewHolder.view.setOnClickListener {
+            radioRepository.currentPlayingStation = radioStation
             bindServiceHelper.mediaControllerCompat?.transportControls?.prepareFromMediaId(Constants.RADIO_STATION, bundle)
         }
 

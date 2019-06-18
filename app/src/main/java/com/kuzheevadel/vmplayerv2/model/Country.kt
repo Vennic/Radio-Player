@@ -6,6 +6,6 @@ data class Country(
     val value: String
 ) {
     override fun toString(): String {
-        return value
+        return name
     }
 }

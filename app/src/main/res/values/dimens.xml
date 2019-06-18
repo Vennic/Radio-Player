@@ -6,6 +6,6 @@
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="bottom_panel_height">60dp</dimen>
-    <dimen name="playback_bottom_buttons_size">60dp</dimen>
+    <dimen name="playback_bottom_buttons_size">88dp</dimen>
     <dimen name="playback_fast_buttons_size">36dp</dimen>
 </resources>
