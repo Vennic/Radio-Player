@@ -1,9 +1,48 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-        android:width="32dp"
-        android:height="32dp"
-        android:viewportWidth="24.0"
-        android:viewportHeight="24.0">
-    <path
-        android:fillColor="#FF000000"
-        android:pathData="M14,10L2,10v2h12v-2zM14,6L2,6v2h12L14,6zM18,14v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM2,16h8v-2L2,14v2z"/>
-</vector>
+<?xml version="1.0"?>
+
+<animated-vector xmlns:aapt="http://schemas.android.com/aapt" xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <aapt:attr name="android:drawable">
+
+
+        <vector android:name="vector" android:viewportHeight="24" android:viewportWidth="24" android:height="24dp" android:width="24dp">
+
+            <path android:name="path_1" android:strokeWidth="1" android:fillColor="#000" android:pathData="M 2 6 L 14 6 L 14 8 L 2 8 Z M 2 10 L 12 10 L 12 12 L 2 12 Z M 2 14 L 10 14 L 10 16 L 2 16 Z"/>
+
+
+            <group android:name="group" android:pivotY="15" android:pivotX="17">
+
+                <path android:name="path" android:strokeWidth="1" android:fillColor="#000" android:pathData="M 12 14 L 16 14 L 16 10 L 18 10 L 18 14 L 22 14 L 22 16 L 18 16 L 18 20 L 16 20 L 16 16 L 12 16 Z"/>
+
+            </group>
+
+        </vector>
+
+    </aapt:attr>
+
+
+    <target android:name="group">
+
+
+        <aapt:attr name="android:animation">
+
+            <objectAnimator android:interpolator="@android:interpolator/fast_out_slow_in" android:valueType="floatType" android:valueTo="45" android:valueFrom="0" android:duration="300" android:propertyName="rotation"/>
+
+        </aapt:attr>
+
+    </target>
+
+
+    <target android:name="path">
+
+
+        <aapt:attr name="android:animation">
+
+            <objectAnimator android:interpolator="@android:interpolator/fast_out_slow_in" android:valueType="colorType" android:valueTo="#ff0000" android:valueFrom="#000" android:duration="300" android:propertyName="fillColor"/>
+
+        </aapt:attr>
+
+    </target>
+
+</animated-vector>

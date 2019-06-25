@@ -41,9 +41,19 @@ class FullScreenPlaybackFragment: Fragment() {
         viewModel = ViewModelProviders.of(this, factory).get(PlaybackViewModel::class.java)
 
         val callback = object : MediaControllerCompat.Callback() {
-            /*override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
+            override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
                 super.onPlaybackStateChanged(state)
-            }*/
+                when (state?.state) {
+                    PlaybackStateCompat.STATE_PLAYING -> {
+                        binding.playbackControlsContainer.playback_play_pause_button.setImageResource(R.drawable.ic_play_to_pause)
+                        (binding.playbackControlsContainer.playback_play_pause_button.drawable as Animatable).start()
+                    }
+                    PlaybackStateCompat.STATE_PAUSED -> {
+                        binding.playbackControlsContainer.playback_play_pause_button.setImageResource(R.drawable.ic_pause_to_play)
+                        (binding.playbackControlsContainer.playback_play_pause_button.drawable as Animatable).start()
+                    }
+                }
+            }
         }
 
 
@@ -102,6 +112,10 @@ class FullScreenPlaybackFragment: Fragment() {
                 viewModel.addTrackToPlaylistDatabase()
             }
 
+            playbackControlsContainer.playlist_image.setOnClickListener {
+                (playbackControlsContainer.playlist_image.drawable as Animatable).start()
+            }
+
         }
 
         viewModel.trackData.observe(this, Observer {
@@ -115,12 +129,8 @@ class FullScreenPlaybackFragment: Fragment() {
         with(bindService.mediaControllerCompat) {
             if (this?.playbackState?.state == PlaybackStateCompat.STATE_PLAYING) {
                 transportControls.pause()
-                binding.playbackControlsContainer.playback_play_pause_button.setImageResource(R.drawable.ic_pause_to_play)
-                (binding.playbackControlsContainer.playback_play_pause_button.drawable as Animatable).start()
             } else {
                 this?.transportControls?.play()
-                binding.playbackControlsContainer.playback_play_pause_button.setImageResource(R.drawable.ic_play_to_pause)
-                (binding.playbackControlsContainer.playback_play_pause_button.drawable as Animatable).start()
             }
         }
     }

@@ -117,13 +117,13 @@
 
         <ImageButton
                 android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
                 app:srcCompat="@drawable/ic_playlist_add_black_24dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:id="@+id/imageButton61"
+                android:id="@+id/playlist_image"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginBottom="24dp" app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginStart="32dp"/>
@@ -137,7 +137,7 @@
                 android:focusable="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:id="@+id/shuffle_image_button"
-                app:layout_constraintStart_toEndOf="@+id/imageButton61"
+                app:layout_constraintStart_toEndOf="@+id/playlist_image"
                 app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toStartOf="@+id/loop_image_button"
                 android:layout_marginBottom="24dp" app:layout_constraintBottom_toBottomOf="parent"/>
 
