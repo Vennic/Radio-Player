@@ -34,7 +34,7 @@ class StorageMedia(private val context: Context): Callable<MutableList<Track>> {
                 val duration: Int = cursor.getInt(durationColumn)
                 val album: String = cursor.getString(albumColumn)
 
-                tracksList.add(Track(id, title, artist, albumId, id, duration, album))
+                tracksList.add(Track(id, title, artist, albumId, id, duration, album, false))
 
             } while (cursor.moveToNext())
 

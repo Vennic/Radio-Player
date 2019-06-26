@@ -141,7 +141,10 @@ class PlayerService: Service() {
 
             if (mediaId == Constants.TRACK) {
                 val position = extras.getInt(Constants.POSITION)
+
                 val track = mediaRepository.getTrackByPosition(position)
+
+                Log.i("PLAYERTEST", track.inPlaylist.toString())
 
                 if (track.id != currentPlayingTrackId) {
                     mediaRepository.setCurrentPosition(position)
@@ -151,7 +154,15 @@ class PlayerService: Service() {
                     source = Source.TRACK
 
                     with(track) {
-                        updateTrackUI(UpdateUIMessage(title, artist, albumId, null, duration, albumName, Source.TRACK))
+                        updateTrackUI(UpdateUIMessage(title,
+                            artist,
+                            albumId,
+                            null,
+                            duration,
+                            albumName,
+                            Source.TRACK,
+                            id,
+                            track.inPlaylist))
                     }
 
 
@@ -167,7 +178,7 @@ class PlayerService: Service() {
                 val name = extras.getString(Constants.RADIO_TITLE)
                 val imageUrl = extras.getString(Constants.RADIO_IMAGE)
                 source = Source.RADIO
-                updateTrackUI(UpdateUIMessage("", name, 0, Uri.parse(imageUrl), 0, "", Source.RADIO))
+                updateTrackUI(UpdateUIMessage("", name, 0, Uri.parse(imageUrl), 0, "", Source.RADIO, -1, false))
                 setAudioUri(uri)
                 onPlay()
 
@@ -241,7 +252,7 @@ class PlayerService: Service() {
             source = Source.TRACK
 
             with(track) {
-                updateTrackUI(UpdateUIMessage(title, artist, albumId, null, duration, albumName, Source.TRACK))
+                updateTrackUI(UpdateUIMessage(title, artist, albumId, null, duration, albumName, Source.TRACK, id, track.inPlaylist))
             }
 
             onPlay()
@@ -257,7 +268,7 @@ class PlayerService: Service() {
             source = Source.TRACK
 
             with(track) {
-                updateTrackUI(UpdateUIMessage(title, artist, albumId, null, duration, albumName, Source.TRACK))
+                updateTrackUI(UpdateUIMessage(title, artist, albumId, null, duration, albumName, Source.TRACK, id, track.inPlaylist))
             }
 
             onPlay()

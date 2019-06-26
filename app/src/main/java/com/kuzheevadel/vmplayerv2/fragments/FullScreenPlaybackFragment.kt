@@ -13,8 +13,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import android.widget.Toast
 import com.kuzheevadel.vmplayerv2.bindhelper.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.R
+import com.kuzheevadel.vmplayerv2.common.DataBaseInfo
 import com.kuzheevadel.vmplayerv2.common.Source
 import com.kuzheevadel.vmplayerv2.dagger.App
 import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
@@ -108,18 +110,41 @@ class FullScreenPlaybackFragment: Fragment() {
                 bindService.mediaControllerCompat?.transportControls?.skipToPrevious()
             }
 
-            playbackControlsContainer.shuffle_image_button.setOnClickListener {
-                viewModel.addTrackToPlaylistDatabase()
-            }
-
             playbackControlsContainer.playlist_image.setOnClickListener {
-                (playbackControlsContainer.playlist_image.drawable as Animatable).start()
+                viewModel.addOrDeleteTrackFromPlaylist()
             }
 
         }
 
         viewModel.trackData.observe(this, Observer {
             binding.updatePlaybackMessage = it
+        })
+
+        viewModel.dataBaseInfoData.observe(this, Observer {
+            when (it) {
+                DataBaseInfo.ADDED -> {
+                    binding.playbackControlsContainer.playlist_image.setImageResource(R.drawable.ic_playlist_add_black_24dp)
+                    Toast.makeText(context, "Added in playlist", Toast.LENGTH_SHORT).show()
+                    (binding.playbackControlsContainer.playlist_image.drawable as Animatable).start()
+                }
+
+                DataBaseInfo.ERROR -> Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+
+                DataBaseInfo.DELETED -> {
+                    binding.playbackControlsContainer.playlist_image.setImageResource(R.drawable.ic_playlist_delete_animatable)
+                    Toast.makeText(context, "Deleted from playlist", Toast.LENGTH_SHORT).show()
+                    (binding.playbackControlsContainer.playlist_image.drawable as Animatable).start()
+                }
+            }
+        })
+
+        viewModel.checkPlaylistData.observe(this, Observer {
+            if (it == DataBaseInfo.ADDED) {
+                binding.playbackControlsContainer.playlist_image.setImageResource(R.drawable.ic_playlist_delete_animatable)
+            } else if (it == DataBaseInfo.DONT_ADDED) {
+                binding.playbackControlsContainer.playlist_image.setImageResource(R.drawable.ic_playlist_add_black_24dp)
+
+            }
         })
 
         return view

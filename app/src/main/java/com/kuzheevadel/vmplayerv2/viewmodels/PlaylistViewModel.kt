@@ -3,6 +3,7 @@ package com.kuzheevadel.vmplayerv2.viewmodels
 import android.annotation.SuppressLint
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.util.Log
 import com.kuzheevadel.vmplayerv2.database.PlaylistDatabase
 import com.kuzheevadel.vmplayerv2.model.Track
 import com.kuzheevadel.vmplayerv2.common.State
@@ -30,6 +31,7 @@ class PlaylistViewModel @Inject constructor(database: PlaylistDatabase): ViewMod
                 loadStatus.value = State.DONE
             },
                 {
+                    Log.e("PLAYLISTERROR", "", it)
                     loadStatus.value = State.ERROR
                 })
     }

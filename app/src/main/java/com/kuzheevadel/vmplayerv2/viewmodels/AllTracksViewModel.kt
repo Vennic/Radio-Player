@@ -2,19 +2,24 @@ package com.kuzheevadel.vmplayerv2.viewmodels
 
 import android.annotation.SuppressLint
 import android.arch.lifecycle.ViewModel
+import android.util.Log
 import com.kuzheevadel.vmplayerv2.adapters.TrackListAdapter
 import com.kuzheevadel.vmplayerv2.common.LoadMediaMessage
+import com.kuzheevadel.vmplayerv2.database.PlaylistDatabase
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Track
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import org.greenrobot.eventbus.EventBus
 import java.util.concurrent.Callable
 import javax.inject.Inject
 
 class AllTracksViewModel @Inject constructor(private val storageMedia: Callable<MutableList<Track>>,
-                                             private val mediaRepository: Interfaces.StorageMediaRepository): ViewModel() {
+                                             private val mediaRepository: Interfaces.StorageMediaRepository,
+                                             private val database: PlaylistDatabase): ViewModel() {
 
     private lateinit var mAdapter: TrackListAdapter
 
@@ -34,6 +39,18 @@ class AllTracksViewModel @Inject constructor(private val storageMedia: Callable<
                     } else {
                         EventBus.getDefault().post(LoadMediaMessage(false))
                     }
+
+                    val callable = Callable<Unit> {mediaRepository.setPlaylistFlags(database.trackDao().getAllTracks())}
+                    val disposable = CompositeDisposable()
+
+                    disposable.add(Observable.fromCallable(callable)
+                        .subscribeOn(Schedulers.computation())
+                        .subscribe ({
+                            disposable.dispose()
+                        },
+                            {error ->
+                                Log.e("PLAYLISTERROR", "", error)
+                            }))
                 }
         } else {
             mediaRepository.createAlbums()

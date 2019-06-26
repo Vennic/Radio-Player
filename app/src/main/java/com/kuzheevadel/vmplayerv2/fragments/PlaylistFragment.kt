@@ -37,6 +37,7 @@ class PlaylistFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        EventBus.getDefault().register(this)
         (activity?.application as App).getComponent().inject(this)
         viewModel = ViewModelProviders.of(this, factory).get(PlaylistViewModel::class.java)
         mAdapter.fm = activity?.supportFragmentManager
@@ -65,14 +66,9 @@ class PlaylistFragment: Fragment() {
         return view
     }
 
-    override fun onStart() {
-        super.onStart()
-        EventBus.getDefault().register(this)
-    }
-
-    override fun onStop() {
+    override fun onDestroy() {
         EventBus.getDefault().unregister(this)
-        super.onStop()
+        super.onDestroy()
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)

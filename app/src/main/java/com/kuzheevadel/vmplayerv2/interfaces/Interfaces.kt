@@ -6,6 +6,8 @@ import com.kuzheevadel.vmplayerv2.model.Track
 class Interfaces {
 
     interface StorageMediaRepository {
+        fun setFlagById(id: Long, isAdded: Boolean)
+        fun setPlaylistFlags(list: MutableList<Track>)
         fun setShuffleMode(mode:Int)
         fun getTrackByPosition(position: Int): Track
         fun getTracksList(): MutableList<Track>

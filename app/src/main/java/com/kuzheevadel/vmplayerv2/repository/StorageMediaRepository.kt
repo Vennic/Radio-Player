@@ -49,7 +49,13 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
             val album = Album(item.key, item.value)
             albumsList.add(album)
         }
-        Log.i("CheckMap", "$albumsList")
+    }
+
+    override fun setFlagById(id: Long, isAdded: Boolean) {
+        for (item in loadedTracksList) {
+            if (item.id == id)
+                item.inPlaylist = isAdded
+        }
     }
 
     override fun setTracksList(list: MutableList<Track>) {
@@ -139,6 +145,18 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
 
     override fun setCurrentPosition(position: Int) {
         currentTrackPosition = position
+    }
+
+    override fun setPlaylistFlags(list: MutableList<Track>) {
+        for (playlistItem in list) {
+            for (loadedItem in loadedTracksList) {
+                if (playlistItem.id == loadedItem.id) {
+                    loadedItem.inPlaylist = true
+                }
+            }
+        }
+
+        Log.i("PLAYLISTTEST", "finish sort")
     }
 
     override fun getCurrentPosition() = currentTrackPosition

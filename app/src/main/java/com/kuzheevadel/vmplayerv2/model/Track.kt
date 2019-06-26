@@ -14,7 +14,8 @@ data class Track(@PrimaryKey val id: Long,
                  val albumId: Long,
                  val uri: Long,
                  val duration: Int,
-                 val albumName: String){
+                 val albumName: String,
+                 var inPlaylist: Boolean){
 
 
     fun getFullName() = "$artist - $title"

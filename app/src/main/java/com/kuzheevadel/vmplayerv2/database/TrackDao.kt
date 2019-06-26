@@ -17,4 +17,7 @@ interface TrackDao {
 
     @Query("SELECT * FROM track")
     fun getAllTracks(): MutableList<Track>
+
+    @Query("SELECT * FROM track WHERE id = :id")
+    fun getTrackById(id: Long): Track
 }

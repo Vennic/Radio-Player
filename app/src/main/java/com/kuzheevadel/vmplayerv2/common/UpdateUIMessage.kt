@@ -9,7 +9,9 @@ data class UpdateUIMessage(val title: String,
                            val url: Uri?,
                            val duration: Int,
                            val albumName: String,
-                           val type: Source) {
+                           val type: Source,
+                           val id: Long,
+                           var inPlaylist: Boolean) {
 
     fun getFullName(): String {
         return when (type) {
