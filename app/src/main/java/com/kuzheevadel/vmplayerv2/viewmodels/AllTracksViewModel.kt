@@ -11,7 +11,6 @@ import com.kuzheevadel.vmplayerv2.model.Track
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import org.greenrobot.eventbus.EventBus
 import java.util.concurrent.Callable
@@ -40,7 +39,7 @@ class AllTracksViewModel @Inject constructor(private val storageMedia: Callable<
                         EventBus.getDefault().post(LoadMediaMessage(false))
                     }
 
-                    val callable = Callable<Unit> {mediaRepository.setPlaylistFlags(database.trackDao().getAllTracks())}
+                    val callable = Callable<Unit> {mediaRepository.setPlaylistFlagsInLoadedList(database.trackDao().getAllTracks())}
                     val disposable = CompositeDisposable()
 
                     disposable.add(Observable.fromCallable(callable)

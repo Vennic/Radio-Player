@@ -16,6 +16,7 @@ class DetailAlbumViewModel @Inject constructor(private val mediaRepository: Inte
 
     fun setAlbum(pos: Int) {
         trackList = mediaRepository.getAlbumsList()[pos].tracksList
+        mediaRepository.setPlaylistFlagsInAlbumsList(trackList)
         mAdapter.trackList = trackList
         mAdapter.notifyDataSetChanged()
     }

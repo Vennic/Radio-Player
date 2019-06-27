@@ -2,6 +2,7 @@ package com.kuzheevadel.vmplayerv2.adapters
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.v4.app.FragmentManager
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.support.v7.widget.RecyclerView
@@ -11,14 +12,16 @@ import android.view.ViewGroup
 import com.android.databinding.library.baseAdapters.BR
 import com.kuzheevadel.vmplayerv2.bindhelper.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.common.Constants
-import com.kuzheevadel.vmplayerv2.databinding.DetailAlbumItemBinding
+import com.kuzheevadel.vmplayerv2.databinding.TrackItemLayoutBinding
+import com.kuzheevadel.vmplayerv2.fragments.TrackBottomMenu
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Track
 
-class AlbumsTracksListAdapter(private val mediaRepository: Interfaces.StorageMediaRepository,
-                              private val bindServiceHelper: BindServiceHelper): RecyclerView.Adapter<AlbumsTracksListAdapter.AlbumsTracksListViewHolder>() {
+class PlaylistAdapter(private val mediaRepository: Interfaces.StorageMediaRepository,
+                       private val bindServiceHelper: BindServiceHelper): RecyclerView.Adapter<PlaylistAdapter.PlaylistListViewHolder>() {
 
     var trackList = mutableListOf<Track>()
+    var fm: FragmentManager? = null
 
     init {
         val callback = object : MediaControllerCompat.Callback() {
@@ -30,39 +33,47 @@ class AlbumsTracksListAdapter(private val mediaRepository: Interfaces.StorageMed
         bindServiceHelper.bindPlayerService(callback)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, pos: Int): AlbumsTracksListViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val binding = DetailAlbumItemBinding.inflate(inflater, parent, false)
-        return AlbumsTracksListViewHolder(binding.root)
+    override fun onCreateViewHolder(viewGroup: ViewGroup, p1: Int): PlaylistListViewHolder {
+        val inflater = LayoutInflater.from(viewGroup.context)
+        val binding = TrackItemLayoutBinding.inflate(inflater, viewGroup, false)
+        return PlaylistListViewHolder(binding.root)
     }
 
     override fun getItemCount(): Int {
         return trackList.size
     }
 
-    override fun onBindViewHolder(viewHolder: AlbumsTracksListViewHolder, pos: Int) {
-        val track = trackList[pos]
+    override fun onBindViewHolder(viewHolder: PlaylistListViewHolder, position: Int) {
+        val track = trackList[position]
         val bundle = Bundle()
-        bundle.putInt(Constants.POSITION, pos)
-        viewHolder.binding?.textPosition?.text = (1 + pos).toString()
-        viewHolder.binding?.setVariable(BR.albumsTrack, track)
+        viewHolder.binding?.setVariable(BR.track, track)
+        bundle.putInt(Constants.POSITION, position)
 
         viewHolder.binding?.click = object : ClickHandler {
+
             override fun click(view: View) {
-                mediaRepository.isPlaylist = false
+                mediaRepository.isPlaylist = true
                 mediaRepository.setPlayingTrackList(trackList)
                 bindServiceHelper.mediaControllerCompat?.transportControls?.prepareFromMediaId(Constants.TRACK, bundle)
             }
+
+        }
+
+        viewHolder.binding?.itemsMenu?.setOnClickListener {
+            val bottomDialog = TrackBottomMenu()
+            bottomDialog.show(fm, bottomDialog.tag)
         }
 
         viewHolder.binding?.executePendingBindings()
+
+    }
+
+    inner class PlaylistListViewHolder(view: View): RecyclerView.ViewHolder(view) {
+        val binding: TrackItemLayoutBinding? = DataBindingUtil.bind(view)
     }
 
     fun unbindService() {
         bindServiceHelper.unbindPlayerService()
     }
 
-    inner class AlbumsTracksListViewHolder(view: View): RecyclerView.ViewHolder(view) {
-        val binding: DetailAlbumItemBinding? = DataBindingUtil.bind(view)
-    }
 }

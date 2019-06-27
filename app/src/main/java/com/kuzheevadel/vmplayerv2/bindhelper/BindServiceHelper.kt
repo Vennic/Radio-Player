@@ -8,8 +8,10 @@ import android.content.ServiceConnection
 import android.os.IBinder
 import android.os.RemoteException
 import android.support.v4.media.session.MediaControllerCompat
+import com.kuzheevadel.vmplayerv2.common.LoadStateMessage
 import com.kuzheevadel.vmplayerv2.common.Source
 import com.kuzheevadel.vmplayerv2.services.PlayerService
+import org.greenrobot.eventbus.EventBus
 
 class BindServiceHelper(private val context: Context) {
 
@@ -48,10 +50,13 @@ class BindServiceHelper(private val context: Context) {
                 } catch (e: RemoteException) {
                     mediaControllerCompat = null
                 }
+
+                EventBus.getDefault().post(LoadStateMessage(isTracksLoaded = false, isConnected = true))
             }
         }
 
         context.bindService(Intent(context, PlayerService::class.java), serviceConnection, Context.BIND_AUTO_CREATE)
+
     }
 
     fun unbindPlayerService() {

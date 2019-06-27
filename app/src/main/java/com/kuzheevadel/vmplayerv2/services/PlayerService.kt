@@ -173,6 +173,27 @@ class PlayerService: Service() {
                 } else if (!mExoplayer.playWhenReady) {
                     onPlay()
                 }
+            } else if (mediaId == Constants.INIT) {
+                Log.i("PrefTest", "prepare")
+                val id = extras.getLong(Constants.ID)
+                val track = mediaRepository.getTrackById(id)
+
+                setAudioUri(track.getAudioUri())
+                mediaSession.setMetadata(setMediaMetaData(track))
+                currentPlayingTrackId = track.id
+                source = Source.TRACK
+
+                with(track) {
+                    updateTrackUI(UpdateUIMessage(title,
+                        artist,
+                        albumId,
+                        null,
+                        duration,
+                        albumName,
+                        Source.TRACK,
+                        id,
+                        track.inPlaylist))
+                }
             } else {
                 val uri = Uri.parse(extras.getString(Constants.RADIO_URL))
                 val name = extras.getString(Constants.RADIO_TITLE)
@@ -224,7 +245,7 @@ class PlayerService: Service() {
 
         override fun onPause() {
             super.onPause()
-
+            stopSelf()
             if (mExoplayer.playWhenReady) {
                 mExoplayer.playWhenReady = false
                 stopInterval()
@@ -310,12 +331,6 @@ class PlayerService: Service() {
 
     private fun setAudioUri(uri: Uri) {
         val mediaSource = ExtractorMediaSource.Factory(DefaultDataSourceFactory(this, "vmplayer"))
-            .createMediaSource(uri)
-        mExoplayer.prepare(mediaSource)
-    }
-
-    private fun setHlsMediaSource(uri: Uri) {
-        val mediaSource = HlsMediaSource.Factory(DefaultDataSourceFactory(this, Util.getUserAgent(this, "VMPlayer")))
             .createMediaSource(uri)
         mExoplayer.prepare(mediaSource)
     }

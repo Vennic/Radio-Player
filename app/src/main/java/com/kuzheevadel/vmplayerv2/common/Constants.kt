@@ -1,6 +1,9 @@
 package com.kuzheevadel.vmplayerv2.common
 
 object Constants {
+    const val PROGRESS = "xom.kuzheevade.progress"
+    const val INIT = "com.kuzheevadel.init"
+    const val ID = "com.kuzheevadel.id"
     const val NO_LOOP_MODE = 0
     const val ONE_LOOP_MODE = 1
     const val ALL_LOOP_MODE = 2

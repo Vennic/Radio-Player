@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.kuzheevadel.vmplayerv2.R
-import com.kuzheevadel.vmplayerv2.adapters.TrackListAdapter
+import com.kuzheevadel.vmplayerv2.adapters.PlaylistAdapter
 import com.kuzheevadel.vmplayerv2.dagger.App
 import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
 import com.kuzheevadel.vmplayerv2.database.PlaylistDatabase
@@ -31,9 +31,9 @@ class PlaylistFragment: Fragment() {
     lateinit var factory: CustomViewModelFactory
 
     @Inject
-    lateinit var mAdapter: TrackListAdapter
+    lateinit var mAdapter: PlaylistAdapter
 
-    lateinit var viewModel: PlaylistViewModel
+    private lateinit var viewModel: PlaylistViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

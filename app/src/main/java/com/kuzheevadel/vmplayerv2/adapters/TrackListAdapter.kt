@@ -52,6 +52,7 @@ class TrackListAdapter(private val mediaRepository: Interfaces.StorageMediaRepos
         viewHolder.binding?.click = object : ClickHandler {
 
             override fun click(view: View) {
+                mediaRepository.isPlaylist = false
                 mediaRepository.setPlayingTrackList(trackList)
                 bindServiceHelper.mediaControllerCompat?.transportControls?.prepareFromMediaId(Constants.TRACK, bundle)
             }

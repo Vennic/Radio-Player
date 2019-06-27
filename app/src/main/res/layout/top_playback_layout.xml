@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="topUpdateMessage" type="com.kuzheevadel.vmplayerv2.common.UpdateUIMessage"/>
+        <variable name="topUpdateMessage"
+                  type="com.kuzheevadel.vmplayerv2.common.UpdateUIMessage"/>
     </data>
 
     <android.support.constraint.ConstraintLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="60dp">
 
@@ -18,27 +18,31 @@
                 android:layout_height="60dp"
                 app:album_url="@{topUpdateMessage.imageUri}"
                 app:srcCompat="@drawable/album_art_default"
-                android:id="@+id/imageView4"
+                android:id="@+id/top_playback_image"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
         <TextView
                 android:text="@{topUpdateMessage.fullName}"
+                tools:text="Gorrilaz - Rockit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/bottom_track_info_text"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView4"
-                app:layout_constraintTop_toTopOf="@+id/imageView4"
-                app:layout_constraintStart_toEndOf="@+id/imageView4"
+                app:layout_constraintBottom_toBottomOf="@+id/top_playback_image"
+                app:layout_constraintTop_toTopOf="@+id/top_playback_image"
+                app:layout_constraintStart_toEndOf="@+id/top_playback_image"
                 android:layout_marginStart="8dp"
-                app:layout_constraintEnd_toStartOf="@+id/bottom_play_pause_image"
-                android:layout_marginEnd="8dp"/>
+                app:layout_constraintEnd_toStartOf="@+id/top_play_pause_image_button"
+                android:layout_marginEnd="8dp"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"/>
 
         <ImageButton
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                app:srcCompat="@drawable/ic_play_arrow_black"
-                android:id="@+id/bottom_play_pause_image"
+                app:srcCompat="@drawable/ic_play_to_pause"
+                android:id="@+id/top_play_pause_image_button"
+                android:scaleType="centerCrop"
                 android:clickable="true"
                 android:focusable="true"
                 android:background="?attr/selectableItemBackgroundBorderless"

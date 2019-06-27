@@ -1,9 +1,6 @@
 package com.kuzheevadel.vmplayerv2.dagger
 
-import com.kuzheevadel.vmplayerv2.adapters.AlbumsListAdapter
-import com.kuzheevadel.vmplayerv2.adapters.AlbumsTracksListAdapter
-import com.kuzheevadel.vmplayerv2.adapters.RadioStationsAdapter
-import com.kuzheevadel.vmplayerv2.adapters.TrackListAdapter
+import com.kuzheevadel.vmplayerv2.adapters.*
 import com.kuzheevadel.vmplayerv2.bindhelper.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.paging.RadioPagingAdapter
@@ -38,6 +35,11 @@ class AdaptersModule {
     @Provides
     fun provideSearchPagingAdapter(bindServiceHelper: BindServiceHelper, radioRepository: RadioRepository): RadioPagingAdapter {
         return RadioPagingAdapter(bindServiceHelper, radioRepository)
+    }
+
+    @Provides
+    fun providePlaylistAdapter(mediaRepository: Interfaces.StorageMediaRepository, bindServiceHelper: BindServiceHelper): PlaylistAdapter {
+        return PlaylistAdapter(mediaRepository, bindServiceHelper)
     }
 
 }

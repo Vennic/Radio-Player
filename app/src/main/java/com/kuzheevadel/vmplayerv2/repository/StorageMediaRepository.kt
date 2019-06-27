@@ -2,17 +2,19 @@ package com.kuzheevadel.vmplayerv2.repository
 
 import android.util.Log
 import com.kuzheevadel.vmplayerv2.common.Constants
+import com.kuzheevadel.vmplayerv2.common.LoadStateMessage
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Album
 import com.kuzheevadel.vmplayerv2.model.Track
+import org.greenrobot.eventbus.EventBus
 import java.util.*
 
 class StorageMediaRepository: Interfaces.StorageMediaRepository {
     
     private var loadedTracksList: MutableList<Track> = mutableListOf()
-    private var shuffleMode = Constants.SHUFFLE_MODE_ON
+    override var isPlaylist = false
+    private var shuffleMode = Constants.SHUFFLE_MODE_OFF
     private var currentTrackPosition: Int = 0
-    private var currentAlbumsPosition: Int = 0
     private var loopMode = Constants.NO_LOOP_MODE
     private lateinit var albumsList: MutableList<Album>
     private lateinit var playingTrackList: MutableList<Track>
@@ -63,6 +65,16 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
         loadedTracksList = list
         playingTrackList = loadedTracksList
         createAlbums()
+        EventBus.getDefault().post(LoadStateMessage(isTracksLoaded = true, isConnected = false))
+    }
+
+    override fun deleteTrackFromPlaylist(id: Long) {
+        if (isPlaylist) {
+            for ((index, item) in playingTrackList.withIndex())
+                if (item.id == id)
+                    playingTrackList.removeAt(index)
+        }
+        Log.i("STORAGEETST", playingTrackList.size.toString())
     }
 
     override fun setShuffleMode(mode: Int) {
@@ -143,11 +155,25 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
         }
     }
 
+    override fun getTrackById(id: Long): Track {
+        var track = loadedTracksList[0]
+
+        for ((index, item) in loadedTracksList.withIndex()) {
+            if (item.id == id) {
+                track = item
+                currentTrackPosition = index
+                return track
+            }
+        }
+
+        return track
+    }
+
     override fun setCurrentPosition(position: Int) {
         currentTrackPosition = position
     }
 
-    override fun setPlaylistFlags(list: MutableList<Track>) {
+    override fun setPlaylistFlagsInLoadedList(list: MutableList<Track>) {
         for (playlistItem in list) {
             for (loadedItem in loadedTracksList) {
                 if (playlistItem.id == loadedItem.id) {
@@ -157,6 +183,13 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
         }
 
         Log.i("PLAYLISTTEST", "finish sort")
+    }
+
+    override fun setPlaylistFlagsInAlbumsList(list: MutableList<Track>) {
+        for (albumsItem in list)
+            for (loadedItem in loadedTracksList)
+                if (albumsItem.id == loadedItem.id)
+                    albumsItem.inPlaylist = loadedItem.inPlaylist
     }
 
     override fun getCurrentPosition() = currentTrackPosition

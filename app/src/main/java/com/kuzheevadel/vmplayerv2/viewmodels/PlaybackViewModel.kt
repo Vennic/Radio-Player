@@ -27,6 +27,7 @@ class PlaybackViewModel @Inject constructor(private val mediaRepository: Interfa
     private val trackDao: TrackDao = database.trackDao()
     val dataBaseInfoData: MutableLiveData<DataBaseInfo> = MutableLiveData()
     val checkPlaylistData: MutableLiveData<DataBaseInfo> = MutableLiveData()
+    val trackIdData: MutableLiveData<Long> = MutableLiveData()
 
     lateinit var source: Source
 
@@ -35,10 +36,15 @@ class PlaybackViewModel @Inject constructor(private val mediaRepository: Interfa
             when (source) {
                 Source.TRACK -> {
                     val track = mediaRepository.getCurrentTrack()
-
                     with(track) {
                         trackData.value =
                             UpdateUIMessage(title, artist, albumId, null, duration, albumName, Source.TRACK, id, track.inPlaylist)
+                    }
+
+                    if (track.inPlaylist) {
+                        checkPlaylistData.value = DataBaseInfo.ADDED
+                    } else {
+                        checkPlaylistData.value = DataBaseInfo.DONT_ADDED
                     }
                 }
                 Source.RADIO -> {
@@ -60,16 +66,17 @@ class PlaybackViewModel @Inject constructor(private val mediaRepository: Interfa
         EventBus.getDefault().register(this)
     }
 
-    @SuppressLint("CheckResult")
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun updateUI(message: UpdateUIMessage) {
         trackData.value = message
 
+        Log.i("PLAYBACKTEST", message.inPlaylist.toString())
         if (message.inPlaylist) {
             checkPlaylistData.value = DataBaseInfo.ADDED
         } else {
             checkPlaylistData.value = DataBaseInfo.DONT_ADDED
         }
+        trackIdData.value = mediaRepository.getCurrentTrack().id
     }
 
     @SuppressLint("CheckResult")
@@ -101,6 +108,7 @@ class PlaybackViewModel @Inject constructor(private val mediaRepository: Interfa
                     {
                         EventBus.getDefault().post("post")
                         mediaRepository.setFlagById(mediaRepository.getCurrentTrack().id, false)
+                        mediaRepository.deleteTrackFromPlaylist(mediaRepository.getCurrentTrack().id)
                         dataBaseInfoData.postValue(DataBaseInfo.DELETED)
                     },
                     {
