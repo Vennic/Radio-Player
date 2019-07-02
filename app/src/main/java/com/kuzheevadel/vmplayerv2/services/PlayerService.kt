@@ -198,8 +198,10 @@ class PlayerService: Service() {
                 val uri = Uri.parse(extras.getString(Constants.RADIO_URL))
                 val name = extras.getString(Constants.RADIO_TITLE)
                 val imageUrl = extras.getString(Constants.RADIO_IMAGE)
+                val radioId = extras.getString(Constants.RADIO_ID).toLong()
+                currentPlayingTrackId = -1
                 source = Source.RADIO
-                updateTrackUI(UpdateUIMessage("", name, 0, Uri.parse(imageUrl), 0, "", Source.RADIO, -1, false))
+                updateTrackUI(UpdateUIMessage("", name, 0, Uri.parse(imageUrl), 0, "", Source.RADIO, radioId, false))
                 setAudioUri(uri)
                 onPlay()
 

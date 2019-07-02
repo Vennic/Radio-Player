@@ -1,6 +1,7 @@
 package com.kuzheevadel.vmplayerv2.common
 
 object Constants {
+    const val RADIO_ID = "kuzheev.adel.radio_id"
     const val PROGRESS = "xom.kuzheevade.progress"
     const val INIT = "com.kuzheevadel.init"
     const val ID = "com.kuzheevadel.id"

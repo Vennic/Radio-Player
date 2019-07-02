@@ -138,7 +138,7 @@ class FullScreenPlaybackFragment: Fragment() {
 
         viewModel.dataBaseInfoData.observe(this, Observer {
             when (it) {
-                DataBaseInfo.ADDED -> {
+                DataBaseInfo.TRACK_ADDED -> {
                     binding.playbackControlsContainer.playlist_image.setImageResource(R.drawable.ic_playlist_add_black_24dp)
                     Toast.makeText(context, "Added in playlist", Toast.LENGTH_SHORT).show()
                     (binding.playbackControlsContainer.playlist_image.drawable as Animatable).start()
@@ -152,16 +152,33 @@ class FullScreenPlaybackFragment: Fragment() {
                     (binding.playbackControlsContainer.playlist_image.drawable as Animatable).start()
                 }
 
-                DataBaseInfo.DONT_ADDED -> {}
+                DataBaseInfo.RADIO_ADDED -> {
+                    binding.playbackControlsContainer.playlist_image.setImageResource(R.drawable.ic_unliked_to_liked)
+                    (binding.playbackControlsContainer.playlist_image.drawable as Animatable).start()
+
+                }
+
+                DataBaseInfo.RADIO_IS_NOT_ADDED -> {
+                    binding.playbackControlsContainer.playlist_image.setImageResource(R.drawable.ic_liked_to_unliked)
+                    (binding.playbackControlsContainer.playlist_image.drawable as Animatable).start()
+                }
             }
         })
 
         viewModel.checkPlaylistData.observe(this, Observer {
-            if (it == DataBaseInfo.ADDED) {
-                binding.playbackControlsContainer.playlist_image.setImageResource(R.drawable.ic_playlist_delete_animatable)
-            } else if (it == DataBaseInfo.DONT_ADDED) {
-                binding.playbackControlsContainer.playlist_image.setImageResource(R.drawable.ic_playlist_add_black_24dp)
 
+            when (it) {
+                DataBaseInfo.TRACK_ADDED ->
+                    binding.playbackControlsContainer.playlist_image.setImageResource(R.drawable.ic_playlist_delete_animatable)
+
+                DataBaseInfo.TRACK_IS_NOT_ADDED ->
+                    binding.playbackControlsContainer.playlist_image.setImageResource(R.drawable.ic_playlist_add_black_24dp)
+
+                DataBaseInfo.RADIO_IS_NOT_ADDED ->
+                    binding.playbackControlsContainer.playlist_image.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+
+                DataBaseInfo.RADIO_ADDED ->
+                        binding.playbackControlsContainer.playlist_image.setImageResource(R.drawable.ic_favorite_black_24dp)
             }
         })
 

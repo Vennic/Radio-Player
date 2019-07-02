@@ -44,4 +44,9 @@ abstract class Model {
     @IntoMap
     @ViewModelKey(SearchRadioViewModel::class)
     abstract fun searchTadioViewMOdel(viewModel: SearchRadioViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(FavoriteRadioViewModel::class)
+    abstract fun favoriteRadioViewMOdel(viewModel: FavoriteRadioViewModel): ViewModel
 }

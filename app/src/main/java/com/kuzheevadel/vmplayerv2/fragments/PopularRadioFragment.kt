@@ -57,7 +57,9 @@ class PopularRadioFragment: Fragment() {
                     view.radio_reload_button.visibility = View.GONE
                 }
 
-                State.DONE -> view.radio_progressBar.visibility = View.GONE
+                State.DONE -> {
+                    view.radio_progressBar.visibility = View.GONE
+                }
 
 
                 State.ERROR -> {

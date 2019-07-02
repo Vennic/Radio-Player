@@ -9,22 +9,29 @@ import com.kuzheevadel.vmplayerv2.common.DataBaseInfo
 import com.kuzheevadel.vmplayerv2.common.Source
 import com.kuzheevadel.vmplayerv2.common.UpdateUIMessage
 import com.kuzheevadel.vmplayerv2.database.PlaylistDatabase
+import com.kuzheevadel.vmplayerv2.database.RadioDatabase
 import com.kuzheevadel.vmplayerv2.database.TrackDao
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
+import com.kuzheevadel.vmplayerv2.model.RadioStation
 import com.kuzheevadel.vmplayerv2.repository.RadioRepository
 import io.reactivex.Completable
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import java.util.concurrent.Callable
 import javax.inject.Inject
 
 class PlaybackViewModel @Inject constructor(private val mediaRepository: Interfaces.StorageMediaRepository,
                                             private val radioRepository: RadioRepository,
-                                            database: PlaylistDatabase): ViewModel() {
+                                            tracksDatabase: PlaylistDatabase,
+                                            radioDatabase: RadioDatabase): ViewModel() {
 
     val trackData: MutableLiveData<UpdateUIMessage> = MutableLiveData()
-    private val trackDao: TrackDao = database.trackDao()
+    private val trackDao: TrackDao = tracksDatabase.trackDao()
+    private val radioDao = radioDatabase.radioDao()
     val dataBaseInfoData: MutableLiveData<DataBaseInfo> = MutableLiveData()
     val checkPlaylistData: MutableLiveData<DataBaseInfo> = MutableLiveData()
     val trackIdData: MutableLiveData<Long> = MutableLiveData()
@@ -42,9 +49,9 @@ class PlaybackViewModel @Inject constructor(private val mediaRepository: Interfa
                     }
 
                     if (track.inPlaylist) {
-                        checkPlaylistData.value = DataBaseInfo.ADDED
+                        checkPlaylistData.value = DataBaseInfo.TRACK_ADDED
                     } else {
-                        checkPlaylistData.value = DataBaseInfo.DONT_ADDED
+                        checkPlaylistData.value = DataBaseInfo.TRACK_IS_NOT_ADDED
                     }
                 }
                 Source.RADIO -> {
@@ -56,7 +63,7 @@ class PlaybackViewModel @Inject constructor(private val mediaRepository: Interfa
                         Uri.parse(radioStation.favicon),
                         0,
                         "",
-                        Source.RADIO, -1, false)
+                        Source.RADIO, -1, radioStation.inPlaylist)
                 }
             }
         } catch (e: Exception) {
@@ -71,50 +78,115 @@ class PlaybackViewModel @Inject constructor(private val mediaRepository: Interfa
         trackData.value = message
 
         Log.i("PLAYBACKTEST", message.inPlaylist.toString())
-        if (message.inPlaylist) {
-            checkPlaylistData.value = DataBaseInfo.ADDED
+        if (message.type == Source.TRACK) {
+            source = Source.TRACK
+
+            if (message.inPlaylist) {
+                checkPlaylistData.value = DataBaseInfo.TRACK_ADDED
+            } else {
+                checkPlaylistData.value = DataBaseInfo.TRACK_IS_NOT_ADDED
+            }
+            trackIdData.value = mediaRepository.getCurrentTrack().id
         } else {
-            checkPlaylistData.value = DataBaseInfo.DONT_ADDED
+            source = Source.RADIO
+            checkRadioInDatabase(message.id)
         }
-        trackIdData.value = mediaRepository.getCurrentTrack().id
+    }
+
+    @SuppressLint("CheckResult")
+    private fun checkRadioInDatabase(radioId: Long) {
+        val callable = Callable<RadioStation>{ radioDao.getRadiostationById(radioId.toString())}
+
+        Observable.fromCallable(callable)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    Log.i("RadioDatabase", it.toString())
+                    if (it != null) {
+                        checkPlaylistData.value = DataBaseInfo.RADIO_ADDED
+                        radioRepository.currentPlayingStation?.inPlaylist = true
+                    } else {
+                        checkPlaylistData.value = DataBaseInfo.RADIO_IS_NOT_ADDED
+                        radioRepository.currentPlayingStation?.inPlaylist = false
+
+                    }
+                },
+                {
+                    Log.i("RadioDatabase", "Error")
+                    checkPlaylistData.value = DataBaseInfo.RADIO_IS_NOT_ADDED
+                    radioRepository.currentPlayingStation?.inPlaylist = false
+
+                }
+            )
     }
 
     @SuppressLint("CheckResult")
     fun addOrDeleteTrackFromPlaylist() {
 
-        if (!mediaRepository.getCurrentTrack().inPlaylist) {
-            mediaRepository.getCurrentTrack().inPlaylist = true
+        if (source == Source.TRACK) {
+            if (!mediaRepository.getCurrentTrack().inPlaylist) {
+                mediaRepository.getCurrentTrack().inPlaylist = true
 
-            Completable.fromAction { trackDao.insertTrack(mediaRepository.getCurrentTrack()) }
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                    {
-                        Log.i("InsertTest", "in onNext")
-                        EventBus.getDefault().post("post")
-                        mediaRepository.setFlagById(mediaRepository.getCurrentTrack().id, true)
-                        dataBaseInfoData.postValue(DataBaseInfo.ADDED)
-                    },
-                    {
-                        Log.e("InsertTest", "Add error", it)
-                        dataBaseInfoData.postValue(DataBaseInfo.ERROR)
-                    }
-                )
-        } else {
-            mediaRepository.getCurrentTrack().inPlaylist = false
+                Completable.fromAction { trackDao.insertTrack(mediaRepository.getCurrentTrack()) }
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(
+                        {
+                            Log.i("InsertTest", "in onNext")
+                            EventBus.getDefault().post("post")
+                            mediaRepository.setFlagById(mediaRepository.getCurrentTrack().id, true)
+                            dataBaseInfoData.postValue(DataBaseInfo.TRACK_ADDED)
+                        },
+                        {
+                            Log.e("InsertTest", "Add error", it)
+                            dataBaseInfoData.postValue(DataBaseInfo.ERROR)
+                        }
+                    )
+            } else {
+                mediaRepository.getCurrentTrack().inPlaylist = false
 
-            Completable.fromAction { trackDao.deleteTrack(mediaRepository.getCurrentTrack()) }
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                    {
-                        EventBus.getDefault().post("post")
-                        mediaRepository.setFlagById(mediaRepository.getCurrentTrack().id, false)
-                        mediaRepository.deleteTrackFromPlaylist(mediaRepository.getCurrentTrack().id)
-                        dataBaseInfoData.postValue(DataBaseInfo.DELETED)
-                    },
-                    {
-                        dataBaseInfoData.postValue(DataBaseInfo.ERROR)
-                    }
-                )
+                Completable.fromAction { trackDao.deleteTrack(mediaRepository.getCurrentTrack()) }
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(
+                        {
+                            EventBus.getDefault().post("post")
+                            mediaRepository.setFlagById(mediaRepository.getCurrentTrack().id, false)
+                            mediaRepository.deleteTrackFromPlaylist(mediaRepository.getCurrentTrack().id)
+                            dataBaseInfoData.postValue(DataBaseInfo.DELETED)
+                        },
+                        {
+                            dataBaseInfoData.postValue(DataBaseInfo.ERROR)
+                        }
+                    )
+            }
+        } else if (source == Source.RADIO) {
+            if (!radioRepository.currentPlayingStation!!.inPlaylist) {
+                Completable.fromAction { radioDao.insertTrack(radioRepository.currentPlayingStation!!) }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                        {
+                            dataBaseInfoData.value = DataBaseInfo.RADIO_ADDED
+                            radioRepository.currentPlayingStation?.inPlaylist = true
+                        },
+                        {
+                            dataBaseInfoData.value = DataBaseInfo.ERROR
+                        }
+                    )
+            } else {
+                Completable.fromAction { radioDao.deleteTrack(radioRepository.currentPlayingStation!!) }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                        {
+                            dataBaseInfoData.value = DataBaseInfo.RADIO_IS_NOT_ADDED
+                            radioRepository.currentPlayingStation?.inPlaylist = false
+                        },
+                        {
+                            dataBaseInfoData.value = DataBaseInfo.ERROR
+                        }
+                    )
+            }
         }
     }
 

@@ -5,16 +5,10 @@ import android.arch.persistence.room.Room
 import android.content.Context
 import com.kuzheevadel.vmplayerv2.bindhelper.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.activities.AlbumActivity
-import com.kuzheevadel.vmplayerv2.adapters.AlbumsListAdapter
-import com.kuzheevadel.vmplayerv2.adapters.AlbumsTracksListAdapter
-import com.kuzheevadel.vmplayerv2.adapters.RadioStationsAdapter
-import com.kuzheevadel.vmplayerv2.adapters.TrackListAdapter
 import com.kuzheevadel.vmplayerv2.database.PlaylistDatabase
+import com.kuzheevadel.vmplayerv2.database.RadioDatabase
 import com.kuzheevadel.vmplayerv2.fragments.*
-import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Track
-import com.kuzheevadel.vmplayerv2.paging.RadioPagingAdapter
-import com.kuzheevadel.vmplayerv2.repository.StorageMediaRepository
 import com.kuzheevadel.vmplayerv2.services.PlayerService
 import com.kuzheevadel.vmplayerv2.services.StorageMedia
 import com.kuzheevadel.vmplayerv2.services.VmpNetwork
@@ -58,6 +52,7 @@ interface ApplicationComponent {
     fun inject(fragment: PopularRadioFragment)
     fun inject(fragment: PlaylistFragment)
     fun inject(fragment: SearchRadioFragment)
+    fun inject(fragment: FavoriteRadioFragment)
 
 }
 
@@ -75,6 +70,12 @@ class AppModule(val context: Context) {
     @Provides
     fun provideDatabase(context: Context): PlaylistDatabase {
         return Room.databaseBuilder(context, PlaylistDatabase::class.java, "playlistDatabase").build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideRadioDatabase(context: Context): RadioDatabase {
+        return Room.databaseBuilder(context, RadioDatabase::class.java, "radioDataBase").build()
     }
 
     @Provides

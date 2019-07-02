@@ -47,6 +47,7 @@ class RadioStationsAdapter(private val bindServiceHelper: BindServiceHelper,
         bundle.putString(Constants.RADIO_URL, radioStation.url)
         bundle.putString(Constants.RADIO_TITLE, radioStation.name)
         bundle.putString(Constants.RADIO_IMAGE, radioStation.favicon)
+        bundle.putString(Constants.RADIO_ID, radioStation.id)
 
 
         viewHolder.binding?.setVariable(BR.radioStation, radioStation)

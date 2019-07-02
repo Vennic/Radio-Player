@@ -30,7 +30,8 @@ data class RadioStation(
     val stationuuid: String,
     val tags: String,
     val url: String,
-    val votes: String
+    val votes: String,
+    var inPlaylist: Boolean = false
 ) {
 
     fun getCorrectUrl(): String {

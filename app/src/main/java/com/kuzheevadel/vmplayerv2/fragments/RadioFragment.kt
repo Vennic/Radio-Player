@@ -17,13 +17,11 @@ class RadioFragment: Fragment() {
     private var state = RadioState.POPULAR
     private lateinit var popularRadioFragment: PopularRadioFragment
     private lateinit var searchRadioFragment: SearchRadioFragment
-    private lateinit var favoriteRadioFragment: FavoriteRadioFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         popularRadioFragment = PopularRadioFragment()
         searchRadioFragment = SearchRadioFragment()
-        favoriteRadioFragment = FavoriteRadioFragment()
         fm = childFragmentManager
     }
 
@@ -63,10 +61,18 @@ class RadioFragment: Fragment() {
                     }
 
                     R.id.favorite_stations -> {
-                        view.category_textview.text = getText(R.string.favorite_stations)
-                        state = RadioState.FAVORITE
+                        if (state != RadioState.FAVORITE) {
+                            view.category_textview.text = getText(R.string.favorite_stations)
+                            state = RadioState.FAVORITE
+
+                            fm.beginTransaction()
+                                .replace(R.id.radio_fragments_container, FavoriteRadioFragment())
+                                .commit()
+                        }
+
                         return@setOnMenuItemClickListener true
                     }
+
                     else -> {
                         return@setOnMenuItemClickListener false
                     }
