@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.android.databinding.library.baseAdapters.BR
-import com.kuzheevadel.vmplayerv2.bindhelper.BindServiceHelper
+import com.kuzheevadel.vmplayerv2.helper.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.databinding.DetailAlbumItemBinding
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces

@@ -1,4 +1,4 @@
-package com.kuzheevadel.vmplayerv2.bindhelper
+package com.kuzheevadel.vmplayerv2.helper
 
 import android.arch.lifecycle.MutableLiveData
 import android.content.ComponentName

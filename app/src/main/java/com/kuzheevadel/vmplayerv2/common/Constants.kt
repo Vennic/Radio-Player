@@ -1,6 +1,8 @@
 package com.kuzheevadel.vmplayerv2.common
 
 object Constants {
+    const val NOTIFICATION_ID = 12
+    const val NOTIFICATION_DEFAULT_CHANNEL = "vmplayer channel"
     const val RADIO_ID = "kuzheev.adel.radio_id"
     const val PROGRESS = "xom.kuzheevade.progress"
     const val INIT = "com.kuzheevadel.init"

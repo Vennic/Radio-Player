@@ -17,7 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.Toast
-import com.kuzheevadel.vmplayerv2.bindhelper.BindServiceHelper
+import com.kuzheevadel.vmplayerv2.helper.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.common.DataBaseInfo

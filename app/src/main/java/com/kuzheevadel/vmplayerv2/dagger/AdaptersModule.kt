@@ -1,7 +1,7 @@
 package com.kuzheevadel.vmplayerv2.dagger
 
 import com.kuzheevadel.vmplayerv2.adapters.*
-import com.kuzheevadel.vmplayerv2.bindhelper.BindServiceHelper
+import com.kuzheevadel.vmplayerv2.helper.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.paging.RadioPagingAdapter
 import com.kuzheevadel.vmplayerv2.repository.RadioRepository
