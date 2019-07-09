@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.TypedArray
 import android.databinding.DataBindingUtil
 import android.graphics.drawable.Animatable
 import android.os.Bundle
@@ -49,6 +50,12 @@ class FullScreenPlaybackFragment: Fragment() {
     private var isServiceConnected = false
     private var isUpdated = false
     private var id: Long? = 0L
+    private  var mContext: Context? = null
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        mContext = context
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -139,27 +146,27 @@ class FullScreenPlaybackFragment: Fragment() {
         viewModel.dataBaseInfoData.observe(this, Observer {
             when (it) {
                 DataBaseInfo.TRACK_ADDED -> {
-                    binding.playbackControlsContainer.playlist_image.setImageResource(R.drawable.ic_playlist_add_black_24dp)
-                    Toast.makeText(context, "Added in playlist", Toast.LENGTH_SHORT).show()
+                    binding.playbackControlsContainer.playlist_image.setImageResource(getStyleableDrawable(R.attr.playlistAddAnimatable))
+                    Toast.makeText(mContext, "Added in playlist", Toast.LENGTH_SHORT).show()
                     (binding.playbackControlsContainer.playlist_image.drawable as Animatable).start()
                 }
 
                 DataBaseInfo.ERROR -> Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
 
                 DataBaseInfo.DELETED -> {
-                    binding.playbackControlsContainer.playlist_image.setImageResource(R.drawable.ic_playlist_delete_animatable)
-                    Toast.makeText(context, "Deleted from playlist", Toast.LENGTH_SHORT).show()
+                    binding.playbackControlsContainer.playlist_image.setImageResource(getStyleableDrawable(R.attr.playlistDeleteAnimatable))
+                    Toast.makeText(mContext, "Deleted from playlist", Toast.LENGTH_SHORT).show()
                     (binding.playbackControlsContainer.playlist_image.drawable as Animatable).start()
                 }
 
                 DataBaseInfo.RADIO_ADDED -> {
-                    binding.playbackControlsContainer.playlist_image.setImageResource(R.drawable.ic_unliked_to_liked)
+                    binding.playbackControlsContainer.playlist_image.setImageResource(getStyleableDrawable(R.attr.fromUnlikedToLiked))
                     (binding.playbackControlsContainer.playlist_image.drawable as Animatable).start()
 
                 }
 
                 DataBaseInfo.RADIO_IS_NOT_ADDED -> {
-                    binding.playbackControlsContainer.playlist_image.setImageResource(R.drawable.ic_liked_to_unliked)
+                    binding.playbackControlsContainer.playlist_image.setImageResource(getStyleableDrawable(R.attr.fromLikedToUnliked))
                     (binding.playbackControlsContainer.playlist_image.drawable as Animatable).start()
                 }
             }
@@ -169,16 +176,16 @@ class FullScreenPlaybackFragment: Fragment() {
 
             when (it) {
                 DataBaseInfo.TRACK_ADDED ->
-                    binding.playbackControlsContainer.playlist_image.setImageResource(R.drawable.ic_playlist_delete_animatable)
+                    binding.playbackControlsContainer.playlist_image.setImageResource(getStyleableDrawable(R.attr.playlistDeleteAnimatable))
 
                 DataBaseInfo.TRACK_IS_NOT_ADDED ->
-                    binding.playbackControlsContainer.playlist_image.setImageResource(R.drawable.ic_playlist_add_black_24dp)
+                    binding.playbackControlsContainer.playlist_image.setImageResource(getStyleableDrawable(R.attr.playlistAddAnimatable))
 
                 DataBaseInfo.RADIO_IS_NOT_ADDED ->
-                    binding.playbackControlsContainer.playlist_image.setImageResource(R.drawable.ic_favorite_border_black_24dp)
+                    binding.playbackControlsContainer.playlist_image.setImageResource(getStyleableDrawable(R.attr.unLikedImage))
 
                 DataBaseInfo.RADIO_ADDED ->
-                        binding.playbackControlsContainer.playlist_image.setImageResource(R.drawable.ic_favorite_black_24dp)
+                        binding.playbackControlsContainer.playlist_image.setImageResource(R.drawable.ic_favorite_red_24dp)
             }
         })
 
@@ -189,14 +196,14 @@ class FullScreenPlaybackFragment: Fragment() {
     private fun setPlaybackButtonImage(state: PlaybackStateCompat?) {
         when (state?.state) {
             PlaybackStateCompat.STATE_PLAYING -> {
-                binding.playbackControlsContainer.playback_play_pause_button.setImageResource(R.drawable.ic_play_to_pause)
-                binding.topPlaybackControls.top_play_pause_image_button.setImageResource(R.drawable.ic_play_to_pause)
+                binding.playbackControlsContainer.playback_play_pause_button.setImageResource(getStyleableDrawable(R.attr.playToPauseAnimate))
+                binding.topPlaybackControls.top_play_pause_image_button.setImageResource(getStyleableDrawable(R.attr.playToPauseAnimate))
                 (binding.topPlaybackControls.top_play_pause_image_button.drawable as Animatable).start()
                 (binding.playbackControlsContainer.playback_play_pause_button.drawable as Animatable).start()
             }
             PlaybackStateCompat.STATE_PAUSED -> {
-                binding.playbackControlsContainer.playback_play_pause_button.setImageResource(R.drawable.ic_pause_to_play)
-                binding.topPlaybackControls.top_play_pause_image_button.setImageResource(R.drawable.ic_pause_to_play)
+                binding.playbackControlsContainer.playback_play_pause_button.setImageResource(getStyleableDrawable(R.attr.pauseToPlayAnimate))
+                binding.topPlaybackControls.top_play_pause_image_button.setImageResource(getStyleableDrawable(R.attr.pauseToPlayAnimate))
                 (binding.topPlaybackControls.top_play_pause_image_button.drawable as Animatable).start()
                 (binding.playbackControlsContainer.playback_play_pause_button.drawable as Animatable).start()
             }
@@ -256,10 +263,21 @@ class FullScreenPlaybackFragment: Fragment() {
         }
     }
 
+    private fun getStyleableDrawable(attribute: Int): Int {
+        Log.i("StyleTest", context.toString())
+        val a: TypedArray? = mContext?.theme?.obtainStyledAttributes(intArrayOf(attribute))
+        return a!!.getResourceId(0, -1)
+    }
+
     override fun onDestroy() {
         EventBus.getDefault().unregister(this)
         bindService.unbindPlayerService()
         super.onDestroy()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.i("StyleTest", "onDetach")
     }
 
 }

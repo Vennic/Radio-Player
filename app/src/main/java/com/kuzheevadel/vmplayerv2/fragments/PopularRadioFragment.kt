@@ -71,4 +71,9 @@ class PopularRadioFragment: Fragment() {
         })
         return view
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mAdapter.unbindService()
+    }
 }

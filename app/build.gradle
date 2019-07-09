@@ -67,6 +67,7 @@ dependencies {
 
     //ExoPlayer
     implementation 'com.google.android.exoplayer:exoplayer:2.7.3'
+    implementation 'com.google.android.exoplayer:extension-okhttp:2.7.3'
 
     //RxKotlin
     implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'

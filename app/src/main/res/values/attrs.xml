@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AppTheme">
+        <attr name="primaryTextColor" format="color"/>
+        <attr name="secondaryTextColor" format="color"/>
+        <attr name="dividerColor" format="color"/>
+        <attr name="menuDotsColor" format="integer"/>
+        <attr name="backgroundCardColor" format="color"/>
+        <attr name="iconPlaceholder" format="integer"/>
+        <attr name="playlistDeleteAnimatable" format="integer"/>
+        <attr name="playlistAddAnimatable" format="integer"/>
+        <attr name="shuffleButton" format="integer"/>
+        <attr name="loopModeButton" format="integer"/>
+        <attr name="skipNextButton" format="integer"/>
+        <attr name="skipPrevButton" format="integer"/>
+        <attr name="playToPauseAnimate" format="integer"/>
+        <attr name="pauseToPlayAnimate" format="integer"/>
+        <attr name="fromUpToDownArrow" format="integer"/>
+        <attr name="fromDownToUpArrow" format="integer"/>
+        <attr name="fromLikedToUnliked" format="integer"/>
+        <attr name="fromUnlikedToLiked" format="integer"/>
+        <attr name="likedImage" format="integer"/>
+        <attr name="unLikedImage" format="integer"/>
+        <attr name="searchImage" format="integer"/>
+        <attr name="starImage" format="integer"/>
+    </declare-styleable>
+</resources>

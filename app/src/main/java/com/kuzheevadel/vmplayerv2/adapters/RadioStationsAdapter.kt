@@ -64,4 +64,8 @@ class RadioStationsAdapter(private val bindServiceHelper: BindServiceHelper,
     inner class RadioViewHolder(val view: View): RecyclerView.ViewHolder(view) {
         val binding: RadioStationItemBinding? = DataBindingUtil.bind(view)
     }
+
+    fun unbindService() {
+        bindServiceHelper.unbindPlayerService()
+    }
 }

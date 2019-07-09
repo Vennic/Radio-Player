@@ -27,9 +27,16 @@ import com.google.android.exoplayer2.DefaultLoadControl
 import com.google.android.exoplayer2.DefaultRenderersFactory
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
 import com.google.android.exoplayer2.source.ExtractorMediaSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.upstream.cache.CacheDataSource
+import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory
+import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor
+import com.google.android.exoplayer2.upstream.cache.SimpleCache
+import com.google.android.exoplayer2.util.Util
 import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.common.Source
@@ -47,7 +54,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import okhttp3.OkHttpClient
 import org.greenrobot.eventbus.EventBus
+import java.io.File
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -71,6 +80,8 @@ class PlayerService: Service() {
     private lateinit var audioFocusRequest: AudioFocusRequest
     private var isAudioFocusRequest = false
     private lateinit var audioManager: AudioManager
+    private lateinit var dataSourceFactory: CacheDataSourceFactory
+    private lateinit var extractorsFactory: DefaultExtractorsFactory
 
     private val stateBuilder = PlaybackStateCompat.Builder().setActions(
         PlaybackStateCompat.ACTION_PLAY
@@ -96,6 +107,8 @@ class PlayerService: Service() {
 
     override fun onCreate() {
         super.onCreate()
+        Log.i("ServiceTest", "onCreate")
+
         (application as App).getComponent().inject(this)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -130,6 +143,11 @@ class PlayerService: Service() {
             //setSessionActivity(PendingIntent.getActivity(applicationContext, 0, activityIntent, 0))
             setMediaButtonReceiver(PendingIntent.getBroadcast(applicationContext, 0, mediaButtonIntent, 0))
         }
+
+        val httpDataSourceFactory = OkHttpDataSourceFactory(OkHttpClient(), Util.getUserAgent(this, "vmplayer"), null)
+        val cache = SimpleCache(File("${this.cacheDir.absolutePath}/exoplayer"), LeastRecentlyUsedCacheEvictor(1024 * 1024 * 30))
+        dataSourceFactory = CacheDataSourceFactory(cache, httpDataSourceFactory, CacheDataSource.FLAG_BLOCK_ON_CACHE or CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
+        extractorsFactory = DefaultExtractorsFactory()
 
         initializePlayer()
     }
@@ -177,7 +195,7 @@ class PlayerService: Service() {
 
                 if (track.id != currentPlayingTrackId) {
                     mediaRepository.setCurrentPosition(position)
-                    setAudioUri(track.getAudioUri())
+                    prepareTrack(track.getAudioUri())
                     mediaSession.setMetadata(setTrackMediaMetaData(track))
                     currentPlayingTrackId = track.id
                     source = Source.TRACK
@@ -207,7 +225,7 @@ class PlayerService: Service() {
                 val id = extras.getLong(Constants.ID)
                 val track = mediaRepository.getTrackById(id)
 
-                setAudioUri(track.getAudioUri())
+                prepareTrack(track.getAudioUri())
                 mediaSession.setMetadata(setTrackMediaMetaData(track))
                 currentPlayingTrackId = track.id
                 source = Source.TRACK
@@ -233,7 +251,7 @@ class PlayerService: Service() {
                 currentPlayingTrackId = -1
                 source = Source.RADIO
                 updateTrackUI(UpdateUIMessage("", name, 0, Uri.parse(imageUrl), 0, "", Source.RADIO, radioId, false))
-                setAudioUri(uri)
+                prepareRadiostation(uri)
 
                 onPlay()
 
@@ -287,7 +305,7 @@ class PlayerService: Service() {
 
         override fun onPause() {
             super.onPause()
-            stopSelf()
+
             if (mExoplayer.playWhenReady) {
                 mExoplayer.playWhenReady = false
                 stopInterval()
@@ -314,7 +332,7 @@ class PlayerService: Service() {
             val track = mediaRepository.getNextTrackByClick()
             mediaSession.setMetadata(setTrackMediaMetaData(track))
             currentPlayingTrackId = track.id
-            setAudioUri(track.getAudioUri())
+            prepareTrack(track.getAudioUri())
             source = Source.TRACK
 
             with(track) {
@@ -331,7 +349,7 @@ class PlayerService: Service() {
             val track = mediaRepository.getPrevTrack()
             mediaSession.setMetadata(setTrackMediaMetaData(track))
             currentPlayingTrackId = track.id
-            setAudioUri(track.getAudioUri())
+            prepareTrack(track.getAudioUri())
             source = Source.TRACK
 
             with(track) {
@@ -339,6 +357,25 @@ class PlayerService: Service() {
             }
 
             onPlay()
+        }
+
+        override fun onStop() {
+            super.onStop()
+
+            if (isAudioFocusRequest) {
+                isAudioFocusRequest = false;
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    audioManager.abandonAudioFocusRequest(audioFocusRequest);
+                } else {
+                    audioManager.abandonAudioFocus(audioFocusChangeListener);
+                }
+            }
+
+            mediaSession.isActive = false
+            currentState = PlaybackStateCompat.STATE_STOPPED
+            refreshNotification(currentState)
+            stopSelf()
         }
 
         override fun onSetShuffleMode(shuffleMode: Int) {
@@ -353,6 +390,8 @@ class PlayerService: Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         MediaButtonReceiver.handleIntent(mediaSession, intent)
+        Log.i("ServiceTest", "onStartCommand")
+
         return super.onStartCommand(intent, flags, startId)
     }
 
@@ -375,9 +414,14 @@ class PlayerService: Service() {
         )
     }
 
-    private fun setAudioUri(uri: Uri) {
+    private fun prepareTrack(uri: Uri) {
         val mediaSource = ExtractorMediaSource.Factory(DefaultDataSourceFactory(this, "vmplayer"))
             .createMediaSource(uri)
+        mExoplayer.prepare(mediaSource)
+    }
+
+    private fun prepareRadiostation(uri: Uri) {
+        val mediaSource = ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(uri)
         mExoplayer.prepare(mediaSource)
     }
 
@@ -485,7 +529,7 @@ class PlayerService: Service() {
         )
 
         builder.setSmallIcon(R.mipmap.ic_launcher)
-        builder.color = ContextCompat.getColor(this, R.color.colorPrimaryDark)
+        builder.color = ContextCompat.getColor(this, R.color.switch_thumb_normal_material_dark)
         builder.setShowWhen(false)
         builder.priority = NotificationCompat.PRIORITY_HIGH
         builder.setOnlyAlertOnce(true)
@@ -499,7 +543,9 @@ class PlayerService: Service() {
         } catch (e: Exception) {
             e.printStackTrace()
         }
+        mExoplayer.release()
         mediaSession.release()
+        Log.i("ServiceTest", "onDestroy")
 
         super.onDestroy()
     }

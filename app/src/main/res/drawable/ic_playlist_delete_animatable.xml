@@ -1,19 +1,37 @@
 <?xml version="1.0"?>
 
-        <animated-vector xmlns:aapt="http://schemas.android.com/aapt" xmlns:android="http://schemas.android.com/apk/res/android">
+        <animated-vector
+        xmlns:aapt="http://schemas.android.com/aapt"
+        xmlns:android="http://schemas.android.com/apk/res/android">
 
 
     <aapt:attr name="android:drawable">
 
 
-    <vector android:name="vector" android:viewportHeight="24" android:viewportWidth="24" android:height="24dp" android:width="24dp">
+    <vector
+            android:name="vector"
+            android:viewportHeight="24"
+            android:viewportWidth="24"
+            android:height="24dp"
+            android:width="24dp">
 
-    <path android:name="path_1" android:strokeWidth="1" android:fillColor="#000" android:pathData="M 2 6 L 14 6 L 14 8 L 2 8 Z M 2 10 L 12 10 L 12 12 L 2 12 Z M 2 14 L 10 14 L 10 16 L 2 16 Z"/>
+    <path
+            android:name="path_1"
+            android:strokeWidth="1"
+            android:fillColor="#000"
+            android:pathData="M 2 6 L 14 6 L 14 8 L 2 8 Z M 2 10 L 12 10 L 12 12 L 2 12 Z M 2 14 L 10 14 L 10 16 L 2 16 Z"/>
 
 
-    <group android:name="group" android:pivotY="15" android:pivotX="17">
+    <group
+            android:name="group"
+            android:pivotY="15"
+            android:pivotX="17">
 
-    <path android:name="path" android:strokeWidth="1" android:fillColor="#ff0000" android:pathData="M 19.828 19.243 L 17 16.414 L 14.172 19.243 L 12.757 17.828 L 15.586 15 L 12.757 12.172 L 14.172 10.757 L 17 13.586 L 19.828 10.757 L 21.243 12.172 L 18.414 15 L 21.243 17.828 Z"/>
+    <path
+            android:name="path"
+            android:strokeWidth="1"
+            android:fillColor="#ff0000"
+            android:pathData="M 19.828 19.243 L 17 16.414 L 14.172 19.243 L 12.757 17.828 L 15.586 15 L 12.757 12.172 L 14.172 10.757 L 17 13.586 L 19.828 10.757 L 21.243 12.172 L 18.414 15 L 21.243 17.828 Z"/>
 
 </group>
 
@@ -27,7 +45,13 @@
 
     <aapt:attr name="android:animation">
 
-    <objectAnimator android:interpolator="@android:interpolator/fast_out_slow_in" android:valueType="colorType" android:valueTo="#000000" android:valueFrom="#ff0000" android:duration="300" android:propertyName="fillColor"/>
+    <objectAnimator
+            android:interpolator="@android:interpolator/fast_out_slow_in"
+            android:valueType="colorType"
+            android:valueTo="#000000"
+            android:valueFrom="#ff0000"
+            android:duration="300"
+            android:propertyName="fillColor"/>
 
 </aapt:attr>
 
@@ -39,7 +63,13 @@
 
     <aapt:attr name="android:animation">
 
-    <objectAnimator android:interpolator="@android:interpolator/fast_out_slow_in" android:valueType="floatType" android:valueTo="45" android:valueFrom="0" android:duration="300" android:propertyName="rotation"/>
+    <objectAnimator
+            android:interpolator="@android:interpolator/fast_out_slow_in"
+            android:valueType="floatType"
+            android:valueTo="45"
+            android:valueFrom="0"
+            android:duration="300"
+            android:propertyName="rotation"/>
 
 </aapt:attr>
 

@@ -34,13 +34,13 @@
                 android:layout_marginStart="8dp"
                 app:layout_constraintEnd_toStartOf="@+id/top_play_pause_image_button"
                 android:layout_marginEnd="8dp"
-                android:textColor="@android:color/black"
+                android:textColor="?attr/primaryTextColor"
                 android:textSize="14sp"/>
 
         <ImageButton
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                app:srcCompat="@drawable/ic_play_to_pause"
+                app:srcCompat="?attr/playToPauseAnimate"
                 android:id="@+id/top_play_pause_image_button"
                 android:scaleType="centerCrop"
                 android:clickable="true"
@@ -53,6 +53,6 @@
                 android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
-</android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
 
 </layout>

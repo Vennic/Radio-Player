@@ -85,6 +85,7 @@ class FavoriteRadioFragment: Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        mAdapter.unbindService()
         Log.i("LifecycleTest", "onDestroy")
     }
 

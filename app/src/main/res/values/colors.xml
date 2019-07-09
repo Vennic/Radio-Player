@@ -6,4 +6,6 @@
     <color name="bottom_playback_collor">#FFFFFF</color>
     <color name="splash_color">#FF6D00</color>
     <color name="notifyButton">#E8F5E9</color>
+    <color name="light_background">#F4F4F6</color>
+    <color name="dark_background">#1D1D1D</color>
 </resources>

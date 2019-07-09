@@ -14,17 +14,18 @@
             android:clickable="true"
             android:focusable="true"
             android:onClick="@{click.click}"
-            android:background="@drawable/ripple_effect"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_width="match_parent"
             android:layout_height="60dp">
 
         <TextView
-                tools:text="TextView"
+                tools:text="1"
                 android:layout_width="59dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/text_position"
                 android:layout_marginTop="8dp"
                 android:gravity="center"
+                android:textColor="?attr/primaryTextColor"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="16dp"
@@ -32,18 +33,21 @@
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
+                tools:text="Gorillaz"
                 android:text="@{albumsTrack.nameAndDuration}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/album_artist_name"
+                android:textColor="?attr/secondaryTextColor"
                 app:layout_constraintStart_toEndOf="@+id/text_position"
                 android:layout_marginStart="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="12dp"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent" android:textSize="12sp"/>
 
         <TextView
+                tools:text="Feels good"
                 android:text="@{albumsTrack.title}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -53,7 +57,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="8dp"
                 app:layout_constraintBottom_toTopOf="@+id/album_artist_name"
-                android:textColor="@android:color/black"/>
+                android:textColor="?attr/primaryTextColor"/>
 
     </android.support.constraint.ConstraintLayout>
 </layout>

@@ -58,7 +58,7 @@ class AllTracksFragment: Fragment() {
         tracksRecycler = view.recycler_view
         tracksRecycler.layoutManager = LinearLayoutManager(context)
         tracksRecycler.adapter = mAdapter
-        tracksRecycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        //tracksRecycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
         return view
     }

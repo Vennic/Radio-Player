@@ -12,4 +12,5 @@
     <string name="favorite_stations">Favorite stations</string>
     <string name="search">Search</string>
     <string name="search_radio_stations">Search radio stations</string>
+    <string name="choose_theme">Choose theme</string>
 </resources>

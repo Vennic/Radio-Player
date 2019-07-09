@@ -1,5 +1,8 @@
 package com.kuzheevadel.vmplayerv2.fragments
 
+import android.content.Context
+import android.content.res.TypedArray
+import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -17,12 +20,18 @@ class RadioFragment: Fragment() {
     private var state = RadioState.POPULAR
     private lateinit var popularRadioFragment: PopularRadioFragment
     private lateinit var searchRadioFragment: SearchRadioFragment
+    private var mContext: Context? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         popularRadioFragment = PopularRadioFragment()
         searchRadioFragment = SearchRadioFragment()
         fm = childFragmentManager
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        mContext = context
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -81,7 +90,8 @@ class RadioFragment: Fragment() {
 
             popupMenu.inflate(R.menu.menu_main)
             popupMenu.setOnDismissListener{
-                view.category_button.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp)
+                view.category_button.setImageResource(getStyleableDrawable(R.attr.fromUpToDownArrow))
+                (view.category_button.drawable as Animatable).start()
             }
 
             try {
@@ -94,11 +104,10 @@ class RadioFragment: Fragment() {
             } catch (e: Exception) {
                 Log.e("Menu icons", "Error showing menu icons", e )
             } finally {
+                view.category_button.setImageResource(getStyleableDrawable(R.attr.fromDownToUpArrow))
+                (view.category_button.drawable as Animatable).start()
                 popupMenu.show()
-                view.category_button.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp)
             }
-
-
         }
 
         return view
@@ -126,6 +135,12 @@ class RadioFragment: Fragment() {
                 view.category_textview.text = getText(R.string.favorite_stations)
             }
         }
+    }
+
+    private fun getStyleableDrawable(attribute: Int): Int {
+        Log.i("StyleTest", context.toString())
+        val a: TypedArray? = mContext?.theme?.obtainStyledAttributes(intArrayOf(attribute))
+        return a!!.getResourceId(0, -1)
     }
 }
 

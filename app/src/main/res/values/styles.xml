@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="LightAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#FF6D00</item>
         <item name="colorPrimaryDark">#B45206</item>
@@ -10,8 +10,69 @@
         <item name="android:windowContentTransitions">true</item>
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
     </style>
+
+    <style name="ActivityTheme.Primary.Base.Light"    parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
+        <item name="colorPrimary">#FF6D00</item>
+        <item name="colorPrimaryDark">#B45206</item>
+        <item name="primaryTextColor">#000000</item>
+        <item name="secondaryTextColor">#575757</item>
+        <item name="backgroundCardColor">#ECECEC</item>
+        <item name="dividerColor">#E2E2E2</item>
+        <item name="colorAccent">#000000</item>
+        <item name="playlistDeleteAnimatable">@drawable/ic_playlist_delete_animatable</item>
+        <item name="playlistAddAnimatable">@drawable/ic_playlist_add_black_24dp</item>
+        <item name="menuDotsColor">@drawable/ic_more_vert_black_24dp</item>
+        <item name="shuffleButton">@drawable/ic_shuffle_black</item>
+        <item name="skipNextButton">@drawable/ic_skip_next_black</item>
+        <item name="skipPrevButton">@drawable/ic_skip_previous_black</item>
+        <item name="loopModeButton">@drawable/ic_repeat_black</item>
+        <item name="playToPauseAnimate">@drawable/ic_play_to_pause</item>
+        <item name="pauseToPlayAnimate">@drawable/ic_pause_to_play</item>
+        <item name="fromUpToDownArrow">@drawable/ic_from_up_to_down_arrow_animated</item>
+        <item name="fromDownToUpArrow">@drawable/ic_from_dowm_to_up_arrow_animated</item>
+        <item name="unLikedImage">@drawable/ic_favorite_border_black_24dp</item>
+        <item name="fromLikedToUnliked">@drawable/ic_liked_to_unliked</item>
+        <item name="fromUnlikedToLiked">@drawable/ic_unliked_to_liked</item>
+        <item name="searchImage">@drawable/ic_search_black_24dp</item>
+        <item name="starImage">@drawable/ic_star_border_black_24dp</item>
+    </style>
+
+    <style name="ActivityTheme.Primary.Base.Dark"    parent="Theme.AppCompat.NoActionBar">
+        <item name="primaryTextColor">#FFFFFF</item>
+        <item name="secondaryTextColor">#8AADADAD</item>
+        <item name="backgroundCardColor">#313131</item>
+        <item name="dividerColor">#303030</item>
+        <item name="colorAccent">#ffffff</item>
+        <item name="playlistDeleteAnimatable">@drawable/ic_playlist_animatable_white</item>
+        <item name="playlistAddAnimatable">@drawable/ic_playlist_add_animatable_white</item>
+        <item name="menuDotsColor">@drawable/ic_more_vert_white_24dp</item>
+        <item name="shuffleButton">@drawable/ic_shuffle_white_24dp</item>
+        <item name="skipNextButton">@drawable/ic_skip_next_white</item>
+        <item name="skipPrevButton">@drawable/ic_skip_previous_white</item>
+        <item name="loopModeButton">@drawable/ic_repeat_white</item>
+        <item name="playToPauseAnimate">@drawable/ic_play_to_pause_white</item>
+        <item name="pauseToPlayAnimate">@drawable/ic_pause_to_play_white</item>
+        <item name="fromUpToDownArrow">@drawable/ic_from_up_to_down_arrow_white</item>
+        <item name="fromDownToUpArrow">@drawable/ic_from_down_to_up_white</item>
+        <item name="unLikedImage">@drawable/ic_favorite_border_white</item>
+        <item name="fromLikedToUnliked">@drawable/ic_liked_to_unliked_white</item>
+        <item name="fromUnlikedToLiked">@drawable/ic_unliked_to_liked_white</item>
+        <item name="searchImage">@drawable/ic_search_white</item>
+        <item name="starImage">@drawable/ic_star_border_white</item>
+    </style>
+
+    <style name="FeedActivityThemeLight" parent="ActivityTheme.Primary.Base.Light">
+        <item name="android:windowBackground">@color/light_background</item>
+    </style>
+
+    <style name="FeedActivityThemeDark" parent="ActivityTheme.Primary.Base.Dark">
+        <item name="android:windowBackground">@color/dark_background</item>
+    </style>
     
-    <style name="AppTheme.NoActionBar">
+    <style name="LightAppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
@@ -20,7 +81,7 @@
     
     <style name="AppTheme.PopupOverlay" parent="Theme.AppCompat.Light"/>
 
-    <style name="AppTheme.Launcher">
+    <style name="LightAppTheme.Launcher">
         <item name="android:windowBackground">@drawable/launch_screen</item>
         <item name="colorPrimaryDark">#FF6D00</item>
     </style>

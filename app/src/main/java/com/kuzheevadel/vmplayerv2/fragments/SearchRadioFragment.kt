@@ -139,6 +139,7 @@ class SearchRadioFragment: Fragment() {
 
     override fun onDestroy() {
         Log.i("SpinnerTest", "onDestroy")
+        mAdapter.unbindService()
         super.onDestroy()
     }
 

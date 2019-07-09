@@ -27,6 +27,7 @@ class AlbumActivity: AppCompatActivity() {
     lateinit var adapter: AlbumsTracksListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.FeedActivityThemeDark)
         super.onCreate(savedInstanceState)
         val picasso = Picasso.get()
         setContentView(R.layout.album_activity_layout)

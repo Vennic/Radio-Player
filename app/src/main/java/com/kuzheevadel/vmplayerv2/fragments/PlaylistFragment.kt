@@ -68,6 +68,7 @@ class PlaylistFragment: Fragment() {
 
     override fun onDestroy() {
         EventBus.getDefault().unregister(this)
+        mAdapter.unbindService()
         super.onDestroy()
     }
 

@@ -4,13 +4,10 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
-import android.transition.Fade
-import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBarDrawerToggle
 import android.view.MenuItem
-import android.view.View
 import com.kuzheevadel.vmplayerv2.adapters.PlayerPagerAdapter
 import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.fragments.*
@@ -20,7 +17,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.player_layout.*
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -30,7 +26,7 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     private var isStarted = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.AppTheme)
+        setTheme(R.style.FeedActivityThemeDark)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(player_toolbar)
@@ -108,7 +104,7 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             R.id.nav_camera -> {
                 // Handle the camera action
             }
-            R.id.nav_gallery -> {
+            R.id.nav_choose_theme -> {
 
             }
             R.id.nav_slideshow -> {
