@@ -13,4 +13,6 @@
     <string name="search">Search</string>
     <string name="search_radio_stations">Search radio stations</string>
     <string name="choose_theme">Choose theme</string>
+    <string name="dark_theme">Dark</string>
+    <string name="light_theme">Light</string>
 </resources>

@@ -19,8 +19,8 @@
         <item name="colorPrimaryDark">#B45206</item>
         <item name="primaryTextColor">#000000</item>
         <item name="secondaryTextColor">#575757</item>
-        <item name="backgroundCardColor">#ECECEC</item>
-        <item name="dividerColor">#E2E2E2</item>
+        <item name="backgroundCardColor">#FFFFFF</item>
+        <item name="dividerColor">#FFFFFF</item>
         <item name="colorAccent">#000000</item>
         <item name="playlistDeleteAnimatable">@drawable/ic_playlist_delete_animatable</item>
         <item name="playlistAddAnimatable">@drawable/ic_playlist_add_black_24dp</item>
@@ -44,7 +44,7 @@
         <item name="primaryTextColor">#FFFFFF</item>
         <item name="secondaryTextColor">#8AADADAD</item>
         <item name="backgroundCardColor">#313131</item>
-        <item name="dividerColor">#303030</item>
+        <item name="dividerColor">#37636363</item>
         <item name="colorAccent">#ffffff</item>
         <item name="playlistDeleteAnimatable">@drawable/ic_playlist_animatable_white</item>
         <item name="playlistAddAnimatable">@drawable/ic_playlist_add_animatable_white</item>
@@ -83,7 +83,12 @@
 
     <style name="LightAppTheme.Launcher">
         <item name="android:windowBackground">@drawable/launch_screen</item>
-        <item name="colorPrimaryDark">#FF6D00</item>
+        <item name="colorPrimary">#303030</item>
+    </style>
+
+    <style name="LightAppTheme.LauncherDark">
+        <item name="android:windowBackground">@drawable/launch_screen</item>
+        <item name="colorPrimary">#303030</item>
     </style>
     
     <style name="MyCustomTextAppearance" parent="TextAppearance.Design.Tab">

@@ -23,14 +23,13 @@ import android.support.v4.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
-import com.google.android.exoplayer2.DefaultLoadControl
-import com.google.android.exoplayer2.DefaultRenderersFactory
-import com.google.android.exoplayer2.ExoPlayerFactory
-import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.ext.okhttp.OkHttpDataSourceFactory
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
 import com.google.android.exoplayer2.source.ExtractorMediaSource
+import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource
 import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory
@@ -249,6 +248,7 @@ class PlayerService: Service() {
                 //mediaSession.setMetadata(setRadioMediaMetaData(radioRepository.currentPlayingStation!!))
                 Picasso.get().load(radioRepository.currentPlayingStation!!.favicon).into(target)
                 currentPlayingTrackId = -1
+                stopInterval(source)
                 source = Source.RADIO
                 updateTrackUI(UpdateUIMessage("", name, 0, Uri.parse(imageUrl), 0, "", Source.RADIO, radioId, false))
                 prepareRadiostation(uri)
@@ -290,7 +290,6 @@ class PlayerService: Service() {
                 isAudioFocusRequest = true
                 mediaSession.isActive = true
                 mExoplayer.playWhenReady = true
-                startInterval()
 
                 mediaSession.setPlaybackState(
                     stateBuilder.setState(
@@ -300,6 +299,7 @@ class PlayerService: Service() {
                 )
             }
             currentState = PlaybackStateCompat.STATE_PLAYING
+            startInterval(source)
             refreshNotification(currentState)
         }
 
@@ -308,7 +308,7 @@ class PlayerService: Service() {
 
             if (mExoplayer.playWhenReady) {
                 mExoplayer.playWhenReady = false
-                stopInterval()
+                stopInterval(source)
 
                 mediaSession.setPlaybackState(
                     stateBuilder.setState(
@@ -412,6 +412,32 @@ class PlayerService: Service() {
             DefaultRenderersFactory(this),
             DefaultTrackSelector(), DefaultLoadControl()
         )
+        mExoplayer.addListener(object : Player.EventListener {
+            override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters?) {}
+
+            override fun onSeekProcessed() {}
+
+            override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {}
+
+            override fun onPlayerError(error: ExoPlaybackException?) {}
+
+            override fun onLoadingChanged(isLoading: Boolean) {}
+
+            override fun onPositionDiscontinuity(reason: Int) {}
+
+            override fun onRepeatModeChanged(repeatMode: Int) {}
+
+            override fun onShuffleModeEnabledChanged(shuffleModeEnabled: Boolean) {}
+
+            override fun onTimelineChanged(timeline: Timeline?, manifest: Any?, reason: Int) {}
+
+            override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+                if (playbackState == Player.STATE_ENDED) {
+                    mediaSessionCallback.onSkipToNext()
+                }
+            }
+
+        })
     }
 
     private fun prepareTrack(uri: Uri) {
@@ -449,28 +475,34 @@ class PlayerService: Service() {
             .build()
     }
 
-    private fun stopInterval() {
-        disposable.dispose()
+    private fun stopInterval(source: Source) {
+        if (source == Source.TRACK) {
+            disposable.dispose()
+        }
     }
 
-    private fun startInterval() {
-        disposable = CompositeDisposable()
+    private fun startInterval(source: Source) {
+        if (source == Source.TRACK) {
+            disposable = CompositeDisposable()
 
-        subscription = Observable.interval(1, TimeUnit.SECONDS)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                if (mExoplayer.playWhenReady) {
-                    progressData.value = (mExoplayer.currentPosition / 1000).toInt()
-                } else {
-                    disposable.dispose()
-                }
-            },
-                {
-                    Log.i("Error Log", "${it.stackTrace}")
-                })
+            subscription = Observable.interval(1, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    if (mExoplayer.playWhenReady) {
+                        progressData.value = (mExoplayer.currentPosition / 1000).toInt()
+                    } else {
+                        disposable.dispose()
+                    }
+                },
+                    {
+                        Log.i("Error Log", "${it.stackTrace}")
+                    })
 
-        disposable.add(subscription)
+            disposable.add(subscription)
+        } else {
+            progressData.value = 0
+        }
     }
 
     private fun refreshNotification(playbackState: Int) {

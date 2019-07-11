@@ -1,17 +1,19 @@
 package com.kuzheevadel.vmplayerv2.activities
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import com.kuzheevadel.vmplayerv2.adapters.PlayerPagerAdapter
 import com.kuzheevadel.vmplayerv2.R
+import com.kuzheevadel.vmplayerv2.adapters.PlayerPagerAdapter
+import com.kuzheevadel.vmplayerv2.common.Constants
+import com.kuzheevadel.vmplayerv2.dialogs.SwitchThemeDialog
 import com.kuzheevadel.vmplayerv2.fragments.*
-import com.sothree.slidinguppanel.SlidingUpPanelLayout.*
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -26,7 +28,8 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     private var isStarted = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.FeedActivityThemeDark)
+        setTheme(Constants.themeId)
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(player_toolbar)
@@ -105,8 +108,9 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 // Handle the camera action
             }
             R.id.nav_choose_theme -> {
-
+                openSwitchThemeDialog()
             }
+
             R.id.nav_slideshow -> {
 
             }
@@ -123,5 +127,10 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    private fun openSwitchThemeDialog() {
+        val dialog = SwitchThemeDialog()
+        dialog.show(supportFragmentManager, "switch dialog")
     }
 }

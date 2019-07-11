@@ -14,13 +14,13 @@
             android:layout_height="60dp">
 
         <android.support.v7.widget.AppCompatImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="58dp"
+                android:layout_height="58dp"
                 app:album_url="@{topUpdateMessage.imageUri}"
                 app:srcCompat="@drawable/album_art_default"
                 android:id="@+id/top_playback_image"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/top_playback_progress"/>
 
         <TextView
                 android:text="@{topUpdateMessage.fullName}"
@@ -49,9 +49,20 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="8dp"
-                app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/top_playback_progress"/>
+
+        <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:id="@+id/top_playback_progress"
+                android:max="@{topUpdateMessage.durationInSeconds}"
+                app:layout_constraintStart_toStartOf="parent"
+                android:background="?attr/backgroundCardColor"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
     </android.support.constraint.ConstraintLayout>
 

@@ -12,13 +12,12 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.SeekBar
 import android.widget.Toast
-import com.kuzheevadel.vmplayerv2.helper.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.common.DataBaseInfo
@@ -27,6 +26,7 @@ import com.kuzheevadel.vmplayerv2.common.Source
 import com.kuzheevadel.vmplayerv2.dagger.App
 import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
 import com.kuzheevadel.vmplayerv2.databinding.PlaybackLayoutBinding
+import com.kuzheevadel.vmplayerv2.helper.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.viewmodels.PlaybackViewModel
 import kotlinx.android.synthetic.main.playback_controls_layout.view.*
 import kotlinx.android.synthetic.main.top_playback_layout.view.*
@@ -51,6 +51,8 @@ class FullScreenPlaybackFragment: Fragment() {
     private var isUpdated = false
     private var id: Long? = 0L
     private  var mContext: Context? = null
+    private var currentShuffleMode = Constants.SHUFFLE_MODE_OFF
+    private lateinit var shuffleImageButton: ImageButton
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -82,6 +84,7 @@ class FullScreenPlaybackFragment: Fragment() {
                 progressData.observe(this@FullScreenPlaybackFragment, Observer {
                     binding.playbackControlsContainer.current_duration_text.text = getDurationInTimeFormat(it!!)
                     binding.playbackControlsContainer.progress_seek_bar.progress = it
+                    binding.topPlaybackControls.top_playback_progress.progress = it
                 })
 
             }
@@ -94,45 +97,53 @@ class FullScreenPlaybackFragment: Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.playback_layout, container, false)
         val view = binding.root
+        shuffleImageButton = binding.playbackControlsContainer.shuffle_image_button
 
         binding.apply {
             topPlaybackControls.bottom_track_info_text.isSelected = true
 
-            playbackControlsContainer.playback_play_pause_button.setOnClickListener {
-                playOrPause()
-            }
-
-            playbackControlsContainer.progress_seek_bar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-                override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+            with(playbackControlsContainer) {
+                next_track.setOnClickListener {
+                    playbackControlsContainer.progress_seek_bar.progress = 0
+                    bindService.mediaControllerCompat?.transportControls?.skipToNext()
                 }
 
-                override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                prev_track.setOnClickListener {
+                    playbackControlsContainer.progress_seek_bar.progress = 0
+                    bindService.mediaControllerCompat?.transportControls?.skipToPrevious()
                 }
 
-                override fun onStopTrackingTouch(seekBar: SeekBar) {
-                    bindService.mediaControllerCompat?.transportControls?.seekTo((seekBar.progress * 1000).toLong())
+                playlist_image.setOnClickListener {
+                    viewModel.addOrDeleteTrackFromPlaylist()
                 }
 
-            })
+                progress_seek_bar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                    override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                    }
 
-            playbackControlsContainer.next_track.setOnClickListener {
-                playbackControlsContainer.progress_seek_bar.progress = 0
-                bindService.mediaControllerCompat?.transportControls?.skipToNext()
-            }
+                    override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                    }
 
-            playbackControlsContainer.prev_track.setOnClickListener {
-                playbackControlsContainer.progress_seek_bar.progress = 0
-                bindService.mediaControllerCompat?.transportControls?.skipToPrevious()
+                    override fun onStopTrackingTouch(seekBar: SeekBar) {
+                        bindService.mediaControllerCompat?.transportControls?.seekTo((seekBar.progress * 1000).toLong())
+                        binding.topPlaybackControls.top_playback_progress.progress = seekBar.progress
+                    }
+
+                })
+
+                playback_play_pause_button.setOnClickListener {
+                    playOrPause()
+                }
+
+                shuffleImageButton.setOnClickListener {
+                    setShuffleMode(it as ImageButton)
+                }
+
             }
 
             topPlaybackControls.top_play_pause_image_button.setOnClickListener {
                 playOrPause()
             }
-
-            playbackControlsContainer.playlist_image.setOnClickListener {
-                viewModel.addOrDeleteTrackFromPlaylist()
-            }
-
         }
 
         viewModel.trackData.observe(this, Observer {
@@ -193,6 +204,24 @@ class FullScreenPlaybackFragment: Fragment() {
         return view
     }
 
+    private fun setShuffleMode(button: ImageButton) {
+        when (currentShuffleMode) {
+            Constants.SHUFFLE_MODE_OFF -> {
+                button.setImageResource(getStyleableDrawable(R.attr.shuffleButton))
+                bindService.mediaControllerCompat?.transportControls?.setShuffleMode(PlaybackStateCompat.SHUFFLE_MODE_ALL)
+                currentShuffleMode = Constants.SHUFFLE_MODE_ON
+                Toast.makeText(context, "Shuffle on", Toast.LENGTH_SHORT).show()
+            }
+
+            Constants.SHUFFLE_MODE_ON -> {
+                button.setImageResource(R.drawable.ic_shuffle_disabled)
+                bindService.mediaControllerCompat?.transportControls?.setShuffleMode(PlaybackStateCompat.SHUFFLE_MODE_NONE)
+                currentShuffleMode = Constants.SHUFFLE_MODE_OFF
+                Toast.makeText(context, "Shuffle off", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private fun setPlaybackButtonImage(state: PlaybackStateCompat?) {
         when (state?.state) {
             PlaybackStateCompat.STATE_PLAYING -> {
@@ -226,14 +255,6 @@ class FullScreenPlaybackFragment: Fragment() {
         return "$minutes:${if (seconds < 10) "0" else ""}$seconds"
     }
 
-    override fun onPause() {
-        super.onPause()
-        val editor = pref.edit()
-        editor.putLong(Constants.ID, id!!)
-            .putInt(Constants.PROGRESS, progressData.value!!)
-            .apply()
-    }
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun updateUi(message: LoadStateMessage) {
         if (!isTracksLoaded) {
@@ -244,14 +265,16 @@ class FullScreenPlaybackFragment: Fragment() {
             isServiceConnected = message.isConnected
         }
 
-        Log.i("PrefTest", message.toString())
-
         if (isTracksLoaded && isServiceConnected && !isUpdated) {
             isUpdated = true
             if (pref.contains(Constants.ID)) {
                 val bundle = Bundle()
                 val progress = pref.getInt(Constants.PROGRESS, 0)
-                Log.i("PrefTest", progress.toString())
+                currentShuffleMode = pref.getInt(Constants.SHUFFLE_MODE,  Constants.SHUFFLE_MODE_OFF)
+
+                if (currentShuffleMode == Constants.SHUFFLE_MODE_OFF) {
+                    shuffleImageButton.setImageResource(R.drawable.ic_shuffle_disabled)
+                }
 
                 bundle.putLong(Constants.ID, pref.getLong(Constants.ID, 0))
 
@@ -259,14 +282,19 @@ class FullScreenPlaybackFragment: Fragment() {
                 bindService.mediaControllerCompat?.transportControls?.seekTo((progress * 1000).toLong())
                 progressData.value = progress
                 binding.playbackControlsContainer.progress_seek_bar.progress = progress
+                binding.topPlaybackControls.top_playback_progress.progress = progress
             }
         }
     }
 
     private fun getStyleableDrawable(attribute: Int): Int {
-        Log.i("StyleTest", context.toString())
         val a: TypedArray? = mContext?.theme?.obtainStyledAttributes(intArrayOf(attribute))
         return a!!.getResourceId(0, -1)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        writeDataInPref()
     }
 
     override fun onDestroy() {
@@ -275,9 +303,13 @@ class FullScreenPlaybackFragment: Fragment() {
         super.onDestroy()
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        Log.i("StyleTest", "onDetach")
+    private fun writeDataInPref() {
+        val editor = pref.edit()
+        editor
+            .putInt(Constants.SHUFFLE_MODE, currentShuffleMode)
+            .putLong(Constants.ID, id!!)
+            .putInt(Constants.PROGRESS, progressData.value!!)
+            .apply()
     }
 
 }
