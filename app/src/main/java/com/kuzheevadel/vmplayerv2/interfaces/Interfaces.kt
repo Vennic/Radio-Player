@@ -7,6 +7,7 @@ class Interfaces {
 
     interface StorageMediaRepository {
         var isPlaylist: Boolean
+        fun comparePlaylistWithUploaded(playlist: MutableList<Track>): MutableList<Track>
         fun setFlagById(id: Long, isAdded: Boolean)
         fun setPlaylistFlagsInLoadedList(list: MutableList<Track>)
         fun setPlaylistFlagsInAlbumsList(list: MutableList<Track>)

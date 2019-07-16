@@ -30,6 +30,7 @@ class AllTracksViewModel @Inject constructor(private val storageMedia: Callable<
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     mediaRepository.setTracksList(it)
+                    EventBus.getDefault().post("post")
                     mAdapter.trackList = mediaRepository.getTracksList()
                     mAdapter.notifyDataSetChanged()
 

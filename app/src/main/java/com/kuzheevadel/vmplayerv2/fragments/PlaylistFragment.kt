@@ -11,10 +11,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.adapters.PlaylistAdapter
+import com.kuzheevadel.vmplayerv2.common.State
 import com.kuzheevadel.vmplayerv2.dagger.App
 import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
 import com.kuzheevadel.vmplayerv2.database.PlaylistDatabase
-import com.kuzheevadel.vmplayerv2.common.State
 import com.kuzheevadel.vmplayerv2.viewmodels.PlaylistViewModel
 import kotlinx.android.synthetic.main.playlist_layout.view.*
 import org.greenrobot.eventbus.EventBus
@@ -42,7 +42,7 @@ class PlaylistFragment: Fragment() {
         viewModel = ViewModelProviders.of(this, factory).get(PlaylistViewModel::class.java)
         mAdapter.fm = activity?.supportFragmentManager
 
-        viewModel.apply {
+        viewModel.run {
             trackData.observe(this@PlaylistFragment, Observer { mAdapter.trackList = it!! })
             loadStatus.observe(this@PlaylistFragment, Observer {
                 if (it == State.ERROR) {
@@ -52,13 +52,12 @@ class PlaylistFragment: Fragment() {
                 }
             })
         }
-        viewModel.loadPlaylistFromDatabase()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.playlist_layout, container, false)
 
-        view.playlist_recycler.apply {
+        view.playlist_recycler.run {
             layoutManager = LinearLayoutManager(context)
             adapter = mAdapter
         }

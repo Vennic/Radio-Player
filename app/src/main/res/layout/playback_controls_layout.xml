@@ -26,7 +26,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/progress_seek_bar" android:layout_marginBottom="8dp"/>
+                app:layout_constraintBottom_toTopOf="@+id/progress_seek_bar"
+                android:layout_marginBottom="8dp"/>
 
         <SeekBar
                 android:layout_width="379dp"
@@ -34,7 +35,8 @@
                 android:id="@+id/progress_seek_bar"
                 android:max="@{updateMessage.durationInSeconds}"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="8dp"
                 app:layout_constraintBottom_toTopOf="@+id/current_duration_text"/>
 
@@ -67,7 +69,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginBottom="16dp" app:layout_constraintBottom_toTopOf="@+id/loop_image_button"/>
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/loop_image_button"/>
 
         <ImageButton
                 android:layout_width="wrap_content"
@@ -81,7 +84,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="24dp"
                 app:layout_constraintStart_toEndOf="@+id/playback_play_pause_button"
-                android:layout_marginStart="8dp" app:layout_constraintTop_toTopOf="@+id/playback_play_pause_button"
+                android:layout_marginStart="8dp"
+                app:layout_constraintTop_toTopOf="@+id/playback_play_pause_button"
                 app:layout_constraintBottom_toBottomOf="@+id/playback_play_pause_button"/>
         <TextView
                 tools:text="Mann gegen mann"
@@ -110,7 +114,8 @@
                 android:marqueeRepeatLimit="marquee_forever"
                 android:singleLine="true"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="8dp"
                 android:textColor="?attr/primaryTextColor"
                 android:textSize="18sp"
@@ -123,7 +128,8 @@
                 android:id="@+id/current_duration_text"
                 android:textColor="?attr/secondaryTextColor"
                 app:layout_constraintStart_toStartOf="@+id/progress_seek_bar"
-                app:layout_constraintBottom_toTopOf="@+id/playback_artist_name" android:textSize="12sp"/>
+                app:layout_constraintBottom_toTopOf="@+id/playback_artist_name"
+                android:textSize="12sp"/>
         <TextView
                 tools:text="3:52"
                 android:text="@{updateMessage.durationType}"
@@ -132,7 +138,8 @@
                 android:textColor="?attr/secondaryTextColor"
                 android:id="@+id/textView9"
                 app:layout_constraintEnd_toEndOf="@+id/progress_seek_bar"
-                app:layout_constraintBottom_toTopOf="@+id/playback_artist_name" android:textSize="12sp"/>
+                app:layout_constraintBottom_toTopOf="@+id/playback_artist_name"
+                android:textSize="12sp"/>
 
         <ImageButton
                 android:layout_weight="1"
@@ -191,8 +198,10 @@
                 android:scaleType="center"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:id="@+id/imageButton51"
-                app:layout_constraintEnd_toEndOf="parent" android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent" android:layout_marginEnd="32dp"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginEnd="32dp"/>
 
     </android.support.constraint.ConstraintLayout>
 

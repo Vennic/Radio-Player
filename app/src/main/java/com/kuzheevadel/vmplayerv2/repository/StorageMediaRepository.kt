@@ -202,6 +202,22 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
         return albumsList
     }
 
+    override fun comparePlaylistWithUploaded(playlist: MutableList<Track>): MutableList<Track> {
+        synchronized(this) {
+            val correctPlaylist = mutableListOf<Track>()
+
+            for (item in playlist) {
+                for (loadedItem in loadedTracksList) {
+                    if (item.title == loadedItem.title && item.artist == loadedItem.artist && item.albumName == loadedItem.albumName && item.duration == loadedItem.duration) {
+                        correctPlaylist.add(item)
+                    }
+                }
+            }
+
+            return correctPlaylist
+        }
+    }
+
     private fun getShuffledTrack(): Track {
         val r = Random()
         currentTrackPosition = r.nextInt(playingTrackList.size)
