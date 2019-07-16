@@ -56,6 +56,8 @@ class PlaybackViewModel @Inject constructor(private val mediaRepository: Interfa
                 }
                 Source.RADIO -> {
                     val radioStation = radioRepository.currentPlayingStation
+                    checkRadioInDatabase(radioStation?.id?.toLong() ?: 0)
+
                     trackData.value = UpdateUIMessage(
                         "",
                         radioStation!!.name,

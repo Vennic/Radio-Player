@@ -52,7 +52,9 @@ class FullScreenPlaybackFragment: Fragment() {
     private var id: Long? = 0L
     private  var mContext: Context? = null
     private var currentShuffleMode = Constants.SHUFFLE_MODE_OFF
+    private var currentRepeatMode = Constants.NO_LOOP_MODE
     private lateinit var shuffleImageButton: ImageButton
+    private lateinit var repeatImageButton: ImageButton
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -98,9 +100,12 @@ class FullScreenPlaybackFragment: Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.playback_layout, container, false)
         val view = binding.root
         shuffleImageButton = binding.playbackControlsContainer.shuffle_image_button
+        repeatImageButton = binding.playbackControlsContainer.loop_image_button
 
         binding.apply {
             topPlaybackControls.bottom_track_info_text.isSelected = true
+            playbackControlsContainer.playback_track_name.isSelected = true
+            playbackControlsContainer.playback_artist_name.isSelected = true
 
             with(playbackControlsContainer) {
                 next_track.setOnClickListener {
@@ -139,6 +144,10 @@ class FullScreenPlaybackFragment: Fragment() {
                     setShuffleMode(it as ImageButton)
                 }
 
+                repeatImageButton.setOnClickListener {
+                    setRepeatMode(it as ImageButton)
+                }
+
             }
 
             topPlaybackControls.top_play_pause_image_button.setOnClickListener {
@@ -148,6 +157,7 @@ class FullScreenPlaybackFragment: Fragment() {
 
         viewModel.trackData.observe(this, Observer {
             binding.updatePlaybackMessage = it
+            setPlaybackButtonsState(it!!.type)
         })
 
         viewModel.trackIdData.observe(this, Observer {
@@ -210,14 +220,60 @@ class FullScreenPlaybackFragment: Fragment() {
                 button.setImageResource(getStyleableDrawable(R.attr.shuffleButton))
                 bindService.mediaControllerCompat?.transportControls?.setShuffleMode(PlaybackStateCompat.SHUFFLE_MODE_ALL)
                 currentShuffleMode = Constants.SHUFFLE_MODE_ON
-                Toast.makeText(context, "Shuffle on", Toast.LENGTH_SHORT).show()
             }
 
             Constants.SHUFFLE_MODE_ON -> {
                 button.setImageResource(R.drawable.ic_shuffle_disabled)
                 bindService.mediaControllerCompat?.transportControls?.setShuffleMode(PlaybackStateCompat.SHUFFLE_MODE_NONE)
                 currentShuffleMode = Constants.SHUFFLE_MODE_OFF
-                Toast.makeText(context, "Shuffle off", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun setRepeatMode(button: ImageButton) {
+        when (currentRepeatMode) {
+            Constants.NO_LOOP_MODE -> {
+                button.setImageResource(getStyleableDrawable(R.attr.oneLoopModeButton))
+                bindService.mediaControllerCompat?.transportControls?.setRepeatMode(PlaybackStateCompat.REPEAT_MODE_ONE)
+                currentRepeatMode = Constants.ONE_LOOP_MODE
+            }
+
+            Constants.ONE_LOOP_MODE -> {
+                button.setImageResource(getStyleableDrawable(R.attr.loopModeButton))
+                bindService.mediaControllerCompat?.transportControls?.setRepeatMode(PlaybackStateCompat.REPEAT_MODE_ALL)
+                currentRepeatMode = Constants.ALL_LOOP_MODE
+            }
+
+            Constants.ALL_LOOP_MODE -> {
+                button.setImageResource(R.drawable.ic_repeat_disable)
+                bindService.mediaControllerCompat?.transportControls?.setRepeatMode(PlaybackStateCompat.REPEAT_MODE_NONE)
+                currentRepeatMode = Constants.NO_LOOP_MODE
+            }
+        }
+    }
+
+    private fun setPlaybackButtonsState(source: Source) {
+        when (source) {
+            Source.RADIO -> {
+                binding.playbackControlsContainer.run {
+                    prev_track.visibility = View.INVISIBLE
+                    next_track.visibility = View.INVISIBLE
+                    shuffle_image_button.setImageResource(R.drawable.ic_shuffle_disabled)
+                    shuffle_image_button.isEnabled = false
+                    loop_image_button.setImageResource(R.drawable.ic_repeat_disable)
+                    loop_image_button.isEnabled = false
+                }
+            }
+
+            Source.TRACK -> {
+                binding.playbackControlsContainer.run {
+                    prev_track.visibility = View.VISIBLE
+                    next_track.visibility = View.VISIBLE
+                    setShuffleMode(shuffleImageButton)
+                    setRepeatMode(repeatImageButton)
+                    loop_image_button.isEnabled = true
+                    shuffle_image_button.isEnabled = true
+                }
             }
         }
     }
@@ -271,9 +327,16 @@ class FullScreenPlaybackFragment: Fragment() {
                 val bundle = Bundle()
                 val progress = pref.getInt(Constants.PROGRESS, 0)
                 currentShuffleMode = pref.getInt(Constants.SHUFFLE_MODE,  Constants.SHUFFLE_MODE_OFF)
+                currentRepeatMode = pref.getInt(Constants.REPEAT_MODE, Constants.NO_LOOP_MODE)
 
                 if (currentShuffleMode == Constants.SHUFFLE_MODE_OFF) {
                     shuffleImageButton.setImageResource(R.drawable.ic_shuffle_disabled)
+                }
+
+                when (currentRepeatMode) {
+                    Constants.NO_LOOP_MODE -> repeatImageButton.setImageResource(R.drawable.ic_repeat_disable)
+                    Constants.ONE_LOOP_MODE -> repeatImageButton.setImageResource(getStyleableDrawable(R.attr.oneLoopModeButton))
+                    Constants.ALL_LOOP_MODE -> repeatImageButton.setImageResource(getStyleableDrawable(R.attr.loopModeButton))
                 }
 
                 bundle.putLong(Constants.ID, pref.getLong(Constants.ID, 0))
@@ -303,9 +366,11 @@ class FullScreenPlaybackFragment: Fragment() {
         super.onDestroy()
     }
 
+    //Error
     private fun writeDataInPref() {
         val editor = pref.edit()
         editor
+            .putInt(Constants.REPEAT_MODE, currentRepeatMode)
             .putInt(Constants.SHUFFLE_MODE, currentShuffleMode)
             .putLong(Constants.ID, id!!)
             .putInt(Constants.PROGRESS, progressData.value!!)

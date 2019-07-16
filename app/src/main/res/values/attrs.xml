@@ -11,6 +11,7 @@
         <attr name="playlistAddAnimatable" format="integer"/>
         <attr name="shuffleButton" format="integer"/>
         <attr name="loopModeButton" format="integer"/>
+        <attr name="oneLoopModeButton" format="integer"/>
         <attr name="skipNextButton" format="integer"/>
         <attr name="skipPrevButton" format="integer"/>
         <attr name="playToPauseAnimate" format="integer"/>

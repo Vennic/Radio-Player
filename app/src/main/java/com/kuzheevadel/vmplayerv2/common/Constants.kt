@@ -3,6 +3,7 @@ package com.kuzheevadel.vmplayerv2.common
 import com.kuzheevadel.vmplayerv2.R
 
 object Constants {
+    const val REPEAT_MODE = "repeat mode"
     const val SHUFFLE_MODE = "shuffle_mode"
     const val THEME_ID = "kuzheev.adel.theme"
     var themeId = R.style.FeedActivityThemeDark
