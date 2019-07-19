@@ -1,12 +1,9 @@
 package com.kuzheevadel.vmplayerv2.repository
 
-import android.util.Log
 import com.kuzheevadel.vmplayerv2.common.Constants
-import com.kuzheevadel.vmplayerv2.common.LoadStateMessage
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Album
 import com.kuzheevadel.vmplayerv2.model.Track
-import org.greenrobot.eventbus.EventBus
 import java.util.*
 
 class StorageMediaRepository: Interfaces.StorageMediaRepository {
@@ -65,7 +62,6 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
         loadedTracksList = list
         playingTrackList = loadedTracksList
         createAlbums()
-        EventBus.getDefault().post(LoadStateMessage(isTracksLoaded = true, isConnected = false))
     }
 
     override fun deleteTrackFromPlaylist(id: Long) {
@@ -74,7 +70,6 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
                 if (item.id == id)
                     playingTrackList.removeAt(index)
         }
-        Log.i("STORAGEETST", playingTrackList.size.toString())
     }
 
     override fun setShuffleMode(mode: Int) {
@@ -181,8 +176,6 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
                 }
             }
         }
-
-        Log.i("PLAYLISTTEST", "finish sort")
     }
 
     override fun setPlaylistFlagsInAlbumsList(list: MutableList<Track>) {

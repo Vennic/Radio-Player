@@ -9,10 +9,8 @@ import android.os.IBinder
 import android.os.RemoteException
 import android.support.v4.media.session.MediaControllerCompat
 import android.util.Log
-import com.kuzheevadel.vmplayerv2.common.LoadStateMessage
 import com.kuzheevadel.vmplayerv2.common.Source
 import com.kuzheevadel.vmplayerv2.services.PlayerService
-import org.greenrobot.eventbus.EventBus
 
 class BindServiceHelper(private val context: Context) {
 
@@ -44,7 +42,6 @@ class BindServiceHelper(private val context: Context) {
 
             override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
                 val serviceBinder = service as PlayerService.PlayerBinder
-                dataCallback.setProgressData(serviceBinder.getProgressData(), serviceBinder.getCurrentSource())
 
                 try {
                     mediaControllerCompat = MediaControllerCompat(context, serviceBinder.getMediaSessionToken())
@@ -54,7 +51,7 @@ class BindServiceHelper(private val context: Context) {
                     mediaControllerCompat = null
                 }
 
-                EventBus.getDefault().post(LoadStateMessage(isTracksLoaded = false, isConnected = true))
+                dataCallback.setProgressData(serviceBinder.getProgressData(), serviceBinder.getCurrentSource())
             }
         }
 

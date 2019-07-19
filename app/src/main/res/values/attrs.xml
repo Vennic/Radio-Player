@@ -24,5 +24,6 @@
         <attr name="unLikedImage" format="integer"/>
         <attr name="searchImage" format="integer"/>
         <attr name="starImage" format="integer"/>
+        <attr name="splashBackground" format="color"/>
     </declare-styleable>
 </resources>

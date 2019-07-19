@@ -14,7 +14,7 @@ class SplashActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setThemeId()
 
-        setTheme(R.style.LightAppTheme_LauncherDark)
+        setTheme(R.style.LauncherDark)
 
         super.onCreate(savedInstanceState)
 

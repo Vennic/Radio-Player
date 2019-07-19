@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModel
 import android.util.Log
 import com.kuzheevadel.vmplayerv2.adapters.TrackListAdapter
 import com.kuzheevadel.vmplayerv2.common.LoadMediaMessage
+import com.kuzheevadel.vmplayerv2.common.LoadStateMessage
 import com.kuzheevadel.vmplayerv2.database.PlaylistDatabase
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Track
@@ -30,7 +31,7 @@ class AllTracksViewModel @Inject constructor(private val storageMedia: Callable<
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     mediaRepository.setTracksList(it)
-                    EventBus.getDefault().post("post")
+                    EventBus.getDefault().postSticky("post")
                     mAdapter.trackList = mediaRepository.getTracksList()
                     mAdapter.notifyDataSetChanged()
 
@@ -54,11 +55,12 @@ class AllTracksViewModel @Inject constructor(private val storageMedia: Callable<
                 }
         } else {
             mediaRepository.createAlbums()
+            EventBus.getDefault().post(LoadStateMessage(isTracksLoaded = true, isConnected = false))
             mAdapter.trackList = mediaRepository.getTracksList()
+            EventBus.getDefault().postSticky("post")
             mAdapter.notifyDataSetChanged()
             EventBus.getDefault().postSticky(LoadMediaMessage(true))
         }
-
     }
 
     fun setAdapter(adapter: TrackListAdapter) {

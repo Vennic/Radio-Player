@@ -39,6 +39,7 @@
         <item name="fromUnlikedToLiked">@drawable/ic_unliked_to_liked</item>
         <item name="searchImage">@drawable/ic_search_black_24dp</item>
         <item name="starImage">@drawable/ic_star_border_black_24dp</item>
+        <item name="splashBackground">#FF6D00</item>
     </style>
 
     <style name="ActivityTheme.Primary.Base.Dark"    parent="Theme.AppCompat.NoActionBar">
@@ -64,6 +65,7 @@
         <item name="fromUnlikedToLiked">@drawable/ic_unliked_to_liked_white</item>
         <item name="searchImage">@drawable/ic_search_white</item>
         <item name="starImage">@drawable/ic_star_border_white</item>
+        <item name="splashBackground">#303030</item>
     </style>
 
     <style name="FeedActivityThemeLight" parent="ActivityTheme.Primary.Base.Light">
@@ -88,7 +90,7 @@
         <item name="colorPrimary">#303030</item>
     </style>
 
-    <style name="LightAppTheme.LauncherDark">
+    <style name="LauncherDark" parent="LightAppTheme">
         <item name="android:windowBackground">@drawable/launch_screen</item>
         <item name="colorPrimary">#303030</item>
     </style>

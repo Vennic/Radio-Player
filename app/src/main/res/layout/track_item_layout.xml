@@ -10,7 +10,6 @@
     </data>
 
     <android.support.constraint.ConstraintLayout
-
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:clickable="true"
@@ -42,7 +41,8 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginBottom="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/items_menu" android:layout_marginEnd="8dp"/>
+                app:layout_constraintEnd_toStartOf="@+id/items_menu"
+                android:layout_marginEnd="8dp"/>
 
         <TextView
                 android:text="@{track.title}"
@@ -74,4 +74,5 @@
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
     </android.support.constraint.ConstraintLayout>
+
 </layout>

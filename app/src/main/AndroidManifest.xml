@@ -30,7 +30,7 @@
         <activity
                 android:name=".activities.SplashActivity"
                 android:screenOrientation="portrait"
-                android:theme="@style/LightAppTheme.LauncherDark">
+                android:theme="@style/LauncherDark">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
