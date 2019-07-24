@@ -25,5 +25,9 @@
         <attr name="searchImage" format="integer"/>
         <attr name="starImage" format="integer"/>
         <attr name="splashBackground" format="color"/>
+        <attr name="allTracksIcon" format="integer"/>
+        <attr name="albumsIcon" format="integer"/>
+        <attr name="playlistIcon" format="integer"/>
+        <attr name="radioIcon" format="integer"/>
     </declare-styleable>
 </resources>

@@ -1,11 +1,9 @@
 package com.kuzheevadel.vmplayerv2.fragments
 
 import android.app.Activity
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -16,7 +14,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
-import android.widget.Spinner
 import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.adapters.SpinnerArrayAdapter
 import com.kuzheevadel.vmplayerv2.common.Constants
@@ -25,7 +22,6 @@ import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
 import com.kuzheevadel.vmplayerv2.model.Country
 import com.kuzheevadel.vmplayerv2.paging.RadioPagingAdapter
 import com.kuzheevadel.vmplayerv2.viewmodels.SearchRadioViewModel
-import kotlinx.android.synthetic.main.search_radio_layout.*
 import kotlinx.android.synthetic.main.search_radio_layout.view.*
 import javax.inject.Inject
 
@@ -144,9 +140,8 @@ class SearchRadioFragment: Fragment() {
     }
 
     private fun hideSoftKeyboard(activityCompat: FragmentActivity?) {
-        val inputMetodManager = activityCompat?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMetodManager.hideSoftInputFromWindow(activityCompat.currentFocus?.windowToken, 0)
-
+        val inputMethodManager = activityCompat?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(activityCompat.currentFocus?.windowToken, 0)
     }
 
 }

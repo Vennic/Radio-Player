@@ -79,7 +79,6 @@ class PlaybackViewModel @Inject constructor(private val mediaRepository: Interfa
     fun updateUI(message: UpdateUIMessage) {
         trackData.value = message
 
-        Log.i("PLAYBACKTEST", message.inPlaylist.toString())
         if (message.type == Source.TRACK) {
             source = Source.TRACK
 
@@ -104,7 +103,6 @@ class PlaybackViewModel @Inject constructor(private val mediaRepository: Interfa
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 {
-                    Log.i("RadioDatabase", it.toString())
                     if (it != null) {
                         checkPlaylistData.value = DataBaseInfo.RADIO_ADDED
                         radioRepository.currentPlayingStation?.inPlaylist = true
@@ -115,7 +113,6 @@ class PlaybackViewModel @Inject constructor(private val mediaRepository: Interfa
                     }
                 },
                 {
-                    Log.i("RadioDatabase", "Error")
                     checkPlaylistData.value = DataBaseInfo.RADIO_IS_NOT_ADDED
                     radioRepository.currentPlayingStation?.inPlaylist = false
 
@@ -134,13 +131,11 @@ class PlaybackViewModel @Inject constructor(private val mediaRepository: Interfa
                     .subscribeOn(Schedulers.io())
                     .subscribe(
                         {
-                            Log.i("InsertTest", "in onNext")
-                            EventBus.getDefault().post("post")
+                            EventBus.getDefault().post("track")
                             mediaRepository.setFlagById(mediaRepository.getCurrentTrack().id, true)
                             dataBaseInfoData.postValue(DataBaseInfo.TRACK_ADDED)
                         },
                         {
-                            Log.e("InsertTest", "Add error", it)
                             dataBaseInfoData.postValue(DataBaseInfo.ERROR)
                         }
                     )
@@ -151,7 +146,7 @@ class PlaybackViewModel @Inject constructor(private val mediaRepository: Interfa
                     .subscribeOn(Schedulers.io())
                     .subscribe(
                         {
-                            EventBus.getDefault().post("post")
+                            EventBus.getDefault().post("track")
                             mediaRepository.setFlagById(mediaRepository.getCurrentTrack().id, false)
                             mediaRepository.deleteTrackFromPlaylist(mediaRepository.getCurrentTrack().id)
                             dataBaseInfoData.postValue(DataBaseInfo.DELETED)
@@ -170,6 +165,7 @@ class PlaybackViewModel @Inject constructor(private val mediaRepository: Interfa
                         {
                             dataBaseInfoData.value = DataBaseInfo.RADIO_ADDED
                             radioRepository.currentPlayingStation?.inPlaylist = true
+                            EventBus.getDefault().post("radio")
                         },
                         {
                             dataBaseInfoData.value = DataBaseInfo.ERROR
@@ -183,6 +179,7 @@ class PlaybackViewModel @Inject constructor(private val mediaRepository: Interfa
                         {
                             dataBaseInfoData.value = DataBaseInfo.RADIO_IS_NOT_ADDED
                             radioRepository.currentPlayingStation?.inPlaylist = false
+                            EventBus.getDefault().post("radio")
                         },
                         {
                             dataBaseInfoData.value = DataBaseInfo.ERROR

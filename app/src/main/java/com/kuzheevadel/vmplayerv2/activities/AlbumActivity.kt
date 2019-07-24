@@ -48,6 +48,7 @@ class AlbumActivity: AppCompatActivity() {
 
         picasso.load(uri)
             .fit()
+            .placeholder(R.drawable.vinil_default)
             .into(albums_detail_image)
 
         supportFragmentManager.beginTransaction()

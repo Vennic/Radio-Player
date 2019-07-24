@@ -1,8 +1,11 @@
 package com.kuzheevadel.vmplayerv2.activities
 
+import android.arch.lifecycle.MutableLiveData
+import android.content.res.TypedArray
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
+import android.support.design.widget.TabLayout
 import android.support.v4.view.GravityCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.ActionBarDrawerToggle
@@ -11,6 +14,7 @@ import android.view.MenuItem
 import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.adapters.PlayerPagerAdapter
 import com.kuzheevadel.vmplayerv2.common.Constants
+import com.kuzheevadel.vmplayerv2.common.State
 import com.kuzheevadel.vmplayerv2.dialogs.SwitchThemeDialog
 import com.kuzheevadel.vmplayerv2.fragments.*
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState
@@ -26,6 +30,7 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     private var count = 0
     private var clickCount = 0
     private var isStarted = false
+    private val loadTracksData: MutableLiveData<State> = MutableLiveData()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(Constants.themeId)
@@ -47,6 +52,33 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         setupPager(player_pager)
         tab_layout.setupWithViewPager(player_pager)
 
+
+        tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                when (tab?.position) {
+                    0 -> {tab.setIcon(R.drawable.ic_list_default)}
+                    1 -> {tab.setIcon(R.drawable.ic_albums_default)}
+                    2 -> {tab.setIcon(R.drawable.ic_tab_playlist_default)}
+                    3 -> {tab.setIcon(R.drawable.ic_radio_default)}
+                }
+            }
+
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when (tab?.position) {
+                    0 -> {tab.setIcon(getStyleableDrawable(R.attr.allTracksIcon))}
+                    1 -> {tab.setIcon(getStyleableDrawable(R.attr.albumsIcon))}
+                    2 -> {tab.setIcon(getStyleableDrawable(R.attr.playlistIcon))}
+                    3 -> {tab.setIcon(getStyleableDrawable(R.attr.radioIcon))}
+                }
+            }
+
+        })
+
+        setupTabIcons()
+
         supportFragmentManager.beginTransaction()
             .replace(R.id.playback_container, FullScreenPlaybackFragment(), "PlaybackFragment")
             .commit()
@@ -54,13 +86,19 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
     private fun setupPager(pager: ViewPager) {
         val adapter = PlayerPagerAdapter(supportFragmentManager)
-        adapter.addFragment(AllTracksFragment(), "All Songs")
+        adapter.addFragment(AllTracksFragment.getInstance(loadTracksData), "All songs")
         adapter.addFragment(AlbumsFragment(), "Albums")
-        adapter.addFragment(PlaylistFragment(), "Playlist")
+        adapter.addFragment(PlaylistFragment.getInstance(loadTracksData), "Playlist")
         adapter.addFragment(RadioFragment(), "Radio")
         pager.adapter = adapter
     }
-    
+
+    private fun setupTabIcons() {
+        tab_layout.getTabAt(0)?.setIcon(R.drawable.ic_list_default)
+        tab_layout.getTabAt(1)?.setIcon(R.drawable.ic_albums_default)
+        tab_layout.getTabAt(2)?.setIcon(R.drawable.ic_tab_playlist_default)
+        tab_layout.getTabAt(3)?.setIcon(R.drawable.ic_radio_default)
+    }
 
     override fun onBackPressed() {
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
@@ -104,19 +142,11 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
         when (item.itemId) {
-            R.id.nav_camera -> {
-                // Handle the camera action
-            }
+
             R.id.nav_choose_theme -> {
                 openSwitchThemeDialog()
             }
 
-            R.id.nav_slideshow -> {
-
-            }
-            R.id.nav_manage -> {
-
-            }
             R.id.nav_share -> {
 
             }
@@ -132,5 +162,10 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     private fun openSwitchThemeDialog() {
         val dialog = SwitchThemeDialog()
         dialog.show(supportFragmentManager, "switch dialog")
+    }
+
+    private fun getStyleableDrawable(attribute: Int): Int {
+        val a: TypedArray? = this.theme?.obtainStyledAttributes(intArrayOf(attribute))
+        return a!!.getResourceId(0, -1)
     }
 }

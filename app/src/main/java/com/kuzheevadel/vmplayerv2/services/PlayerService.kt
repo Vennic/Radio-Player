@@ -251,11 +251,11 @@ class PlayerService: Service() {
                 val name = extras.getString(Constants.RADIO_TITLE)
                 val imageUrl = extras.getString(Constants.RADIO_IMAGE)
                 val radioId = extras.getString(Constants.RADIO_ID).toLong()
-                //mediaSession.setMetadata(setRadioMediaMetaData(radioRepository.currentPlayingStation!!))
+                //mediaSession.setMetadata(setRadioMediaMetaData(radioRepository.currentPlayingStation!!))  ERROR!!!
                 Picasso.get().load(radioRepository.currentPlayingStation!!.favicon).into(target)
                 currentPlayingTrackId = -1
-                stopInterval(source)
                 source = Source.RADIO
+                stopInterval()
                 updateTrackUI(UpdateUIMessage("", name, 0, Uri.parse(imageUrl), 0, "", Source.RADIO, radioId, false))
                 prepareRadiostation(uri)
 
@@ -315,7 +315,7 @@ class PlayerService: Service() {
 
             if (mExoPlayer.playWhenReady) {
                 mExoPlayer.playWhenReady = false
-                stopInterval(source)
+                stopInterval()
 
                 if (isAudioFocusRequest) {
                     isAudioFocusRequest = false
@@ -514,13 +514,11 @@ class PlayerService: Service() {
             .build()
     }
 
-    private fun stopInterval(source: Source) {
-        if (source == Source.TRACK) {
-            try {
-                disposable.dispose()
-            } catch (e: UninitializedPropertyAccessException) {
-                e.printStackTrace()
-            }
+    private fun stopInterval() {
+        try {
+            disposable.dispose()
+        } catch (e: UninitializedPropertyAccessException) {
+            e.printStackTrace()
         }
     }
 

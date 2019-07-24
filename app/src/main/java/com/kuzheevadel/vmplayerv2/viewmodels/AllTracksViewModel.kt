@@ -1,14 +1,16 @@
 package com.kuzheevadel.vmplayerv2.viewmodels
 
 import android.annotation.SuppressLint
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.util.Log
 import com.kuzheevadel.vmplayerv2.adapters.TrackListAdapter
 import com.kuzheevadel.vmplayerv2.common.LoadMediaMessage
-import com.kuzheevadel.vmplayerv2.common.LoadStateMessage
+import com.kuzheevadel.vmplayerv2.common.State
 import com.kuzheevadel.vmplayerv2.database.PlaylistDatabase
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Track
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -23,13 +25,16 @@ class AllTracksViewModel @Inject constructor(private val storageMedia: Callable<
 
     private lateinit var mAdapter: TrackListAdapter
 
+    val loadStateData: MutableLiveData<State> = MutableLiveData()
+
     @SuppressLint("CheckResult")
     fun loadTracks() {
+        loadStateData.value = State.LOADING
         if (mediaRepository.getTracksList().isEmpty()) {
             Observable.fromCallable(storageMedia)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .subscribe ({
                     mediaRepository.setTracksList(it)
                     EventBus.getDefault().postSticky("post")
                     mAdapter.trackList = mediaRepository.getTracksList()
@@ -37,14 +42,15 @@ class AllTracksViewModel @Inject constructor(private val storageMedia: Callable<
 
                     if (it != null) {
                         EventBus.getDefault().post(LoadMediaMessage(true))
+                        loadStateData.value = State.DONE
                     } else {
-                        EventBus.getDefault().post(LoadMediaMessage(false))
+                        loadStateData.value = State.ERROR
                     }
 
                     val callable = Callable<Unit> {mediaRepository.setPlaylistFlagsInLoadedList(database.trackDao().getAllTracks())}
                     val disposable = CompositeDisposable()
 
-                    disposable.add(Observable.fromCallable(callable)
+                    disposable.add(Completable.fromCallable(callable)
                         .subscribeOn(Schedulers.computation())
                         .subscribe ({
                             disposable.dispose()
@@ -52,10 +58,14 @@ class AllTracksViewModel @Inject constructor(private val storageMedia: Callable<
                             {error ->
                                 Log.e("PLAYLISTERROR", "", error)
                             }))
-                }
+                },
+
+                    {
+                        loadStateData.value = State.ERROR
+                    })
         } else {
             mediaRepository.createAlbums()
-            EventBus.getDefault().post(LoadStateMessage(isTracksLoaded = true, isConnected = false))
+            loadStateData.value = State.DONE
             mAdapter.trackList = mediaRepository.getTracksList()
             EventBus.getDefault().postSticky("post")
             mAdapter.notifyDataSetChanged()

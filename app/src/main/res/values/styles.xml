@@ -15,13 +15,13 @@
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
-        <item name="colorPrimary">#FF6D00</item>
-        <item name="colorPrimaryDark">#B45206</item>
-        <item name="primaryTextColor">#000000</item>
-        <item name="secondaryTextColor">#575757</item>
-        <item name="backgroundCardColor">#FFFFFF</item>
-        <item name="dividerColor">#FFFFFF</item>
-        <item name="colorAccent">#000000</item>
+        <item name="colorPrimary">@color/color_primary_white</item>
+        <item name="colorPrimaryDark">@color/color_primary_dark_white</item>
+        <item name="primaryTextColor">@color/primary_text_color_white</item>
+        <item name="secondaryTextColor">@color/secondary_text_color_white</item>
+        <item name="backgroundCardColor">@color/background_card_color_white</item>
+        <item name="dividerColor">@color/divider_color_white</item>
+        <item name="colorAccent">@color/color_accent_white</item>
         <item name="playlistDeleteAnimatable">@drawable/ic_playlist_delete_animatable</item>
         <item name="playlistAddAnimatable">@drawable/ic_playlist_add_black_24dp</item>
         <item name="menuDotsColor">@drawable/ic_more_vert_black_24dp</item>
@@ -40,14 +40,19 @@
         <item name="searchImage">@drawable/ic_search_black_24dp</item>
         <item name="starImage">@drawable/ic_star_border_black_24dp</item>
         <item name="splashBackground">#FF6D00</item>
+        <item name="allTracksIcon">@drawable/ic_list_black_24dp</item>
+        <item name="albumsIcon">@drawable/ic_albums_black_24dp</item>
+        <item name="playlistIcon">@drawable/ic_tab_playlist_add_black_24dp</item>
+        <item name="radioIcon">@drawable/ic_radio_black_24dp</item>
     </style>
 
     <style name="ActivityTheme.Primary.Base.Dark"    parent="Theme.AppCompat.NoActionBar">
-        <item name="primaryTextColor">#FFFFFF</item>
-        <item name="secondaryTextColor">#8AADADAD</item>
-        <item name="backgroundCardColor">#313131</item>
-        <item name="dividerColor">#37636363</item>
-        <item name="colorAccent">#ffffff</item>
+        <item name="primaryTextColor">@color/primary_text_color_dark</item>
+        <item name="colorPrimary">@color/color_primary_dark</item>
+        <item name="secondaryTextColor">@color/secondary_text_color_dark</item>
+        <item name="backgroundCardColor">@color/background_card_color_dark</item>
+        <item name="dividerColor">@color/divider_color_dark</item>
+        <item name="colorAccent">@color/color_accent_dark</item>
         <item name="playlistDeleteAnimatable">@drawable/ic_playlist_animatable_white</item>
         <item name="playlistAddAnimatable">@drawable/ic_playlist_add_animatable_white</item>
         <item name="menuDotsColor">@drawable/ic_more_vert_white_24dp</item>
@@ -66,6 +71,10 @@
         <item name="searchImage">@drawable/ic_search_white</item>
         <item name="starImage">@drawable/ic_star_border_white</item>
         <item name="splashBackground">#303030</item>
+        <item name="allTracksIcon">@drawable/ic_list_white_24dp</item>
+        <item name="albumsIcon">@drawable/ic_albums_white_24dp</item>
+        <item name="playlistIcon">@drawable/ic_tab_playlist_add_white_24dp</item>
+        <item name="radioIcon">@drawable/ic_radio_white_24dp</item>
     </style>
 
     <style name="FeedActivityThemeLight" parent="ActivityTheme.Primary.Base.Light">

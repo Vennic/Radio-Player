@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,7 +62,10 @@ class FullScreenPlaybackFragment: Fragment() {
 
         pref = activity!!.getSharedPreferences("laststate", Context.MODE_PRIVATE)
 
-        (activity?.application as App).getComponent().inject(this)
+        val app = (activity?.application as App)
+        app.getComponent().inject(this)
+        isUpdated = app.isUpdated
+
         viewModel = ViewModelProviders.of(this, factory).get(PlaybackViewModel::class.java)
 
         callback = object : MediaControllerCompat.Callback() {
@@ -84,6 +88,7 @@ class FullScreenPlaybackFragment: Fragment() {
                 })
 
                 updateUiFromPref()
+                app.isUpdated = true
             }
         })
 
@@ -91,6 +96,8 @@ class FullScreenPlaybackFragment: Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.playback_layout, container, false)
+
+        Log.i("PlaybackCaasd", "${savedInstanceState.toString()} on createView")
 
         val view = binding.root
         shuffleImageButton = binding.playbackControlsContainer.shuffle_image_button
@@ -318,31 +325,34 @@ class FullScreenPlaybackFragment: Fragment() {
         return "$minutes:${if (seconds < 10) "0" else ""}$seconds"
     }
 
+
     private fun updateUiFromPref() {
-        if (pref.contains(Constants.ID)) {
+        if (!isUpdated) {
+            if (pref.contains(Constants.ID)) {
 
-            val bundle = Bundle()
-            val progress = pref.getInt(Constants.PROGRESS, 0)
-            currentShuffleMode = pref.getInt(Constants.SHUFFLE_MODE,  Constants.SHUFFLE_MODE_OFF)
-            currentRepeatMode = pref.getInt(Constants.REPEAT_MODE, Constants.NO_LOOP_MODE)
+                val bundle = Bundle()
+                val progress = pref.getInt(Constants.PROGRESS, 0)
+                currentShuffleMode = pref.getInt(Constants.SHUFFLE_MODE, Constants.SHUFFLE_MODE_OFF)
+                currentRepeatMode = pref.getInt(Constants.REPEAT_MODE, Constants.NO_LOOP_MODE)
 
-            if (currentShuffleMode == Constants.SHUFFLE_MODE_OFF) {
-                shuffleImageButton.setImageResource(R.drawable.ic_shuffle_disabled)
+                if (currentShuffleMode == Constants.SHUFFLE_MODE_OFF) {
+                    shuffleImageButton.setImageResource(R.drawable.ic_shuffle_disabled)
+                }
+
+                when (currentRepeatMode) {
+                    Constants.NO_LOOP_MODE -> repeatImageButton.setImageResource(R.drawable.ic_repeat_disable)
+                    Constants.ONE_LOOP_MODE -> repeatImageButton.setImageResource(getStyleableDrawable(R.attr.oneLoopModeButton))
+                    Constants.ALL_LOOP_MODE -> repeatImageButton.setImageResource(getStyleableDrawable(R.attr.loopModeButton))
+                }
+
+                bundle.putLong(Constants.ID, pref.getLong(Constants.ID, 0))
+
+                bindService.mediaControllerCompat?.transportControls?.prepareFromMediaId(Constants.INIT, bundle)
+                bindService.mediaControllerCompat?.transportControls?.seekTo((progress * 1000).toLong())
+                progressData.value = progress
+                binding.playbackControlsContainer.progress_seek_bar.progress = progress
+                binding.topPlaybackControls.top_playback_progress.progress = progress
             }
-
-            when (currentRepeatMode) {
-                Constants.NO_LOOP_MODE -> repeatImageButton.setImageResource(R.drawable.ic_repeat_disable)
-                Constants.ONE_LOOP_MODE -> repeatImageButton.setImageResource(getStyleableDrawable(R.attr.oneLoopModeButton))
-                Constants.ALL_LOOP_MODE -> repeatImageButton.setImageResource(getStyleableDrawable(R.attr.loopModeButton))
-            }
-
-            bundle.putLong(Constants.ID, pref.getLong(Constants.ID, 0))
-
-            bindService.mediaControllerCompat?.transportControls?.prepareFromMediaId(Constants.INIT, bundle)
-            bindService.mediaControllerCompat?.transportControls?.seekTo((progress * 1000).toLong())
-            progressData.value = progress
-            binding.playbackControlsContainer.progress_seek_bar.progress = progress
-            binding.topPlaybackControls.top_playback_progress.progress = progress
         }
     }
 
@@ -358,7 +368,6 @@ class FullScreenPlaybackFragment: Fragment() {
 
     override fun onDestroy() {
         bindService.unbindPlayerService()
-        isUpdated = false
         super.onDestroy()
     }
 

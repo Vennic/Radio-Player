@@ -2,11 +2,9 @@ package com.kuzheevadel.vmplayerv2.fragments
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +16,9 @@ import com.kuzheevadel.vmplayerv2.dagger.App
 import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
 import com.kuzheevadel.vmplayerv2.viewmodels.FavoriteRadioViewModel
 import kotlinx.android.synthetic.main.favorite_radio_layout.view.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import javax.inject.Inject
 
 class FavoriteRadioFragment: Fragment() {
@@ -30,9 +31,13 @@ class FavoriteRadioFragment: Fragment() {
 
     private lateinit var viewModel: FavoriteRadioViewModel
 
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.i("LifecycleTest", "onCreate")
 
         (activity?.application as App).getComponent().inject(this)
         viewModel = ViewModelProviders.of(this, mFactory).get(FavoriteRadioViewModel::class.java)
@@ -47,12 +52,9 @@ class FavoriteRadioFragment: Fragment() {
                 }
             })
         }
-
-        //viewModel.loadRadioListFromDatabase()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.i("LifecycleTest", "onCreateView")
         val view = inflater.inflate(R.layout.favorite_radio_layout, container, false)
         view.fav_radio_recycler.apply {
             adapter = mAdapter
@@ -63,50 +65,20 @@ class FavoriteRadioFragment: Fragment() {
         return view
     }
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        Log.i("LifecycleTest", "onAttach")
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Log.i("LifecycleTest", "onStart")
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    fun updateList(post: String) {
+        if (post == "radio") {
+            viewModel.loadRadioListFromDatabase()
+        }
     }
 
     override fun onStop() {
         super.onStop()
-        Log.i("LifecycleTest", "onStop")
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        Log.i("LifecycleTest", "onDestroyView")
+        EventBus.getDefault().unregister(this)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         mAdapter.unbindService()
-        Log.i("LifecycleTest", "onDestroy")
     }
-
-    override fun onDetach() {
-        super.onDetach()
-        Log.i("LifecycleTest", "onDetach")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.i("LifecycleTest", "onPause")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.i("LifecycleTest", "onResume")
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        Log.i("LifecycleTest", "onViewCreated")
-    }
-
 }

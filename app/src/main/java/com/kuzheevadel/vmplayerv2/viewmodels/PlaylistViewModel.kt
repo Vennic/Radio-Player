@@ -30,6 +30,7 @@ class PlaylistViewModel @Inject constructor(database: PlaylistDatabase,
             val playlist = tracksDao.getAllTracks()
             mediaRepository.comparePlaylistWithUploaded(playlist)
         }
+        loadStatus.value = State.LOADING
 
         disposable.add(
             Observable.fromCallable(callable)

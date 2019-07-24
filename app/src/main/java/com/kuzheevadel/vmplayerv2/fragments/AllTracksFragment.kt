@@ -1,12 +1,13 @@
 package com.kuzheevadel.vmplayerv2.fragments
 
 import android.Manifest
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
-import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -14,9 +15,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.adapters.TrackListAdapter
+import com.kuzheevadel.vmplayerv2.common.State
 import com.kuzheevadel.vmplayerv2.dagger.App
 import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
-import com.kuzheevadel.vmplayerv2.model.Track
 import com.kuzheevadel.vmplayerv2.viewmodels.AllTracksViewModel
 import kotlinx.android.synthetic.main.recycler_layout.view.*
 import javax.inject.Inject
@@ -25,7 +26,7 @@ class AllTracksFragment: Fragment() {
 
     private lateinit var tracksRecycler: RecyclerView
 
-    lateinit var viewModel: AllTracksViewModel
+    private lateinit var viewModel: AllTracksViewModel
 
     @Inject
     lateinit var factory: CustomViewModelFactory
@@ -33,11 +34,30 @@ class AllTracksFragment: Fragment() {
     @Inject
     lateinit var mAdapter: TrackListAdapter
 
+    lateinit var loadStateData: MutableLiveData<State>
+
+    companion object {
+        fun getInstance(liveData: MutableLiveData<State>): AllTracksFragment {
+            val instance = AllTracksFragment()
+            instance.loadStateData = liveData
+            return instance
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         (activity?.application as App).getComponent().inject(this)
         viewModel = ViewModelProviders.of(this, factory).get(AllTracksViewModel::class.java)
+
+        viewModel.loadStateData.observe(this, Observer {
+            when (it) {
+                State.LOADING -> loadStateData.value = State.LOADING
+                State.DONE -> loadStateData.value = State.DONE
+                State.ERROR -> loadStateData.value = State.ERROR
+            }
+        })
+
         viewModel.setAdapter(mAdapter)
         mAdapter.fm = activity?.supportFragmentManager
 
@@ -47,7 +67,7 @@ class AllTracksFragment: Fragment() {
         if (permissionStatus == PackageManager.PERMISSION_GRANTED) {
             viewModel.loadTracks()
         }  else {
-            requestPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+            requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
                 1)
         }
     }
@@ -58,7 +78,6 @@ class AllTracksFragment: Fragment() {
         tracksRecycler = view.recycler_view
         tracksRecycler.layoutManager = LinearLayoutManager(context)
         tracksRecycler.adapter = mAdapter
-        //tracksRecycler.addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
 
         return view
     }

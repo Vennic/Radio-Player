@@ -3,11 +3,11 @@ package com.kuzheevadel.vmplayerv2.dagger
 import android.app.Application
 import android.arch.persistence.room.Room
 import android.content.Context
-import com.kuzheevadel.vmplayerv2.helper.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.activities.AlbumActivity
 import com.kuzheevadel.vmplayerv2.database.PlaylistDatabase
 import com.kuzheevadel.vmplayerv2.database.RadioDatabase
 import com.kuzheevadel.vmplayerv2.fragments.*
+import com.kuzheevadel.vmplayerv2.helper.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.model.Track
 import com.kuzheevadel.vmplayerv2.services.PlayerService
 import com.kuzheevadel.vmplayerv2.services.StorageMedia
@@ -20,6 +20,8 @@ import java.util.concurrent.Callable
 import javax.inject.Singleton
 
 class App: Application() {
+    var isUpdated = false
+
     private val appComponent by lazy { DaggerApplicationComponent.builder()
         .application(this)
         .appModule(AppModule(this))
