@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.util.Log
 import com.kuzheevadel.vmplayerv2.adapters.TrackListAdapter
+import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.common.LoadMediaMessage
 import com.kuzheevadel.vmplayerv2.common.State
 import com.kuzheevadel.vmplayerv2.database.PlaylistDatabase
@@ -28,7 +29,7 @@ class AllTracksViewModel @Inject constructor(private val storageMedia: Callable<
     val loadStateData: MutableLiveData<State> = MutableLiveData()
 
     @SuppressLint("CheckResult")
-    fun loadTracks() {
+    fun loadTracks(loadState: Int) {
         loadStateData.value = State.LOADING
         if (mediaRepository.getTracksList().isEmpty()) {
             Observable.fromCallable(storageMedia)
@@ -36,7 +37,12 @@ class AllTracksViewModel @Inject constructor(private val storageMedia: Callable<
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe ({
                     mediaRepository.setTracksList(it)
-                    EventBus.getDefault().postSticky("post")
+
+                    when (loadState) {
+                        Constants.LOADED_BEFORE -> EventBus.getDefault().postSticky("before")
+                        Constants.FIRST_LOAD -> EventBus.getDefault().post("first")
+                    }
+
                     mAdapter.trackList = mediaRepository.getTracksList()
                     mAdapter.notifyDataSetChanged()
 

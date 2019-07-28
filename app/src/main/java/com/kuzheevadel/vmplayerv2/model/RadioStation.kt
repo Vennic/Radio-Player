@@ -14,7 +14,7 @@ data class RadioStation(
     val clicktrend: String,
     val codec: String,
     val country: String,
-    val favicon: String?,
+    val favicon: String? = "empty",
     val hls: String,
     val homepage: String,
     @PrimaryKey val id: String,
@@ -29,7 +29,7 @@ data class RadioStation(
     val state: String,
     val stationuuid: String,
     val tags: String,
-    val url: String,
+    val url: String = "url",
     val votes: String,
     var inPlaylist: Boolean = false
 ) {

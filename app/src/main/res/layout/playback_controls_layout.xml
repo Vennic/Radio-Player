@@ -37,6 +37,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="8dp"
                 app:layout_constraintStart_toStartOf="parent"
+                android:progressTint="?attr/seekBarColor"
+                android:thumbTint="?attr/seekBarColor"
                 android:layout_marginStart="8dp"
                 app:layout_constraintBottom_toTopOf="@+id/current_duration_text"/>
 

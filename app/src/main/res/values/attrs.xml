@@ -29,5 +29,7 @@
         <attr name="albumsIcon" format="integer"/>
         <attr name="playlistIcon" format="integer"/>
         <attr name="radioIcon" format="integer"/>
+        <attr name="seekBarColor" format="color"/>
+        <attr name="tebTextColor" format="color"/>
     </declare-styleable>
 </resources>

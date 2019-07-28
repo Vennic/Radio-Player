@@ -36,6 +36,7 @@ import com.google.android.exoplayer2.upstream.cache.SimpleCache
 import com.google.android.exoplayer2.util.Util
 import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.common.Constants
+import com.kuzheevadel.vmplayerv2.common.ShowPanelMessage
 import com.kuzheevadel.vmplayerv2.common.Source
 import com.kuzheevadel.vmplayerv2.common.UpdateUIMessage
 import com.kuzheevadel.vmplayerv2.dagger.App
@@ -227,8 +228,7 @@ class PlayerService: Service() {
                 }
             } else if (mediaId == Constants.INIT) {
                 Log.i("PrefTest", "prepare")
-                val id = extras.getLong(Constants.ID)
-                val track = mediaRepository.getTrackById(id)
+                val track = mediaRepository.getCurrentTrack()
 
                 prepareTrack(track.getAudioUri())
                 mediaSession.setMetadata(setTrackMediaMetaData(track))
@@ -251,8 +251,19 @@ class PlayerService: Service() {
                 val name = extras.getString(Constants.RADIO_TITLE)
                 val imageUrl = extras.getString(Constants.RADIO_IMAGE)
                 val radioId = extras.getString(Constants.RADIO_ID).toLong()
-                //mediaSession.setMetadata(setRadioMediaMetaData(radioRepository.currentPlayingStation!!))  ERROR!!!
-                Picasso.get().load(radioRepository.currentPlayingStation!!.favicon).into(target)
+                val favicon = radioRepository.currentPlayingStation!!.favicon
+
+                mediaSession.setMetadata(setRadioMediaMetaData(radioRepository.currentPlayingStation!!,
+                    BitmapFactory.decodeResource(resources, R.drawable.vinil_default)))
+
+                if (favicon!!.isNotEmpty()) {
+                    Picasso.get()
+                        .load(favicon)
+                        .placeholder(R.drawable.vinil_default)
+                        .error(R.drawable.vinil_default)
+                        .into(target)
+                }
+
                 currentPlayingTrackId = -1
                 source = Source.RADIO
                 stopInterval()
@@ -266,6 +277,11 @@ class PlayerService: Service() {
 
         override fun onPlay() {
             super.onPlay()
+
+            if (!(application as App).isUpdated) {
+                EventBus.getDefault().post(ShowPanelMessage(true))
+                (application as App).isUpdated = true
+            }
 
             if (!mExoPlayer.playWhenReady) {
 
@@ -615,7 +631,7 @@ class PlayerService: Service() {
                     )
             )
 
-            setSmallIcon(R.mipmap.ic_launcher)
+            setSmallIcon(R.mipmap.ic_launcher_headset)
             color = ContextCompat.getColor(this@PlayerService, R.color.switch_thumb_normal_material_dark)
             setShowWhen(false)
             priority = NotificationCompat.PRIORITY_HIGH

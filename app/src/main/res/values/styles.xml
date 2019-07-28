@@ -44,6 +44,8 @@
         <item name="albumsIcon">@drawable/ic_albums_black_24dp</item>
         <item name="playlistIcon">@drawable/ic_tab_playlist_add_black_24dp</item>
         <item name="radioIcon">@drawable/ic_radio_black_24dp</item>
+        <item name="seekBarColor">@color/seek_bar_white</item>
+        <item name="tabTextColor">@color/tab_text_color_white</item>
     </style>
 
     <style name="ActivityTheme.Primary.Base.Dark"    parent="Theme.AppCompat.NoActionBar">
@@ -75,6 +77,8 @@
         <item name="albumsIcon">@drawable/ic_albums_white_24dp</item>
         <item name="playlistIcon">@drawable/ic_tab_playlist_add_white_24dp</item>
         <item name="radioIcon">@drawable/ic_radio_white_24dp</item>
+        <item name="seekBarColor">@color/seek_bar_dark</item>
+        <item name="tabTextColor">@color/tab_text_color</item>
     </style>
 
     <style name="FeedActivityThemeLight" parent="ActivityTheme.Primary.Base.Light">

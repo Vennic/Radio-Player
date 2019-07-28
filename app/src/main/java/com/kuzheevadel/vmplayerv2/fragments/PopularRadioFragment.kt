@@ -14,6 +14,7 @@ import com.kuzheevadel.vmplayerv2.adapters.RadioStationsAdapter
 import com.kuzheevadel.vmplayerv2.common.State
 import com.kuzheevadel.vmplayerv2.dagger.App
 import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
+import com.kuzheevadel.vmplayerv2.helper.ConnectivityHelper
 import com.kuzheevadel.vmplayerv2.viewmodels.RadioViewModel
 import kotlinx.android.synthetic.main.popular_radio_layout.view.*
 import kotlinx.android.synthetic.main.view_state_layout.view.*
@@ -27,19 +28,16 @@ class PopularRadioFragment: Fragment() {
     @Inject
     lateinit var factory: CustomViewModelFactory
 
-    private lateinit var viewmodel: RadioViewModel
+    private lateinit var viewModel: RadioViewModel
     private lateinit var loadingState: MutableLiveData<State>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         (activity?.application as App).getComponent().inject(this)
-        viewmodel = ViewModelProviders.of(this, factory).get(RadioViewModel::class.java)
-        loadingState = viewmodel.loadingState
-        viewmodel.setAdapter(mAdapter)
-
-        viewmodel.loadRadioStations()
-
+        viewModel = ViewModelProviders.of(this, factory).get(RadioViewModel::class.java)
+        loadingState = viewModel.loadingState
+        viewModel.setAdapter(mAdapter)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -47,8 +45,7 @@ class PopularRadioFragment: Fragment() {
 
         view.popular_radio_recycler.layoutManager = LinearLayoutManager(context)
         view.popular_radio_recycler.adapter = mAdapter
-        view.popular_radio_state_layout.reload_button.setOnClickListener { viewmodel.loadRadioStations() }
-
+        view.popular_radio_state_layout.reload_button.setOnClickListener { viewModel.loadRadioStations() }
 
         loadingState.observe(this, Observer {
             when (it) {
@@ -64,16 +61,28 @@ class PopularRadioFragment: Fragment() {
                     view.popular_radio_state_layout.visibility = View.GONE
                 }
 
-
                 State.ERROR -> {
                     view.popular_radio_recycler.visibility = View.GONE
                     view.radio_progressBar.visibility = View.GONE
-                    view.popular_radio_state_layout.cannot_load_text.text = "Cannot load stations.\nPlease, check intenet connection."
+                    view.popular_radio_state_layout.cannot_load_text.text = "Cannot load stations.\nSomething went wrong."
                     view.popular_radio_state_layout.visibility = View.VISIBLE
                 }
             }
         })
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        if (ConnectivityHelper.isConnectedToNetwork(context)) {
+            viewModel.loadRadioStations()
+        } else {
+            view.popular_radio_recycler.visibility = View.GONE
+            view.radio_progressBar.visibility = View.GONE
+            view.popular_radio_state_layout.cannot_load_text.text = "Cannot load stations.\nPlease, check network connection."
+            view.popular_radio_state_layout.visibility = View.VISIBLE
+        }
     }
 
     override fun onDestroy() {

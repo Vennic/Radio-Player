@@ -3,6 +3,9 @@ package com.kuzheevadel.vmplayerv2.common
 import com.kuzheevadel.vmplayerv2.R
 
 object Constants {
+    const val FIRST_LOAD = 1
+    const val LOADED_BEFORE = 2
+    const val REQUEST_CODE = 0
     const val REPEAT_MODE = "repeat mode"
     const val SHUFFLE_MODE = "shuffle_mode"
     const val THEME_ID = "kuzheev.adel.theme"
@@ -31,5 +34,6 @@ object Constants {
     const val SPINNER_POSITION = "com.kuzheevadel.spinner_position"
     const val RADIO_TITLE = "com.kuzheevadel.radioTitle"
     const val RADIO_IMAGE = "com.kuzheevadel.radioImage"
+    const val PERM_DIALOG_TAG = "permission dialog tag"
 }
 

@@ -20,7 +20,7 @@ class SearchRadioViewModel @Inject constructor(private val network: VmpNetwork):
     private val compositeDisposable = CompositeDisposable()
     private lateinit var radioDataSourceFactory: RadioDataSourceFactory
     lateinit var listLiveData: LiveData<PagedList<RadioStation>>
-    val countriesdata: MutableLiveData<MutableList<Country>> = MutableLiveData()
+    val countriesData: MutableLiveData<MutableList<Country>> = MutableLiveData()
 
     fun searchRadioStations(name: String, country: String) {
         radioDataSourceFactory = RadioDataSourceFactory(network, compositeDisposable, name, country)
@@ -43,10 +43,15 @@ class SearchRadioViewModel @Inject constructor(private val network: VmpNetwork):
         network.getCountriesList()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
+            .subscribe (
+                {
                 it.add(0, Country("All countries", "", ""))
-                countriesdata.value = it
-            }
+                countriesData.value = it
+                },
+
+                {
+
+                })
     }
 
     override fun onCleared() {

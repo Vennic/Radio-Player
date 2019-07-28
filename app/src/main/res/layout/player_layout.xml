@@ -43,11 +43,13 @@
                         android:id="@+id/tab_layout"
                         app:tabMode="fixed"
                         android:textAlignment="center"
-                        app:tabTextColor="@color/tab_text_color"
                         app:tabPaddingStart="0dp"
+                        app:tabTextColor="?attr/tabTextColor"
+                        app:tabIndicatorColor="?attr/seekBarColor"
                         app:tabPaddingEnd="0dp"
                         app:tabSelectedTextColor="?attr/primaryTextColor"
                         android:layout_width="match_parent"
+                        app:tabGravity="fill"
                         android:layout_height="wrap_content"/>
 
             </android.support.design.widget.AppBarLayout>

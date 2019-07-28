@@ -14,7 +14,9 @@ import android.view.MenuItem
 import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.adapters.PlayerPagerAdapter
 import com.kuzheevadel.vmplayerv2.common.Constants
+import com.kuzheevadel.vmplayerv2.common.ShowPanelMessage
 import com.kuzheevadel.vmplayerv2.common.State
+import com.kuzheevadel.vmplayerv2.dagger.App
 import com.kuzheevadel.vmplayerv2.dialogs.SwitchThemeDialog
 import com.kuzheevadel.vmplayerv2.fragments.*
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState
@@ -23,6 +25,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.player_layout.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.util.concurrent.TimeUnit
 
 class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -53,6 +58,7 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         tab_layout.setupWithViewPager(player_pager)
 
 
+
         tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
             }
@@ -64,6 +70,7 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                     2 -> {tab.setIcon(R.drawable.ic_tab_playlist_default)}
                     3 -> {tab.setIcon(R.drawable.ic_radio_default)}
                 }
+
             }
 
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -78,6 +85,11 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         })
 
         setupTabIcons()
+        player_pager.currentItem = 0
+
+        if (!(application as App).isUpdated) {
+            activity_main.panelState = PanelState.HIDDEN
+        }
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.playback_container, FullScreenPlaybackFragment(), "PlaybackFragment")
@@ -148,8 +160,8 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             }
 
             R.id.nav_share -> {
-
             }
+
             R.id.nav_send -> {
 
             }
@@ -167,5 +179,25 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     private fun getStyleableDrawable(attribute: Int): Int {
         val a: TypedArray? = this.theme?.obtainStyledAttributes(intArrayOf(attribute))
         return a!!.getResourceId(0, -1)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun showPanel(message: ShowPanelMessage) {
+        if (message.update) {
+            activity_main.panelState = PanelState.COLLAPSED
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+        if ((application as App).isUpdated) {
+            activity_main.panelState = PanelState.COLLAPSED
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
     }
 }

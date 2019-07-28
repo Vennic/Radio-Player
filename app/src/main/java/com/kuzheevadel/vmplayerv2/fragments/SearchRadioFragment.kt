@@ -14,11 +14,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
+import android.widget.Toast
 import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.adapters.SpinnerArrayAdapter
-import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.dagger.App
 import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
+import com.kuzheevadel.vmplayerv2.helper.ConnectivityHelper
 import com.kuzheevadel.vmplayerv2.model.Country
 import com.kuzheevadel.vmplayerv2.paging.RadioPagingAdapter
 import com.kuzheevadel.vmplayerv2.viewmodels.SearchRadioViewModel
@@ -33,7 +34,6 @@ class SearchRadioFragment: Fragment() {
     private var searchText = ""
     private var countrySearch = ""
     private var currentSpinnerPosition = 0
-    private var isLoadedBefore = false
     private var countriesList: MutableList<Country>? = mutableListOf()
     private lateinit var searchView: View
     private var spinnerAdapter: SpinnerArrayAdapter? = null
@@ -52,8 +52,6 @@ class SearchRadioFragment: Fragment() {
 
         (activity?.application as App).getComponent().inject(this)
         viewModel = ViewModelProviders.of(this, factory).get(SearchRadioViewModel::class.java)
-
-        viewModel.loadCountriesList()
 
     }
 
@@ -102,21 +100,22 @@ class SearchRadioFragment: Fragment() {
 
         }
 
-        initialList()
-
         return searchView
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        Log.i("SpinnerTest", "onSave $currentSpinnerPosition")
-        outState.putString(Constants.SEARCH_TEXT, searchText)
-        outState.putInt(Constants.SPINNER_POSITION, currentSpinnerPosition)
-        outState.putString(Constants.SPINNER_COUNTRY, countrySearch)
-        super.onSaveInstanceState(outState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        if (ConnectivityHelper.isConnectedToNetwork(context)) {
+            viewModel.loadCountriesList()
+            initialList()
+        }else {
+            Toast.makeText(context, "Check network connection", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun initializeSpinner(view: View) {
-        viewModel.countriesdata.observe(this, Observer {
+        viewModel.countriesData.observe(this, Observer {
             countriesList = it
             if (spinnerAdapter == null) {
                 spinnerAdapter = SpinnerArrayAdapter(context!!, countriesList!!)

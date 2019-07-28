@@ -2,8 +2,8 @@
     <string name="app_name">VMPlayer</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_title">VMPlayer</string>
+    <string name="nav_header_subtitle">v 1.0.1</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="reload_radio_stations">Reload</string>
@@ -15,4 +15,8 @@
     <string name="choose_theme">Choose theme</string>
     <string name="dark_theme">Dark</string>
     <string name="light_theme">Light</string>
+    <string name="permission_dialog_text">To listen to music from memory, you must allow access to the repository.
+    </string>
+    <string name="version">v 1.0.1</string>
+    <string name="vmp_version">v 1.0.1</string>
 </resources>

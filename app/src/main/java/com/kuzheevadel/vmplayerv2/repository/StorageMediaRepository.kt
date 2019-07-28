@@ -15,6 +15,8 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
     private var loopMode = Constants.NO_LOOP_MODE
     private lateinit var albumsList: MutableList<Album>
     private lateinit var playingTrackList: MutableList<Track>
+    private var deletedTrack: Track? = null
+    private var isDeleted = false
 
     override fun getTracksList(): MutableList<Track> {
         return loadedTracksList
@@ -24,6 +26,7 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
         val id = playingTrackList[currentTrackPosition].id
         currentTrackPosition = 0
         playingTrackList = trackList
+        isDeleted = false
 
         for ((index, value) in playingTrackList.withIndex()) {
             if (value.id == id) {
@@ -67,8 +70,17 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
     override fun deleteTrackFromPlaylist(id: Long) {
         if (isPlaylist) {
             for ((index, item) in playingTrackList.withIndex())
-                if (item.id == id)
+                if (item.id == id) {
+                    deletedTrack = item
+
+                    currentTrackPosition = 0
+
+
+                    isDeleted = true
                     playingTrackList.removeAt(index)
+
+                    return
+                }
         }
     }
 
@@ -77,14 +89,20 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
     }
     
     override fun getCurrentTrack(): Track {
-        return playingTrackList[currentTrackPosition]
+        return if (isDeleted) {
+            deletedTrack!!
+        } else {
+            playingTrackList[currentTrackPosition]
+        }
     }
 
     override fun getTrackByPosition(position: Int): Track {
+        isDeleted = false
         return playingTrackList[position]
     }
 
     override fun getNextTrack(): Track {
+        isDeleted = false
         when (loopMode) {
             Constants.NO_LOOP_MODE -> {
                 return if (shuffleMode == Constants.SHUFFLE_MODE_ON) {
@@ -122,6 +140,7 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
     }
 
     override fun getNextTrackByClick(): Track {
+        isDeleted = false
         return if (shuffleMode == Constants.SHUFFLE_MODE_ON) {
             getShuffledTrack()
         } else {
@@ -137,6 +156,7 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
     }
 
     override fun getPrevTrack(): Track {
+        isDeleted = false
         return if (shuffleMode == Constants.SHUFFLE_MODE_ON) {
             getShuffledTrack()
         } else {
@@ -151,13 +171,18 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
     }
 
     override fun getTrackById(id: Long): Track {
-        var track = loadedTracksList[0]
+        isDeleted = false
+        var track = Track(0,"","",0, 0, 0, "", false)
 
-        for ((index, item) in loadedTracksList.withIndex()) {
-            if (item.id == id) {
-                track = item
-                currentTrackPosition = index
-                return track
+        if (loadedTracksList.size > 0) {
+            track = loadedTracksList[0]
+
+            for ((index, item) in loadedTracksList.withIndex()) {
+                if (item.id == id) {
+                    track = item
+                    currentTrackPosition = index
+                    return track
+                }
             }
         }
 

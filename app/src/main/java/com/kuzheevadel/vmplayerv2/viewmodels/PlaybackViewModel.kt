@@ -34,7 +34,6 @@ class PlaybackViewModel @Inject constructor(private val mediaRepository: Interfa
     private val radioDao = radioDatabase.radioDao()
     val dataBaseInfoData: MutableLiveData<DataBaseInfo> = MutableLiveData()
     val checkPlaylistData: MutableLiveData<DataBaseInfo> = MutableLiveData()
-    val trackIdData: MutableLiveData<Long> = MutableLiveData()
 
     lateinit var source: Source
 
@@ -87,7 +86,6 @@ class PlaybackViewModel @Inject constructor(private val mediaRepository: Interfa
             } else {
                 checkPlaylistData.value = DataBaseInfo.TRACK_IS_NOT_ADDED
             }
-            trackIdData.value = mediaRepository.getCurrentTrack().id
         } else {
             source = Source.RADIO
             checkRadioInDatabase(message.id)

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+<layer-list
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:opacity="opaque">
+
     <item android:drawable="@color/light_background"/>
 
-    <item android:drawable="@drawable/start_screen_icon"
+    <item android:drawable="@mipmap/ic_launcher_headset_round"
           android:gravity="center"/>
 </layer-list>
