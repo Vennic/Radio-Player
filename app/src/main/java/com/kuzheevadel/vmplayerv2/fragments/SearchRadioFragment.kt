@@ -20,6 +20,7 @@ import com.kuzheevadel.vmplayerv2.dagger.App
 import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
 import com.kuzheevadel.vmplayerv2.helper.ConnectivityHelper
 import com.kuzheevadel.vmplayerv2.model.Country
+import com.kuzheevadel.vmplayerv2.model.RadioStation
 import com.kuzheevadel.vmplayerv2.paging.RadioPagingAdapter
 import com.kuzheevadel.vmplayerv2.viewmodels.SearchRadioViewModel
 import kotlinx.android.synthetic.main.search_radio_layout.view.*
@@ -63,7 +64,10 @@ class SearchRadioFragment: Fragment() {
                 searchText = searchView.search_radio_edit_text.editText?.text.toString()
                 viewModel.searchRadioStations(searchText, countrySearch)
                 viewModel.listLiveData.removeObservers (this@SearchRadioFragment )
-                viewModel.listLiveData.observe(this@SearchRadioFragment, Observer { mAdapter.submitList(it) })
+                viewModel.listLiveData.observe(this@SearchRadioFragment, Observer {
+                    mAdapter.submitList(it)
+                    setUi(it)
+                })
                 hideSoftKeyboard(activity)
                 return@setOnKeyListener true
 
@@ -84,7 +88,10 @@ class SearchRadioFragment: Fragment() {
 
                 viewModel.searchRadioStations(searchText, countrySearch)
                 viewModel.listLiveData.removeObservers (this@SearchRadioFragment )
-                viewModel.listLiveData.observe(this@SearchRadioFragment, Observer { mAdapter.submitList(it) })
+                viewModel.listLiveData.observe(this@SearchRadioFragment, Observer {
+                    mAdapter.submitList(it)
+                    setUi(it)
+                })
 
             }
 
@@ -118,7 +125,18 @@ class SearchRadioFragment: Fragment() {
 
     private fun initialList() {
         viewModel.searchRadioStations(searchText, countrySearch)
-        viewModel.listLiveData.observe(this, Observer { mAdapter.submitList(it) })
+        viewModel.listLiveData.observe(this, Observer {
+            mAdapter.submitList(it)
+            setUi(it)
+        })
+    }
+
+    private fun setUi(list: MutableList<RadioStation>?) {
+        if (list?.size == 0) {
+            searchView.nothing_found_text.visibility = View.VISIBLE
+        } else {
+            searchView.nothing_found_text.visibility = View.GONE
+        }
     }
 
     override fun onDestroy() {

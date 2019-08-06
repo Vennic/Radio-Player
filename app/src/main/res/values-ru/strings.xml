@@ -30,4 +30,5 @@
     <string name="tab_all_songs">Все треки</string>
     <string name="tab_playlist">Плейлист</string>
     <string name="tab_radio">Радио</string>
+    <string name="nothing_found">Ничего не найдено</string>
 </resources>

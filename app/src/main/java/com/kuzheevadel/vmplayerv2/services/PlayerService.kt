@@ -88,7 +88,7 @@ class PlayerService: Service() {
 
     private val delayedRunnable = Runnable { mediaSessionCallback.onStop() }
 
-    private val becomingNoisyReciever = object : BroadcastReceiver() {
+    private val becomingNoisyReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             if (AudioManager.ACTION_AUDIO_BECOMING_NOISY === intent?.action) {
                 mediaSessionCallback.onPause()
@@ -248,7 +248,7 @@ class PlayerService: Service() {
                 val favicon = radioRepository.currentPlayingStation!!.favicon
 
                 mediaSession.setMetadata(setRadioMediaMetaData(radioRepository.currentPlayingStation!!,
-                    BitmapFactory.decodeResource(resources, R.drawable.vinil_default)))
+                    BitmapFactory.decodeResource(resources, R.drawable.album_art_default)))
 
                 if (favicon!!.isNotEmpty()) {
                     Picasso.get()
@@ -314,7 +314,7 @@ class PlayerService: Service() {
                     ).build()
                 )
             }
-            registerReceiver(becomingNoisyReciever, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
+            registerReceiver(becomingNoisyReceiver, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
             currentState = PlaybackStateCompat.STATE_PLAYING
             mHandler.removeCallbacks(delayedRunnable)
             startInterval(source)
@@ -326,7 +326,7 @@ class PlayerService: Service() {
 
             if (mExoPlayer.playWhenReady) {
                 mExoPlayer.playWhenReady = false
-                unregisterReceiver(becomingNoisyReciever)
+                unregisterReceiver(becomingNoisyReceiver)
                 stopInterval()
 
                 if (isAudioFocusRequest) {
@@ -392,7 +392,7 @@ class PlayerService: Service() {
             super.onStop()
 
             if (mExoPlayer.playWhenReady) {
-                unregisterReceiver(becomingNoisyReciever)
+                unregisterReceiver(becomingNoisyReceiver)
             }
 
             if (isAudioFocusRequest) {
@@ -506,7 +506,7 @@ class PlayerService: Service() {
         val bitmap: Bitmap = try {
             MediaStore.Images.Media.getBitmap(contentResolver, track.getImageUri())
         } catch (e: FileNotFoundException) {
-            BitmapFactory.decodeResource(resources, R.drawable.vinil_default)
+            BitmapFactory.decodeResource(resources, R.drawable.album_art_default)
         }
 
         return metadataBuilder

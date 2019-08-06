@@ -1,7 +1,9 @@
 package com.kuzheevadel.vmplayerv2.activities
 
 import android.arch.lifecycle.MutableLiveData
+import android.content.Intent
 import android.content.res.TypedArray
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
@@ -159,12 +161,10 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 openSwitchThemeDialog()
             }
 
-            R.id.nav_share -> {
+            R.id.nav_contact -> {
+                sendMail()
             }
 
-            R.id.nav_send -> {
-
-            }
         }
         
         drawer_layout.closeDrawer(GravityCompat.START)
@@ -174,6 +174,13 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     private fun openSwitchThemeDialog() {
         val dialog = SwitchThemeDialog()
         dialog.show(supportFragmentManager, "switch dialog")
+    }
+
+    private fun sendMail() {
+        val intent = Intent(Intent.ACTION_SENDTO)
+        intent.data = Uri.parse("mailto:kuzheevadel@gmail.com")
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback VMPlayer")
+        startActivity(intent)
     }
 
     private fun getStyleableDrawable(attribute: Int): Int {

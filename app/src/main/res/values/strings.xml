@@ -37,4 +37,5 @@
     <string name="cannot_load_stations_internet">Cannot load stations.
         Please, check network connection.</string>
     <string name="check_network">Check network connection</string>
+    <string name="nothing_found">Noting found</string>
 </resources>
