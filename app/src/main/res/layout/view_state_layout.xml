@@ -19,7 +19,7 @@
             app:layout_constraintTop_toBottomOf="@+id/cannot_load_text"/>
 
     <TextView
-            android:text="Cannot load playlist"
+            android:text="@string/cannot_load_palylist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/cannot_load_text"

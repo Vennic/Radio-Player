@@ -64,7 +64,7 @@ class PopularRadioFragment: Fragment() {
                 State.ERROR -> {
                     view.popular_radio_recycler.visibility = View.GONE
                     view.radio_progressBar.visibility = View.GONE
-                    view.popular_radio_state_layout.cannot_load_text.text = "Cannot load stations.\nSomething went wrong."
+                    view.popular_radio_state_layout.cannot_load_text.text = getString(R.string.cannot_load_stations)
                     view.popular_radio_state_layout.visibility = View.VISIBLE
                 }
             }
@@ -80,7 +80,7 @@ class PopularRadioFragment: Fragment() {
         } else {
             view.popular_radio_recycler.visibility = View.GONE
             view.radio_progressBar.visibility = View.GONE
-            view.popular_radio_state_layout.cannot_load_text.text = "Cannot load stations.\nPlease, check network connection."
+            view.popular_radio_state_layout.cannot_load_text.text = getString(R.string.cannot_load_stations_internet)
             view.popular_radio_state_layout.visibility = View.VISIBLE
         }
     }

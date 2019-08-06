@@ -163,15 +163,15 @@ class FullScreenPlaybackFragment: Fragment() {
             when (it) {
                 DataBaseInfo.TRACK_ADDED -> {
                     binding.playbackControlsContainer.playlist_image.setImageResource(getStyleableDrawable(R.attr.playlistAddAnimatable))
-                    Toast.makeText(mContext, "Added in playlist", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(mContext, getString(R.string.added_in_playlist), Toast.LENGTH_SHORT).show()
                     (binding.playbackControlsContainer.playlist_image.drawable as Animatable).start()
                 }
 
-                DataBaseInfo.ERROR -> Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                DataBaseInfo.ERROR -> Toast.makeText(context, getString(R.string.error_add), Toast.LENGTH_SHORT).show()
 
                 DataBaseInfo.DELETED -> {
                     binding.playbackControlsContainer.playlist_image.setImageResource(getStyleableDrawable(R.attr.playlistDeleteAnimatable))
-                    Toast.makeText(mContext, "Deleted from playlist", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(mContext, getString(R.string.deleted_from_playlist), Toast.LENGTH_SHORT).show()
                     (binding.playbackControlsContainer.playlist_image.drawable as Animatable).start()
                 }
 

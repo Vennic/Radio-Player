@@ -98,10 +98,10 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
     private fun setupPager(pager: ViewPager) {
         val adapter = PlayerPagerAdapter(supportFragmentManager)
-        adapter.addFragment(AllTracksFragment.getInstance(loadTracksData), "All songs")
-        adapter.addFragment(AlbumsFragment(), "Albums")
-        adapter.addFragment(PlaylistFragment.getInstance(loadTracksData), "Playlist")
-        adapter.addFragment(RadioFragment(), "Radio")
+        adapter.addFragment(AllTracksFragment.getInstance(loadTracksData), getString(R.string.tab_all_songs))
+        adapter.addFragment(AlbumsFragment(), getString(R.string.tab_albums))
+        adapter.addFragment(PlaylistFragment.getInstance(loadTracksData),  getString(R.string.tab_playlist))
+        adapter.addFragment(RadioFragment(),  getString(R.string.tab_radio))
         pager.adapter = adapter
     }
 
@@ -122,7 +122,7 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             clickCount++
 
             if (!isStarted) {
-                Snackbar.make(activity_main, "Click one more time for exit", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(activity_main, getString(R.string.exit_string), Snackbar.LENGTH_LONG).show()
                 startTimer()
             }
 
@@ -166,7 +166,7 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
             }
         }
-
+        
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }

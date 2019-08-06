@@ -8,7 +8,6 @@ import android.content.ServiceConnection
 import android.os.IBinder
 import android.os.RemoteException
 import android.support.v4.media.session.MediaControllerCompat
-import android.util.Log
 import com.kuzheevadel.vmplayerv2.common.Source
 import com.kuzheevadel.vmplayerv2.services.PlayerService
 
@@ -32,7 +31,6 @@ class BindServiceHelper(private val context: Context) {
     }
 
     fun bindPlayerService(callback: MediaControllerCompat.Callback) {
-        Log.i("ServiceTest", "bind to service: $this")
 
         serviceConnection = object : ServiceConnection {
 
@@ -60,8 +58,6 @@ class BindServiceHelper(private val context: Context) {
     }
 
     fun unbindPlayerService() {
-        Log.i("ServiceTest", "unbind: $this")
-
         context.unbindService(serviceConnection)
     }
 }

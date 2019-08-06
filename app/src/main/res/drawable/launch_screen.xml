@@ -3,8 +3,8 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:opacity="opaque">
 
-    <item android:drawable="@color/light_background"/>
+    <item android:drawable="@color/splash_screen_color"/>
 
-    <item android:drawable="@mipmap/ic_launcher_headset_round"
+    <item android:drawable="@drawable/splash_logo"
           android:gravity="center"/>
 </layer-list>

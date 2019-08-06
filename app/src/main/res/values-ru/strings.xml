@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_settings">Настройки</string>
+    <string name="added_in_playlist">Добавлено в плейлист</string>
+    <string name="cancel_dialog">Закрыть</string>
+    <string name="cannot_load_palylist">Не удалось загрузить плейлист</string>
+    <string name="cannot_load_radio_list">Не удалось загрузсть плейлист</string>
+    <string name="cannot_load_stations">Не удалось загрузить радиостанции.
+        Что-то пошло не так.</string>
+    <string name="cannot_load_stations_internet">Не удалось загрузить радиостанции.
+        Проверьте подключение к интенету.
+    </string>
+    <string name="check_network">Проверьте подключение к интернету.</string>
+    <string name="choose_theme">Выбрать тему</string>
+    <string name="dark_theme">Темная</string>
+    <string name="deleted_from_playlist">Удалено из плейлиста</string>
+    <string name="error_add">Ошибка</string>
+    <string name="exit_string">Нажмите еще раз чтобы выйти</string>
+    <string name="favorite_stations">Любимые радиостанции</string>
+    <string name="light_theme">Светлая</string>
+    <string name="nav_contact">Связаться</string>
+    <string name="permission_dialog_text">Для прослушивания музыки необходимо разрешить доступ к памяти.</string>
+    <string name="popular_radio_stations">Популярные радиостанции</string>
+    <string name="reload_radio_stations">Загрузить снова</string>
+    <string name="restart_app">Перезапустите приложение</string>
+    <string name="search">Поиск</string>
+    <string name="search_radio_stations">Поиск радиостанций</string>
+    <string name="search_stations">Поиск</string>
+    <string name="tab_albums">Альбомы</string>
+    <string name="tab_all_songs">Все треки</string>
+    <string name="tab_playlist">Плейлист</string>
+    <string name="tab_radio">Радио</string>
+</resources>

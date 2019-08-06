@@ -6,7 +6,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,7 +50,6 @@ class PlaylistFragment: Fragment() {
         super.onCreate(savedInstanceState)
         EventBus.getDefault().register(this)
         (activity?.application as App).getComponent().inject(this)
-        Log.i("playlisetTest", "adapter injected")
 
         viewModel = ViewModelProviders.of(this, factory).get(PlaylistViewModel::class.java)
         mAdapter.fm = activity?.supportFragmentManager
@@ -62,7 +60,6 @@ class PlaylistFragment: Fragment() {
         val view = inflater.inflate(R.layout.playlist_layout, container, false)
 
         view.playlist_recycler.run {
-            Log.i("playlisetTest", "recycler initialize")
             layoutManager = LinearLayoutManager(context)
             adapter = mAdapter
         }
@@ -74,8 +71,6 @@ class PlaylistFragment: Fragment() {
                 State.LOADING -> {}
                 State.DONE -> {
                     viewModel.loadPlaylistFromDatabase()
-                    Log.i("playlisetTest", "loadStateData = DONE")
-
                 }
                 State.ERROR -> view.playlist_view_state_layout.visibility = View.VISIBLE
             }
@@ -83,16 +78,12 @@ class PlaylistFragment: Fragment() {
 
         viewModel.run {
             trackData.observe(this@PlaylistFragment, Observer {
-                Log.i("playlisetTest", "trackData list = ${it?.size}")
-
                 mAdapter.trackList = it!! })
             loadStatus.observe(this@PlaylistFragment, Observer {
                 if (it == State.ERROR) {
                     view.playlist_view_state_layout.visibility = View.VISIBLE
                     view.playlist_recycler.visibility = View.GONE
                 } else {
-                    Log.i("playlisetTest", "loadStatus = DONE")
-
                     view.playlist_view_state_layout.visibility = View.GONE
                     view.playlist_recycler.visibility = View.VISIBLE
                     mAdapter.notifyDataSetChanged()
@@ -112,8 +103,6 @@ class PlaylistFragment: Fragment() {
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     fun refreshAdapter(post: String) {
         if (post == "track") {
-            Log.i("playlisetTest", "refresh adapter")
-
             viewModel.loadPlaylistFromDatabase()
         }
     }

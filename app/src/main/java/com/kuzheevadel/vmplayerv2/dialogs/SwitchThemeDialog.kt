@@ -55,15 +55,15 @@ class SwitchThemeDialog: AppCompatDialogFragment() {
         }
 
         builder.setView(view)
-            .setTitle("Theme")
-            .setNegativeButton("cancel") {_, _ ->}
+            .setTitle(getString(R.string.choose_theme))
+            .setNegativeButton(getString(R.string.cancel_dialog)) {_, _ ->}
             .setPositiveButton("ok") { _, _ ->
                 if (changedId != currentId) {
                     pref.edit()
                         .putInt(Constants.THEME_ID, changedId)
                         .apply()
 
-                    Toast.makeText(context, "Restart app", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getString(R.string.restart_app), Toast.LENGTH_SHORT).show()
                 }
             }
 

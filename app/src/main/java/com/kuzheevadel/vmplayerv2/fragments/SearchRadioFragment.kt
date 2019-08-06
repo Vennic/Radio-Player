@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -38,17 +37,12 @@ class SearchRadioFragment: Fragment() {
     private lateinit var searchView: View
     private var spinnerAdapter: SpinnerArrayAdapter? = null
 
-    init {
-        Log.i("SpinnerTest", "$currentSpinnerPosition, $searchText, $countrySearch")
-    }
-
     @Inject
     lateinit var mAdapter: RadioPagingAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
-        Log.i("SpinnerTest", "$currentSpinnerPosition, $searchText, $countrySearch")
 
         (activity?.application as App).getComponent().inject(this)
         viewModel = ViewModelProviders.of(this, factory).get(SearchRadioViewModel::class.java)
@@ -66,7 +60,6 @@ class SearchRadioFragment: Fragment() {
             if(event.action == KeyEvent.ACTION_DOWN &&
                 (keyCode == KeyEvent.KEYCODE_ENTER)) {
 
-                Log.i("SpinnerTest", "in setOnKeyListener")
                 searchText = searchView.search_radio_edit_text.editText?.text.toString()
                 viewModel.searchRadioStations(searchText, countrySearch)
                 viewModel.listLiveData.removeObservers (this@SearchRadioFragment )
@@ -89,9 +82,6 @@ class SearchRadioFragment: Fragment() {
 
                 currentSpinnerPosition = position
 
-                Log.i("SpinnerTest",
-                    "in onItemSelected: position - $currentSpinnerPosition, text - $searchText, country - $countrySearch"
-                )
                 viewModel.searchRadioStations(searchText, countrySearch)
                 viewModel.listLiveData.removeObservers (this@SearchRadioFragment )
                 viewModel.listLiveData.observe(this@SearchRadioFragment, Observer { mAdapter.submitList(it) })
@@ -110,7 +100,7 @@ class SearchRadioFragment: Fragment() {
             viewModel.loadCountriesList()
             initialList()
         }else {
-            Toast.makeText(context, "Check network connection", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.check_network), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -127,13 +117,11 @@ class SearchRadioFragment: Fragment() {
     }
 
     private fun initialList() {
-        Log.i("SpinnerTest", "in initialize: position - $currentSpinnerPosition, text - $searchText, country - $countrySearch")
         viewModel.searchRadioStations(searchText, countrySearch)
         viewModel.listLiveData.observe(this, Observer { mAdapter.submitList(it) })
     }
 
     override fun onDestroy() {
-        Log.i("SpinnerTest", "onDestroy")
         mAdapter.unbindService()
         super.onDestroy()
     }

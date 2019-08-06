@@ -47,8 +47,8 @@ class FavoriteRadioFragment: Fragment() {
             loadState.observe(this@FavoriteRadioFragment, Observer {
                 when (it) {
                     State.DONE -> mAdapter.notifyDataSetChanged()
-                    State.ERROR -> Toast.makeText(context, "Cannot load radio playlist", Toast.LENGTH_SHORT).show()
-
+                    State.ERROR -> Toast.makeText(context, getString(R.string.cannot_load_radio_list), Toast.LENGTH_SHORT).show()
+                    State.LOADING -> {}
                 }
             })
         }

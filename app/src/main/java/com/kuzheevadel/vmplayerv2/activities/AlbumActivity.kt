@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.view.MenuItem
 import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.adapters.AlbumsTracksListAdapter
 import com.kuzheevadel.vmplayerv2.common.Constants
@@ -36,6 +37,8 @@ class AlbumActivity: AppCompatActivity() {
         val picasso = Picasso.get()
         setContentView(R.layout.album_activity_layout)
         setSupportActionBar(player_album_toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
 
         (application as App).getComponent().inject(this)
         viewModel = ViewModelProviders.of(this, factory).get(DetailAlbumViewModel::class.java)
@@ -90,6 +93,15 @@ class AlbumActivity: AppCompatActivity() {
     override fun onDestroy() {
         adapter.unbindService()
         super.onDestroy()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+
+        if (item?.itemId == android.R.id.home) {
+            onBackPressed()
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {

@@ -2,8 +2,10 @@ package com.kuzheevadel.vmplayerv2.services
 
 import android.app.*
 import android.arch.lifecycle.MutableLiveData
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
@@ -86,6 +88,14 @@ class PlayerService: Service() {
 
     private val delayedRunnable = Runnable { mediaSessionCallback.onStop() }
 
+    private val becomingNoisyReciever = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (AudioManager.ACTION_AUDIO_BECOMING_NOISY === intent?.action) {
+                mediaSessionCallback.onPause()
+            }
+        }
+    }
+
     private val stateBuilder = PlaybackStateCompat.Builder().setActions(
         PlaybackStateCompat.ACTION_PLAY
                 or PlaybackStateCompat.ACTION_STOP
@@ -110,7 +120,6 @@ class PlayerService: Service() {
 
     override fun onCreate() {
         super.onCreate()
-        Log.i("ServiceTest", "onCreate")
 
         (application as App).getComponent().inject(this)
 
@@ -137,13 +146,11 @@ class PlayerService: Service() {
         audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
         mediaSession = MediaSessionCompat(this, "VMPlayer")
 
-        //val activityIntent = Intent(applicationContext, PlayerActivity::class.java)
         val mediaButtonIntent = Intent(Intent.ACTION_MEDIA_BUTTON, null, applicationContext, MediaButtonReceiver::class.java)
 
         mediaSession.run {
             setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS or MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS)
             setCallback(mediaSessionCallback)
-            //setSessionActivity(PendingIntent.getActivity(applicationContext, 0, activityIntent, 0))
             setMediaButtonReceiver(PendingIntent.getBroadcast(applicationContext, 0, mediaButtonIntent, 0))
         }
 
@@ -157,29 +164,19 @@ class PlayerService: Service() {
     private val audioFocusChangeListener = AudioManager.OnAudioFocusChangeListener { focusChange ->
         when (focusChange) {
             AudioManager.AUDIOFOCUS_GAIN -> {
-                Log.i("AudioFocusTEst", "Audio_focus_GAIN")
-
                 mediaSessionCallback.onPlay()
             }
 
             AudioManager.AUDIOFOCUS_LOSS -> {
-
-                Log.i("AudioFocusTEst", "Audio_focus_LOSS")
-
                 mediaSessionCallback.onPause()
                 mHandler.postDelayed(delayedRunnable, TimeUnit.SECONDS.toMillis(30))
             }
 
             AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
-                Log.i("AudioFocusTEst", "Audio_focus_LOSS_TRANSIENT")
-
                 mediaSessionCallback.onPause()
             }
 
-            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
-                Log.i("AudioFocusTEst", "Audio_focus_GAIN")
-
-            }
+            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {}
         }
     }
 
@@ -196,8 +193,6 @@ class PlayerService: Service() {
                 val position = extras.getInt(Constants.POSITION)
 
                 val track = mediaRepository.getTrackByPosition(position)
-
-                Log.i("PLAYERTEST", track.inPlaylist.toString())
 
                 if (track.id != currentPlayingTrackId) {
                     mediaRepository.setCurrentPosition(position)
@@ -227,7 +222,6 @@ class PlayerService: Service() {
                     onPlay()
                 }
             } else if (mediaId == Constants.INIT) {
-                Log.i("PrefTest", "prepare")
                 val track = mediaRepository.getCurrentTrack()
 
                 prepareTrack(track.getAudioUri())
@@ -320,6 +314,7 @@ class PlayerService: Service() {
                     ).build()
                 )
             }
+            registerReceiver(becomingNoisyReciever, IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY))
             currentState = PlaybackStateCompat.STATE_PLAYING
             mHandler.removeCallbacks(delayedRunnable)
             startInterval(source)
@@ -331,6 +326,7 @@ class PlayerService: Service() {
 
             if (mExoPlayer.playWhenReady) {
                 mExoPlayer.playWhenReady = false
+                unregisterReceiver(becomingNoisyReciever)
                 stopInterval()
 
                 if (isAudioFocusRequest) {
@@ -394,6 +390,10 @@ class PlayerService: Service() {
 
         override fun onStop() {
             super.onStop()
+
+            if (mExoPlayer.playWhenReady) {
+                unregisterReceiver(becomingNoisyReciever)
+            }
 
             if (isAudioFocusRequest) {
                 isAudioFocusRequest = false
@@ -636,6 +636,7 @@ class PlayerService: Service() {
             setShowWhen(false)
             priority = NotificationCompat.PRIORITY_HIGH
             setOnlyAlertOnce(true)
+            setVibrate(longArrayOf(0))
             setChannelId(Constants.NOTIFICATION_DEFAULT_CHANNEL)
         }
 

@@ -138,7 +138,6 @@ class RadioFragment: Fragment() {
     }
 
     private fun getStyleableDrawable(attribute: Int): Int {
-        Log.i("StyleTest", context.toString())
         val a: TypedArray? = mContext?.theme?.obtainStyledAttributes(intArrayOf(attribute))
         return a!!.getResourceId(0, -1)
     }
