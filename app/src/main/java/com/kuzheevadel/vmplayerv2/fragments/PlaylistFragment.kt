@@ -11,10 +11,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.adapters.PlaylistAdapter
+import com.kuzheevadel.vmplayerv2.common.RewriteDoneMessage
 import com.kuzheevadel.vmplayerv2.common.State
 import com.kuzheevadel.vmplayerv2.dagger.App
 import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
 import com.kuzheevadel.vmplayerv2.database.PlaylistDatabase
+import com.kuzheevadel.vmplayerv2.model.Track
 import com.kuzheevadel.vmplayerv2.viewmodels.PlaylistViewModel
 import kotlinx.android.synthetic.main.playlist_layout.view.*
 import kotlinx.android.synthetic.main.view_state_layout.view.*
@@ -35,6 +37,7 @@ class PlaylistFragment: Fragment() {
     lateinit var mAdapter: PlaylistAdapter
 
     private lateinit var loadStateData: MutableLiveData<State>
+    private var list = mutableListOf<Track>()
 
     companion object {
         fun getInstance(loadStateData: MutableLiveData<State>): PlaylistFragment {
@@ -48,8 +51,10 @@ class PlaylistFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(false)
         EventBus.getDefault().register(this)
         (activity?.application as App).getComponent().inject(this)
+        mAdapter.fragment = this
 
         viewModel = ViewModelProviders.of(this, factory).get(PlaylistViewModel::class.java)
         mAdapter.fm = activity?.supportFragmentManager
@@ -77,8 +82,11 @@ class PlaylistFragment: Fragment() {
         })
 
         viewModel.run {
+
             trackData.observe(this@PlaylistFragment, Observer {
-                mAdapter.trackList = it!! })
+                list = it!!
+                mAdapter.trackList = list })
+
             loadStatus.observe(this@PlaylistFragment, Observer {
                 if (it == State.ERROR) {
                     view.playlist_view_state_layout.visibility = View.VISIBLE
@@ -103,6 +111,13 @@ class PlaylistFragment: Fragment() {
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     fun refreshAdapter(post: String) {
         if (post == "track") {
+            viewModel.loadPlaylistFromDatabase()
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun reloadPlaylist(message: RewriteDoneMessage) {
+        if (message.isRewrited) {
             viewModel.loadPlaylistFromDatabase()
         }
     }

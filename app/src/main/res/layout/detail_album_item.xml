@@ -9,6 +9,13 @@
         <variable name="albumsTrack" type="com.kuzheevadel.vmplayerv2.model.Track"/>
     </data>
 
+
+    <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:backgroundTint="?attr/dividerColor">
+
     <android.support.constraint.ConstraintLayout
 
             android:clickable="true"
@@ -60,4 +67,5 @@
                 android:textColor="?attr/primaryTextColor"/>
 
     </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
 </layout>

@@ -4,6 +4,7 @@ import android.app.Application
 import android.arch.persistence.room.Room
 import android.content.Context
 import com.kuzheevadel.vmplayerv2.activities.AlbumActivity
+import com.kuzheevadel.vmplayerv2.activities.EditPlaylistActivity
 import com.kuzheevadel.vmplayerv2.database.PlaylistDatabase
 import com.kuzheevadel.vmplayerv2.database.RadioDatabase
 import com.kuzheevadel.vmplayerv2.fragments.*
@@ -55,6 +56,7 @@ interface ApplicationComponent {
     fun inject(fragment: PlaylistFragment)
     fun inject(fragment: SearchRadioFragment)
     fun inject(fragment: FavoriteRadioFragment)
+    fun inject(activity: EditPlaylistActivity)
 
 }
 

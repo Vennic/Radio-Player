@@ -6,7 +6,7 @@
     <!-- for Button -->
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="?attr/backgroundCardColor"/>
+            <solid android:color="?attr/dividerColor"/>
         </shape>
     </item>
 

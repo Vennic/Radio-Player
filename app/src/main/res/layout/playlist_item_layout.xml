@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable name="click" type="com.kuzheevadel.vmplayerv2.adapters.ClickHandler"/>
+        <variable name="track"
+                  type="com.kuzheevadel.vmplayerv2.model.Track"/>
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/ripple_effect"
+            android:onClick="@{click::click}"
+            android:layout_height="60dp">
+
+        <android.support.v7.widget.AppCompatImageView
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                app:url="@{track.imageUri}"
+                android:id="@+id/item_image"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <android.support.v7.widget.AppCompatTextView
+                android:text="@{track.nameAndDuration}"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/item_artist_name"
+                android:textSize="12sp"
+                android:textColor="?attr/secondaryTextColor"
+                app:layout_constraintStart_toEndOf="@+id/item_image"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/items_menu"
+                android:layout_marginEnd="8dp"/>
+
+        <TextView
+                android:text="@{track.title}"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:id="@+id/item_track_name"
+                android:textSize="14sp"
+                android:textColor="?attr/primaryTextColor"
+                app:layout_constraintStart_toEndOf="@+id/item_image"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/item_artist_name"
+                app:layout_constraintEnd_toStartOf="@+id/items_menu"
+                android:layout_marginEnd="8dp"/>
+
+        <android.support.v7.widget.AppCompatImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:scaleType="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:visibility="gone"
+                android:src="@drawable/ic_menu_black_24dp"
+                android:id="@+id/items_menu"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

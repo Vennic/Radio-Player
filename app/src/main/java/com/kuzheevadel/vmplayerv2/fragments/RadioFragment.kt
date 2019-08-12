@@ -24,6 +24,8 @@ class RadioFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(false)
+
         popularRadioFragment = PopularRadioFragment()
         searchRadioFragment = SearchRadioFragment()
         fm = childFragmentManager
@@ -88,7 +90,7 @@ class RadioFragment: Fragment() {
                 }
             }
 
-            popupMenu.inflate(R.menu.menu_main)
+            popupMenu.inflate(R.menu.radio_menu)
             popupMenu.setOnDismissListener{
                 view.category_button.setImageResource(getStyleableDrawable(R.attr.fromUpToDownArrow))
                 (view.category_button.drawable as Animatable).start()

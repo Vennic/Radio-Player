@@ -13,6 +13,7 @@ class StorageMedia(private val context: Context): Callable<MutableList<Track>> {
 
     private fun getTracksList(): MutableList<Track> {
 
+        var count = 1L
         val tracksList = mutableListOf<Track>()
         val contentResolver = context.contentResolver
         val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
@@ -34,7 +35,8 @@ class StorageMedia(private val context: Context): Callable<MutableList<Track>> {
                 val duration: Int = cursor.getInt(durationColumn)
                 val album: String = cursor.getString(albumColumn)
 
-                tracksList.add(Track(id, title, artist, albumId, id, duration, album, false))
+                tracksList.add(Track(id, title, artist, albumId, id, duration, album, count, false))
+                count++
 
             } while (cursor.moveToNext())
 

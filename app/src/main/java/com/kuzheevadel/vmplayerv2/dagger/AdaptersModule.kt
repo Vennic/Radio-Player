@@ -42,4 +42,9 @@ class AdaptersModule {
         return PlaylistAdapter(mediaRepository, bindServiceHelper)
     }
 
+    @Provides
+    fun provideEditPlaylistAdapter(): EditPlaylistAdapter {
+        return EditPlaylistAdapter()
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.kuzheevadel.vmplayerv2.repository
 
+import android.util.Log
 import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Album
@@ -27,6 +28,8 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
         currentTrackPosition = 0
         playingTrackList = trackList
         isDeleted = false
+        Log.i("MOVETEST", "StorageMedia: $playingTrackList")
+
 
         for ((index, value) in playingTrackList.withIndex()) {
             if (value.id == id) {
@@ -98,6 +101,8 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
 
     override fun getTrackByPosition(position: Int): Track {
         isDeleted = false
+        Log.i("MOVETEST", "Get by position:  ${playingTrackList[position]}, position: $position")
+
         return playingTrackList[position]
     }
 
@@ -172,7 +177,7 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
 
     override fun getTrackById(id: Long): Track {
         isDeleted = false
-        var track = Track(0,"","",0, 0, 0, "", false)
+        var track = Track(0,"","",0, 0, 0, "", 0L, false)
 
         if (loadedTracksList.size > 0) {
             track = loadedTracksList[0]
@@ -227,6 +232,7 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
             for (item in playlist) {
                 for (loadedItem in loadedTracksList) {
                     if (item.title == loadedItem.title && item.artist == loadedItem.artist && item.albumName == loadedItem.albumName && item.duration == loadedItem.duration) {
+                        loadedItem.databaseId = item.databaseId
                         correctPlaylist.add(item)
                     }
                 }

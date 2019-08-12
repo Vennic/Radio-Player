@@ -374,18 +374,36 @@ class PlayerService: Service() {
 
         override fun onSkipToPrevious() {
             super.onSkipToPrevious()
-            mExoPlayer.stop()
-            val track = mediaRepository.getPrevTrack()
-            mediaSession.setMetadata(setTrackMediaMetaData(track))
-            currentPlayingTrackId = track.id
-            prepareTrack(track.getAudioUri())
-            source = Source.TRACK
 
-            with(track) {
-                updateTrackUI(UpdateUIMessage(title, artist, albumId, null, duration, albumName, Source.TRACK, id, track.inPlaylist))
+            if ((mExoPlayer.currentPosition / 1000) > 5) {
+                mExoPlayer.seekTo(0)
+            } else {
+
+                mExoPlayer.stop()
+                val track = mediaRepository.getPrevTrack()
+                mediaSession.setMetadata(setTrackMediaMetaData(track))
+                currentPlayingTrackId = track.id
+                prepareTrack(track.getAudioUri())
+                source = Source.TRACK
+
+                with(track) {
+                    updateTrackUI(
+                        UpdateUIMessage(
+                            title,
+                            artist,
+                            albumId,
+                            null,
+                            duration,
+                            albumName,
+                            Source.TRACK,
+                            id,
+                            track.inPlaylist
+                        )
+                    )
+                }
+
+                onPlay()
             }
-
-            onPlay()
         }
 
         override fun onStop() {
@@ -566,6 +584,7 @@ class PlayerService: Service() {
         when (playbackState) {
             PlaybackStateCompat.STATE_PLAYING -> startForeground(Constants.NOTIFICATION_ID, getNotification(playbackState))
             PlaybackStateCompat.STATE_PAUSED -> {
+                stopForeground(false)
                 NotificationManagerCompat.from(this).notify(Constants.NOTIFICATION_ID, getNotification(playbackState))
             }
             else -> stopForeground(true)
@@ -644,13 +663,11 @@ class PlayerService: Service() {
     }
 
     override fun onDestroy() {
-
         try {
             disposable.dispose()
         } catch (e: Exception) {
             e.printStackTrace()
         }
-
         mExoPlayer.release()
         mediaSession.release()
         mHandler.removeCallbacks(delayedRunnable)

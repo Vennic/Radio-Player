@@ -4,11 +4,8 @@
     <style name="LightAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#FF6D00</item>
-        <item name="colorPrimaryDark">#B45206</item>
-        <item name="colorAccent">#000000</item>
-        <item name="android:windowActionBarOverlay">true</item>
-        <item name="android:windowContentTransitions">true</item>
-        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
+        <item name="colorPrimaryDark">@color/splash_screen_color</item>
+
     </style>
 
     <style name="ActivityTheme.Primary.Base.Light"    parent="Theme.AppCompat.Light.NoActionBar">
@@ -105,7 +102,6 @@
 
     <style name="LauncherDark" parent="LightAppTheme">
         <item name="android:windowBackground">@drawable/launch_screen</item>
-        <item name="colorPrimary">#303030</item>
     </style>
     
     <style name="MyCustomTextAppearance" parent="TextAppearance.Design.Tab">

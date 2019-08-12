@@ -17,7 +17,7 @@ interface ApiService {
     @GET("/webservice/json/countries")
     fun getCountriesList(): Observable<MutableList<Country>>
 
-    @GET("/webservice/json/stations/topvote/100")
+    @GET("/webservice/json/stations/topclick/100")
     fun getStationsByVote(): Observable<MutableList<RadioStation>>
 
     @GET("/webservice/json/stations/search")

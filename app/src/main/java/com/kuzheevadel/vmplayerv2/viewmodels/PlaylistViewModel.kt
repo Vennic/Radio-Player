@@ -42,6 +42,8 @@ class PlaylistViewModel @Inject constructor(database: PlaylistDatabase,
                     isLoadedBefore = true
                 }
 
+                Log.i("MOVETEST", "Playlist: $it")
+
                 trackData.value = it
                 loadStatus.value = State.DONE
             },

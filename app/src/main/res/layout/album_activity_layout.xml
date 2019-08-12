@@ -47,7 +47,7 @@
                     android:scrollbars="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    />
+            />
 
         </LinearLayout>
 
@@ -65,11 +65,11 @@
             <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/albums_detail_image"
                     android:layout_width="match_parent"
-                    android:src="@drawable/album_image"
+                    app:srcCompat="@drawable/album_art_default"
                     android:scaleType="centerCrop"
                     android:transitionName="shared_album_image"
                     app:layout_scrollFlags="scroll|enterAlways"
-                    android:layout_height="288dp"/>
+                    android:layout_height="240dp"/>
 
         </android.support.design.widget.AppBarLayout>
 

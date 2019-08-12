@@ -49,4 +49,9 @@ abstract class Model {
     @IntoMap
     @ViewModelKey(FavoriteRadioViewModel::class)
     abstract fun favoriteRadioViewMOdel(viewModel: FavoriteRadioViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(EditPlaylistViewModel::class)
+    abstract fun editPlaylistViewModel(viewModel: EditPlaylistViewModel): ViewModel
 }

@@ -30,7 +30,7 @@
                 android:layout_marginBottom="8dp"/>
 
         <SeekBar
-                android:layout_width="379dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/progress_seek_bar"
                 android:clickable="false"
@@ -61,8 +61,8 @@
                 app:layout_constraintBottom_toBottomOf="@+id/playback_play_pause_button"/>
 
         <android.support.v7.widget.AppCompatImageButton
-                android:layout_width="@dimen/playback_bottom_buttons_size"
-                android:layout_height="@dimen/playback_bottom_buttons_size"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
                 app:srcCompat="?attr/playToPauseAnimate"
                 android:id="@+id/playback_play_pause_button"
                 android:clickable="true"

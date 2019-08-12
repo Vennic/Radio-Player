@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name" translatable="false">VMPlayer</string>
+    <string name="app_name" translatable="false">Radio Player</string>
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
-    <string name="nav_header_title" translatable="false">VMPlayer</string>
+    <string name="nav_header_title" translatable="false">Radio Player</string>
     <string name="nav_header_subtitle" translatable="false">v 1.0.1</string>
     <string name="nav_header_desc" translatable="false">Navigation header</string>
     <string name="action_settings">Settings</string>
@@ -38,4 +38,6 @@
         Please, check network connection.</string>
     <string name="check_network">Check network connection</string>
     <string name="nothing_found">Noting found</string>
+    <string name="edit">Edit playlist</string>
+    <string name="countries">All countries</string>
 </resources>

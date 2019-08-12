@@ -39,13 +39,13 @@ class SearchRadioViewModel @Inject constructor(private val network: VmpNetwork):
     }
 
     @SuppressLint("CheckResult")
-    fun loadCountriesList() {
+    fun loadCountriesList(allCountries: String) {
         network.getCountriesList()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe (
                 {
-                it.add(0, Country("All countries", "", ""))
+                it.add(0, Country(allCountries, "", ""))
                 countriesData.value = it
                 },
 

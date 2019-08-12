@@ -59,8 +59,6 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         setupPager(player_pager)
         tab_layout.setupWithViewPager(player_pager)
 
-
-
         tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
             }
@@ -87,6 +85,7 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         })
 
         setupTabIcons()
+        player_pager.currentItem = 1
         player_pager.currentItem = 0
 
         if (!(application as App).isUpdated) {
@@ -163,6 +162,11 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
             R.id.nav_contact -> {
                 sendMail()
+            }
+
+            R.id.nav_edit -> {
+                val intent = Intent(this, EditPlaylistActivity::class.java)
+                startActivity(intent)
             }
 
         }

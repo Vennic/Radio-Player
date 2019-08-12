@@ -39,6 +39,10 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".activities.EditPlaylistActivity"
+                  android:screenOrientation="portrait">
+        </activity>
+
         <service
                 android:name=".services.PlayerService"
                 android:exported="false">

@@ -20,4 +20,10 @@ interface TrackDao {
 
     @Query("SELECT * FROM track WHERE id = :id")
     fun getTrackById(id: Long): Track
+
+    @Query("DELETE FROM track")
+    fun deleteAllTracks()
+
+    @Insert
+    fun insertTracksList(list: MutableList<Track>)
 }

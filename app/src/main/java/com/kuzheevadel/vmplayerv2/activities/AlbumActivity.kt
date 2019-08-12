@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.MenuItem
 import com.kuzheevadel.vmplayerv2.R
 import com.kuzheevadel.vmplayerv2.adapters.AlbumsTracksListAdapter
@@ -53,10 +54,14 @@ class AlbumActivity: AppCompatActivity() {
 
         viewModel.setAlbum(position)
 
-        if (uri == null) {
-            albums_detail_image.setImageResource(R.drawable.vinil_default)
+        if (uri == null || uri == "") {
+            Log.i("IMAGETET", uri)
+
+            albums_detail_image.setImageResource(R.drawable.album_art_default)
         } else {
+            Log.i("IMAGETET", uri)
             picasso.load(uri)
+                .placeholder(R.drawable.album_art_default)
                 .fit()
                 .into(albums_detail_image)
         }

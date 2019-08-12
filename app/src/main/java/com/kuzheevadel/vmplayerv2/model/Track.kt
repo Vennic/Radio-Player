@@ -8,17 +8,15 @@ import android.provider.MediaStore
 import com.kuzheevadel.vmplayerv2.common.Constants
 
 @Entity
-data class Track(@PrimaryKey val id: Long,
+data class Track(val id: Long,
                  val title: String,
                  val artist: String,
                  val albumId: Long,
                  val uri: Long,
                  val duration: Int,
                  val albumName: String,
+                 @PrimaryKey var databaseId: Long,
                  var inPlaylist: Boolean){
-
-
-    fun getFullName() = "$artist - $title"
 
     fun getNameAndDuration(): String {
         return "$artist • ${getDurationInTimeFormat()}"
@@ -32,14 +30,15 @@ data class Track(@PrimaryKey val id: Long,
         return ContentUris.withAppendedId(Uri.parse(Constants.BASE_ALBUMSART_URI), albumId)
     }
 
-    fun getDurationInSeconds(): Int {
-        return duration / 1000
-    }
 
-    fun getDurationInTimeFormat(): String {
+    private fun getDurationInTimeFormat(): String {
         val d = duration / 1000
         val minutes = d / 60
         val seconds = d % 60
         return "$minutes:${if (seconds < 10) "0" else ""}$seconds"
+    }
+
+    override fun toString(): String {
+        return "$title - $databaseId"
     }
 }
