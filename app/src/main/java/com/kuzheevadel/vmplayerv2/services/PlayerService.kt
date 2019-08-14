@@ -650,7 +650,7 @@ class PlayerService: Service() {
                     )
             )
 
-            setSmallIcon(R.mipmap.ic_launcher_headset)
+            setSmallIcon(R.drawable.notification_small_icon)
             color = ContextCompat.getColor(this@PlayerService, R.color.switch_thumb_normal_material_dark)
             setShowWhen(false)
             priority = NotificationCompat.PRIORITY_HIGH

@@ -46,6 +46,8 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         setContentView(R.layout.activity_main)
         setSupportActionBar(player_toolbar)
 
+        //player_toolbar.setTitleTextColor(resources.getColor(R.color.light_background))
+
         val toggle = ActionBarDrawerToggle(
             this, drawer_layout, player_toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
         )
@@ -182,8 +184,8 @@ class PlayerActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
     private fun sendMail() {
         val intent = Intent(Intent.ACTION_SENDTO)
-        intent.data = Uri.parse("mailto:kuzheevadel@gmail.com")
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback VMPlayer")
+        intent.data = Uri.parse("mailto:feedback.RAMP@gmail.com")
+        intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.feedback))
         startActivity(intent)
     }
 

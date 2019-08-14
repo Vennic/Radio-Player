@@ -37,12 +37,14 @@
         <item name="searchImage">@drawable/ic_search_black_24dp</item>
         <item name="starImage">@drawable/ic_star_border_black_24dp</item>
         <item name="splashBackground">#FF6D00</item>
-        <item name="allTracksIcon">@drawable/ic_list_black_24dp</item>
-        <item name="albumsIcon">@drawable/ic_albums_black_24dp</item>
-        <item name="playlistIcon">@drawable/ic_tab_playlist_add_black_24dp</item>
-        <item name="radioIcon">@drawable/ic_radio_black_24dp</item>
+        <item name="allTracksIcon">@drawable/ic_list_white_24dp</item>
+        <item name="albumsIcon">@drawable/ic_albums_white_24dp</item>
+        <item name="playlistIcon">@drawable/ic_tab_playlist_add_white_24dp</item>
+        <item name="radioIcon">@drawable/ic_radio_white_24dp</item>
         <item name="seekBarColor">@color/seek_bar_white</item>
         <item name="tabTextColor">@color/tab_text_color_white</item>
+        <item name="tabIndicatorColor">@color/light_background</item>
+        <item name="mainTextColor">@color/mainTextColorBlack</item>
     </style>
 
     <style name="ActivityTheme.Primary.Base.Dark"    parent="Theme.AppCompat.NoActionBar">
@@ -75,7 +77,9 @@
         <item name="playlistIcon">@drawable/ic_tab_playlist_add_white_24dp</item>
         <item name="radioIcon">@drawable/ic_radio_white_24dp</item>
         <item name="seekBarColor">@color/seek_bar_dark</item>
+        <item name="tabIndicatorColor">@color/seek_bar_dark</item>
         <item name="tabTextColor">@color/tab_text_color</item>
+        <item name="mainTextColor">@color/mainTextColorWhite</item>
     </style>
 
     <style name="FeedActivityThemeLight" parent="ActivityTheme.Primary.Base.Light">
@@ -84,6 +88,10 @@
 
     <style name="FeedActivityThemeDark" parent="ActivityTheme.Primary.Base.Dark">
         <item name="android:windowBackground">@color/dark_background</item>
+    </style>
+
+    <style name="ToolBarStyle" parent="Theme.AppCompat">
+        <item name="android:colorControlNormal">@color/light_background</item>
     </style>
     
     <style name="LightAppTheme.NoActionBar">

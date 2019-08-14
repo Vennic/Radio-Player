@@ -30,6 +30,8 @@
         <attr name="playlistIcon" format="integer"/>
         <attr name="radioIcon" format="integer"/>
         <attr name="seekBarColor" format="color"/>
-        <attr name="tebTextColor" format="color"/>
+        <attr name="tabTextColor" format="color"/>
+        <attr name="tabIndicatorColor" format="color"/>
+        <attr name="mainTextColor" format="color"/>
     </declare-styleable>
 </resources>
