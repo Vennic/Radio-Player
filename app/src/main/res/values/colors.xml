@@ -12,7 +12,7 @@
 
     <color name="primary_text_color_dark">#FFFFFF</color>
     <color name="color_primary_dark">#292929</color>
-    <color name="secondary_text_color_dark">#8AADADAD</color>
+    <color name="secondary_text_color_dark">#A2A2A2</color>
     <color name="background_card_color_dark">#313131</color>
     <color name="divider_color_dark">#1F1F1F</color>
     <color name="seek_bar_dark">#A71313</color>
@@ -22,7 +22,7 @@
     <color name="color_primary_white">#F81A1A</color>
     <color name="color_primary_dark_white">#922222</color>
     <color name="primary_text_color_white">#000000</color>
-    <color name="secondary_text_color_white">#575757</color>
+    <color name="secondary_text_color_white">#585858</color>
     <color name="background_card_color_white">#FFFFFF</color>
     <color name="seek_bar_white">#000000</color>
     <color name="divider_color_white">#FFFFFF</color>

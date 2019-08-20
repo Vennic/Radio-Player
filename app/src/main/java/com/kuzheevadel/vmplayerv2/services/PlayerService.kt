@@ -253,8 +253,8 @@ class PlayerService: Service() {
                 if (favicon!!.isNotEmpty()) {
                     Picasso.get()
                         .load(favicon)
-                        .placeholder(R.drawable.vinil_default)
-                        .error(R.drawable.vinil_default)
+                        .placeholder(R.drawable.album_art_default)
+                        .error(R.drawable.album_art_default)
                         .into(target)
                 }
 
@@ -650,7 +650,7 @@ class PlayerService: Service() {
                     )
             )
 
-            setSmallIcon(R.drawable.notification_small_icon)
+            setSmallIcon(R.mipmap.ic_launcher_ramp_round)
             color = ContextCompat.getColor(this@PlayerService, R.color.switch_thumb_normal_material_dark)
             setShowWhen(false)
             priority = NotificationCompat.PRIORITY_HIGH

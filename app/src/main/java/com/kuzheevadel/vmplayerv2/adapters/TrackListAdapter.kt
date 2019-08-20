@@ -10,10 +10,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.android.databinding.library.baseAdapters.BR
-import com.kuzheevadel.vmplayerv2.helper.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.common.Constants
 import com.kuzheevadel.vmplayerv2.databinding.TrackItemLayoutBinding
-import com.kuzheevadel.vmplayerv2.fragments.TrackBottomMenu
+import com.kuzheevadel.vmplayerv2.fragments.TrackBottomMenuFragment
+import com.kuzheevadel.vmplayerv2.helper.BindServiceHelper
 import com.kuzheevadel.vmplayerv2.interfaces.Interfaces
 import com.kuzheevadel.vmplayerv2.model.Track
 
@@ -60,7 +60,7 @@ class TrackListAdapter(private val mediaRepository: Interfaces.StorageMediaRepos
         }
 
         viewHolder.binding?.itemsMenu?.setOnClickListener {
-            val bottomDialog = TrackBottomMenu()
+            val bottomDialog = TrackBottomMenuFragment()
             bottomDialog.show(fm, bottomDialog.tag)
         }
 
