@@ -43,8 +43,9 @@
     <string name="feedback">Feedback Ramp</string>
     <string name="duration">Duration:</string>
     <string name="add_in_playlist">Add in playlist</string>
-    <string name="size">Size:</string>
+    <string name="size">Bitrate:</string>
     <string name="album">Album:</string>
     <string name="title">Title:</string>
     <string name="artist">Artist:</string>
+    <string name="kbps">kbps</string>
 </resources>

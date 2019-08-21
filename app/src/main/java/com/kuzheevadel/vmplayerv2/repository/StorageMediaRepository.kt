@@ -56,6 +56,10 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
         }
     }
 
+    override fun getTrackByPositionFromMainList(position: Int): Track {
+        return loadedTracksList[position]
+    }
+
     override fun setFlagById(id: Long, isAdded: Boolean) {
         for (item in loadedTracksList) {
             if (item.id == id)
@@ -177,7 +181,7 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
 
     override fun getTrackById(id: Long): Track {
         isDeleted = false
-        var track = Track(0,"","",0, 0, 0, "", 0L, false)
+        var track = Track(0,"","",0, 0, 0, "", 0L, false, "")
 
         if (loadedTracksList.size > 0) {
             track = loadedTracksList[0]

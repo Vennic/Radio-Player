@@ -12,6 +12,11 @@ abstract class Model {
 
     @Binds
     @IntoMap
+    @ViewModelKey(BottomMenuViewModel::class)
+    abstract fun bottomMenuViewModel(viewModel: BottomMenuViewModel): ViewModel
+
+    @Binds
+    @IntoMap
     @ViewModelKey(AlbumViewModel::class)
     abstract fun albumViewModel(albumViewModel: AlbumViewModel): ViewModel
 

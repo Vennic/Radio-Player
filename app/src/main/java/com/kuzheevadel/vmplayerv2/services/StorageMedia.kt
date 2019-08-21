@@ -26,6 +26,7 @@ class StorageMedia(private val context: Context): Callable<MutableList<Track>> {
             val albumIdColumn = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)
             val durationColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)
             val albumColumn = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)
+            val data = cursor.getColumnIndex(MediaStore.Audio.Media.DATA)
 
             do {
                 val id: Long = cursor.getLong(idColumn)
@@ -34,8 +35,9 @@ class StorageMedia(private val context: Context): Callable<MutableList<Track>> {
                 val albumId:Long = cursor.getLong(albumIdColumn)
                 val duration: Int = cursor.getInt(durationColumn)
                 val album: String = cursor.getString(albumColumn)
+                val trackData: String = cursor.getString(data)
 
-                tracksList.add(Track(id, title, artist, albumId, id, duration, album, count, false))
+                tracksList.add(Track(id, title, artist, albumId, id, duration, album, count, false, trackData))
                 count++
 
             } while (cursor.moveToNext())

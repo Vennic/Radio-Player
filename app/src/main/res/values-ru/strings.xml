@@ -35,9 +35,10 @@
     <string name="countries">Все страны</string>
     <string name="feedback">Отзыв RAMP</string>
     <string name="add_in_playlist">Добавить в плейлист</string>
-    <string name="album">Альбом</string>
-    <string name="artist">Исполнитель</string>
-    <string name="duration">Продолжительность</string>
-    <string name="size">Размер</string>
-    <string name="title">Название</string>
+    <string name="album">Альбом:</string>
+    <string name="artist">Исполнитель:</string>
+    <string name="duration">Продолжительность:</string>
+    <string name="size">Битрейт:</string>
+    <string name="title">Название:</string>
+    <string name="kbps">кбит/с</string>
 </resources>

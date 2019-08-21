@@ -57,6 +57,7 @@ interface ApplicationComponent {
     fun inject(fragment: SearchRadioFragment)
     fun inject(fragment: FavoriteRadioFragment)
     fun inject(activity: EditPlaylistActivity)
+    fun inject(fragment: TrackBottomMenuFragment)
 
 }
 

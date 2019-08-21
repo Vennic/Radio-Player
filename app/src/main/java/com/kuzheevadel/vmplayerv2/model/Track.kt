@@ -16,7 +16,8 @@ data class Track(val id: Long,
                  val duration: Int,
                  val albumName: String,
                  @PrimaryKey var databaseId: Long,
-                 var inPlaylist: Boolean){
+                 var inPlaylist: Boolean,
+                 val data:String){
 
     fun getNameAndDuration(): String {
         return "$artist • ${getDurationInTimeFormat()}"
@@ -31,7 +32,7 @@ data class Track(val id: Long,
     }
 
 
-    private fun getDurationInTimeFormat(): String {
+    fun getDurationInTimeFormat(): String {
         val d = duration / 1000
         val minutes = d / 60
         val seconds = d % 60

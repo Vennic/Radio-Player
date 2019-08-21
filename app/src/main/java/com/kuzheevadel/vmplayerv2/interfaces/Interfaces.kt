@@ -27,6 +27,7 @@ class Interfaces {
         fun getTrackById(id:Long): Track
         fun getAlbumsList(): MutableList<Album>
         fun setPlayingTrackList(trackList: MutableList<Track>)
+        fun getTrackByPositionFromMainList(position: Int): Track
     }
 
 }

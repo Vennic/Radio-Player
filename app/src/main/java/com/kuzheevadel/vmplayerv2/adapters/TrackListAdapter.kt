@@ -61,6 +61,7 @@ class TrackListAdapter(private val mediaRepository: Interfaces.StorageMediaRepos
 
         viewHolder.binding?.itemsMenu?.setOnClickListener {
             val bottomDialog = TrackBottomMenuFragment()
+            bottomDialog.position = viewHolder.adapterPosition
             bottomDialog.show(fm, bottomDialog.tag)
         }
 
