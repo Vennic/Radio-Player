@@ -90,6 +90,8 @@ class EditPlaylistViewModel @Inject constructor(database: PlaylistDatabase,
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
+                        mediaRepository.setAllFlagsFalse()
+                        mediaRepository.setPlaylistFlagsInLoadedList(trackList)
                         EventBus.getDefault().post(RewriteDoneMessage(true))
                         loadStatus.value = State.DONE
                         disposable.dispose()

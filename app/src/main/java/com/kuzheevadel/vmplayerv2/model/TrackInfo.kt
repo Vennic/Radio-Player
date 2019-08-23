@@ -8,4 +8,5 @@ data class TrackInfo(val artist: String,
                      val duration: String,
                      val size: String,
                      val albumImageUri: Uri,
-                     val bitRate: String)
+                     val bitRate: String,
+                     val inPlaylist: Boolean)

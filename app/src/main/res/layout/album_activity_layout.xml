@@ -59,7 +59,8 @@
                     android:id="@+id/player_album_toolbar"
                     android:layout_width="match_parent"
                     app:layout_scrollFlags="enterAlways|snap|scroll"
-                    android:background="?attr/colorPrimary"
+                    app:popupTheme="@style/Theme.AppCompat"
+                    android:theme="@style/ToolBarStyle"
                     android:layout_height="?attr/actionBarSize"/>
 
             <android.support.v7.widget.AppCompatImageView

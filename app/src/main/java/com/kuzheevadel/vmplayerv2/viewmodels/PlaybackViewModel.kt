@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModel
 import android.net.Uri
 import android.util.Log
 import com.kuzheevadel.vmplayerv2.common.DataBaseInfo
+import com.kuzheevadel.vmplayerv2.common.RewriteDoneMessage
 import com.kuzheevadel.vmplayerv2.common.Source
 import com.kuzheevadel.vmplayerv2.common.UpdateUIMessage
 import com.kuzheevadel.vmplayerv2.database.PlaylistDatabase
@@ -89,6 +90,15 @@ class PlaybackViewModel @Inject constructor(private val mediaRepository: Interfa
         } else {
             source = Source.RADIO
             checkRadioInDatabase(message.id)
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun updateUiAfterEdit(message: RewriteDoneMessage) {
+        if (!message.isRewrited && mediaRepository.getCurrentTrack().inPlaylist) {
+            checkPlaylistData.value = DataBaseInfo.TRACK_ADDED
+        } else {
+            checkPlaylistData.value = DataBaseInfo.TRACK_IS_NOT_ADDED
         }
     }
 

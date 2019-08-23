@@ -156,9 +156,9 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:id="@+id/playlist_image"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginStart="32dp"/>
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintEnd_toStartOf="@+id/shuffle_image_button" android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent" android:layout_marginEnd="32dp"/>
 
         <ImageButton
                 android:layout_weight="1"
@@ -170,11 +170,10 @@
                 android:scaleType="center"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:id="@+id/shuffle_image_button"
-                app:layout_constraintStart_toEndOf="@+id/playlist_image"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintEnd_toStartOf="@+id/loop_image_button"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintStart_toEndOf="@+id/playlist_image" app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintEnd_toStartOf="@+id/loop_image_button" android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent" android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"/>
 
         <ImageButton
                 android:layout_weight="1"
@@ -187,25 +186,9 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:id="@+id/loop_image_button"
                 app:layout_constraintStart_toEndOf="@+id/shuffle_image_button"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintEnd_toStartOf="@+id/imageButton51"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-        <ImageButton
-                android:layout_weight="1"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                app:srcCompat="?attr/menuDotsColor"
-                android:clickable="true"
-                android:focusable="true"
-                android:scaleType="center"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:id="@+id/imageButton51"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginEnd="32dp"/>
+                app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginBottom="16dp" app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="32dp"/>
 
     </android.support.constraint.ConstraintLayout>
 

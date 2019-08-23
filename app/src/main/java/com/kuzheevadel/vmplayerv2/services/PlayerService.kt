@@ -655,7 +655,6 @@ class PlayerService: Service() {
             setShowWhen(false)
             priority = NotificationCompat.PRIORITY_HIGH
             setOnlyAlertOnce(true)
-            setVibrate(longArrayOf(0))
             setChannelId(Constants.NOTIFICATION_DEFAULT_CHANNEL)
         }
 

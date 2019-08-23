@@ -5,5 +5,5 @@
     <item android:title="@string/edit"
           android:id="@+id/done_edit_playlist"
           app:showAsAction="ifRoom"
-          android:icon="@drawable/ic_done_black_24dp"/>
+          android:icon="@drawable/ic_done_white_24dp"/>
 </menu>

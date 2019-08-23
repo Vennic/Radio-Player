@@ -40,6 +40,6 @@ data class Track(val id: Long,
     }
 
     override fun toString(): String {
-        return "$title - $databaseId"
+        return "$title - $databaseId - $inPlaylist"
     }
 }

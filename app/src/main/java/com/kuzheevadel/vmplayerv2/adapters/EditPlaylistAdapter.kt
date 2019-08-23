@@ -3,7 +3,6 @@ package com.kuzheevadel.vmplayerv2.adapters
 import android.annotation.SuppressLint
 import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -59,20 +58,12 @@ class EditPlaylistAdapter: RecyclerView.Adapter<EditPlaylistAdapter.PlaylistList
     }
 
     fun moveItems(from: Int, to: Int) {
-        Log.i("MOVETEST", "Before moving: $trackList")
-
         Collections.swap(trackList, from, to)
-        Log.i("MOVETEST", "After moving: $trackList")
-
         this.notifyItemMoved(from, to)
     }
 
     fun removeItem(position: Int) {
-        Log.i("MOVETEST", "Before removing: $trackList")
-
         trackList.removeAt(position)
-        Log.i("MOVETEST", "After removing: $trackList")
-
         this.notifyItemRemoved(position)
     }
 

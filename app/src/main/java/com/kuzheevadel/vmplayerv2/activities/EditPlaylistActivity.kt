@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -58,14 +57,12 @@ class EditPlaylistActivity: AppCompatActivity() {
                 val draggedPosition = draged.adapterPosition
                 val targetPosition = target.adapterPosition
 
-                Log.i("MOVETEST", "draggedPosition: $draggedPosition, targetPosition: $targetPosition")
                 adapter.moveItems(draggedPosition, targetPosition)
 
                 return true
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, position: Int) {
-                Log.i("MOVETEST", "onSwipe position: ${viewHolder.adapterPosition}")
                 mAdapter.removeItem(viewHolder.adapterPosition)
             }
 

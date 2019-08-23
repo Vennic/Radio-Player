@@ -57,6 +57,9 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
     }
 
     override fun getTrackByPositionFromMainList(position: Int): Track {
+        for (item in loadedTracksList) {
+            Log.i("PlaylistTest", item.toString())
+        }
         return loadedTracksList[position]
     }
 
@@ -202,6 +205,12 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
         currentTrackPosition = position
     }
 
+    override fun setAllFlagsFalse() {
+        for (i in loadedTracksList) {
+            i.inPlaylist = false
+        }
+    }
+
     override fun setPlaylistFlagsInLoadedList(list: MutableList<Track>) {
         for (playlistItem in list) {
             for (loadedItem in loadedTracksList) {
@@ -235,7 +244,7 @@ class StorageMediaRepository: Interfaces.StorageMediaRepository {
 
             for (item in playlist) {
                 for (loadedItem in loadedTracksList) {
-                    if (item.title == loadedItem.title && item.artist == loadedItem.artist && item.albumName == loadedItem.albumName && item.duration == loadedItem.duration) {
+                    if (item.title == loadedItem.title && item.artist == loadedItem.artist && item.albumName == loadedItem.albumName) {
                         loadedItem.databaseId = item.databaseId
                         correctPlaylist.add(item)
                     }

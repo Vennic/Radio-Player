@@ -2,7 +2,7 @@
     <string name="app_name" translatable="false">Radio Player</string>
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
-    <string name="nav_header_title" translatable="false">Radio Player</string>
+    <string name="nav_header_title" translatable="false">Radio and music player</string>
     <string name="nav_header_subtitle" translatable="false">v 1.0.1</string>
     <string name="nav_header_desc" translatable="false">Navigation header</string>
     <string name="action_settings">Settings</string>
@@ -43,6 +43,7 @@
     <string name="feedback">Feedback Ramp</string>
     <string name="duration">Duration:</string>
     <string name="add_in_playlist">Add in playlist</string>
+    <string name="delete_from_playlist">Delete from playlist</string>
     <string name="size">Bitrate:</string>
     <string name="album">Album:</string>
     <string name="title">Title:</string>

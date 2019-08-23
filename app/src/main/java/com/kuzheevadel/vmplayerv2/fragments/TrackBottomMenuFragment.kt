@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.kuzheevadel.vmplayerv2.R
+import com.kuzheevadel.vmplayerv2.common.DataBaseInfo
 import com.kuzheevadel.vmplayerv2.dagger.App
 import com.kuzheevadel.vmplayerv2.dagger.CustomViewModelFactory
 import com.kuzheevadel.vmplayerv2.databinding.BottomMenuDialogBinding
@@ -38,10 +39,42 @@ class TrackBottomMenuFragment: BottomSheetDialogFragment() {
             bottomAlbumText.isSelected = true
             bottomArtistText.isSelected = true
             bottomTitleText.isSelected = true
+
+            binding.linearLayout3.setOnClickListener { viewModel.addOrDeleteFromDatabase() }
         }
+
+        viewModel.dataBaseInfoData.observe(this, Observer {
+            when (it) {
+                DataBaseInfo.TRACK_ADDED -> {
+                    binding.run {
+                        bottomDatabaseImage.setImageResource(R.drawable.ic_delete_black)
+                        bottomDatabaseTextView.text = getString(R.string.delete_from_playlist)
+                    }
+                }
+
+                DataBaseInfo.DELETED -> {
+                    binding.run {
+                        bottomDatabaseImage.setImageResource(R.drawable.ic_bottom_playlist_add)
+                        bottomDatabaseTextView.text = getString(R.string.add_in_playlist)
+                    }
+                }
+            }
+        })
 
         viewModel.trackInfoData.observe(this, Observer {
             binding.trackInfo = it
+
+            if (it!!.inPlaylist) {
+                binding.run {
+                    bottomDatabaseImage.setImageResource(R.drawable.ic_delete_black)
+                    bottomDatabaseTextView.text = getString(R.string.delete_from_playlist)
+                }
+            } else {
+                binding.run {
+                    bottomDatabaseImage.setImageResource(R.drawable.ic_bottom_playlist_add)
+                    bottomDatabaseTextView.text = getString(R.string.add_in_playlist)
+                }
+            }
         })
 
         return binding.root
